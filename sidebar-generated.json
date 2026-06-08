@@ -1,0 +1,1565 @@
+{
+  "/books/claude-code-dev/": [
+    {
+      "text": "Claude Code 企业级全链路开发实战",
+      "items": [
+        {
+          "text": "你是架构师Claude-Code-是你的工程团队",
+          "link": "/books/claude-code-dev/01-你是架构师Claude-Code-是你的工程团队"
+        },
+        {
+          "text": "规范驱动开发SDD-让-AI-永远在轨道上",
+          "link": "/books/claude-code-dev/02-规范驱动开发SDD-让-AI-永远在轨道上"
+        },
+        {
+          "text": "产品定义-动第一行代码之前你该想清楚什么",
+          "link": "/books/claude-code-dev/03-产品定义-动第一行代码之前你该想清楚什么"
+        },
+        {
+          "text": "架构设计上-应用架构与代码组织",
+          "link": "/books/claude-code-dev/04-架构设计上-应用架构与代码组织"
+        },
+        {
+          "text": "架构设计下-部署架构性能预判与数据设计",
+          "link": "/books/claude-code-dev/05-架构设计下-部署架构性能预判与数据设计"
+        },
+        {
+          "text": "Claude-Code-实战必备-CLAUDE.mdSkills-与工程规范",
+          "link": "/books/claude-code-dev/06-Claude-Code-实战必备-CLAUDE.mdSkills-与工程规范"
+        },
+        {
+          "text": "实操课-顶层设计全流程演示",
+          "link": "/books/claude-code-dev/07-实操课-顶层设计全流程演示"
+        },
+        {
+          "text": "工程初始化上-后端骨架与公共基础设施",
+          "link": "/books/claude-code-dev/08-工程初始化上-后端骨架与公共基础设施"
+        },
+        {
+          "text": "工程初始化下-前端工程与一键启动",
+          "link": "/books/claude-code-dev/09-工程初始化下-前端工程与一键启动"
+        },
+        {
+          "text": "基础组件上-后端业务基础设施",
+          "link": "/books/claude-code-dev/10-基础组件上-后端业务基础设施"
+        },
+        {
+          "text": "基础组件下-前端-UI-设计与前端基础组件",
+          "link": "/books/claude-code-dev/11-基础组件下-前端-UI-设计与前端基础组件"
+        },
+        {
+          "text": "实操课-工程搭建全流程演示",
+          "link": "/books/claude-code-dev/12-实操课-工程搭建全流程演示"
+        },
+        {
+          "text": "模型提供商管理-第一个完整功能的交付闭环",
+          "link": "/books/claude-code-dev/13-模型提供商管理-第一个完整功能的交付闭环"
+        },
+        {
+          "text": "把经验变成-Skill-让-Claude-Code-自动按流程走",
+          "link": "/books/claude-code-dev/14-把经验变成-Skill-让-Claude-Code-自动按流程走"
+        },
+        {
+          "text": "Agent-创建与配置-复杂业务逻辑的拆解策略",
+          "link": "/books/claude-code-dev/15-Agent-创建与配置-复杂业务逻辑的拆解策略"
+        },
+        {
+          "text": "对话引擎上-理解对话链路与流式技术选型",
+          "link": "/books/claude-code-dev/16-对话引擎上-理解对话链路与流式技术选型"
+        },
+        {
+          "text": "对话引擎下-让智能客服真正开口说话",
+          "link": "/books/claude-code-dev/17-对话引擎下-让智能客服真正开口说话"
+        },
+        {
+          "text": "复杂前端交互-让-Claude-Code-帮你搞定流式聊天界面",
+          "link": "/books/claude-code-dev/18-复杂前端交互-让-Claude-Code-帮你搞定流式聊天界面"
+        },
+        {
+          "text": "实操课-核心功能基础篇全流程演示",
+          "link": "/books/claude-code-dev/19-实操课-核心功能基础篇全流程演示"
+        },
+        {
+          "text": "RAG-知识库上-用-Claude-Code-快速搞懂-RAG-和向量数据库",
+          "link": "/books/claude-code-dev/20-RAG-知识库上-用-Claude-Code-快速搞懂-RAG-和向量数据库"
+        },
+        {
+          "text": "RAG-知识库下-给客服一本手册对话功能集成-RAG",
+          "link": "/books/claude-code-dev/21-RAG-知识库下-给客服一本手册对话功能集成-RAG"
+        },
+        {
+          "text": "工作流编排上-搞懂工作流把它存起来",
+          "link": "/books/claude-code-dev/22-工作流编排上-搞懂工作流把它存起来"
+        },
+        {
+          "text": "工作流编排下-实现执行引擎让工作流跑起来",
+          "link": "/books/claude-code-dev/23-工作流编排下-实现执行引擎让工作流跑起来"
+        },
+        {
+          "text": "MCP-工具接入上-搞懂协议把-Client-跑通",
+          "link": "/books/claude-code-dev/24-MCP-工具接入上-搞懂协议把-Client-跑通"
+        },
+        {
+          "text": "MCP-工具接入下-自建-MCP-Server让-Agent-能做真正的事",
+          "link": "/books/claude-code-dev/25-MCP-工具接入下-自建-MCP-Server让-Agent-能做真正的事"
+        },
+        {
+          "text": "实操课-核心功能高级篇全流程演示",
+          "link": "/books/claude-code-dev/26-实操课-核心功能高级篇全流程演示"
+        },
+        {
+          "text": "AI-写代码保证质量不靠运气靠体系",
+          "link": "/books/claude-code-dev/27-AI-写代码保证质量不靠运气靠体系"
+        },
+        {
+          "text": "容器化与部署-从本地到可交付",
+          "link": "/books/claude-code-dev/28-容器化与部署-从本地到可交付"
+        },
+        {
+          "text": "可观测性与排错-生产级系统的最后拼图",
+          "link": "/books/claude-code-dev/29-可观测性与排错-生产级系统的最后拼图"
+        },
+        {
+          "text": "实操课-测试部署全流程演示",
+          "link": "/books/claude-code-dev/30-实操课-测试部署全流程演示"
+        },
+        {
+          "text": "进阶-SDDSpec-KitSpec-Coding-与老项目改造",
+          "link": "/books/claude-code-dev/31-进阶-SDDSpec-KitSpec-Coding-与老项目改造"
+        },
+        {
+          "text": "局限与起点-让-Hify-成为你真正的项目经验",
+          "link": "/books/claude-code-dev/32-局限与起点-让-Hify-成为你真正的项目经验"
+        },
+        {
+          "text": "结课测试-来赴一场满分之约",
+          "link": "/books/claude-code-dev/33-结课测试-来赴一场满分之约"
+        },
+        {
+          "text": "结束语-一个人的工程团队静待花开",
+          "link": "/books/claude-code-dev/34-结束语-一个人的工程团队静待花开"
+        },
+        {
+          "text": "开篇词-一个人用-Claude-Code-造一个简版-Dify需要多久",
+          "link": "/books/claude-code-dev/35-开篇词-一个人用-Claude-Code-造一个简版-Dify需要多久"
+        },
+        {
+          "text": "热点速递-Claude-Code-源码泄漏-热闹看完我们聊点真问题",
+          "link": "/books/claude-code-dev/36-热点速递-Claude-Code-源码泄漏-热闹看完我们聊点真问题"
+        },
+        {
+          "text": "summary",
+          "link": "/books/claude-code-dev/37-summary"
+        }
+      ]
+    }
+  ],
+  "/books/claude-code-legacy/": [
+    {
+      "text": "Claude Code 企业级老项目改造实战",
+      "items": [
+        {
+          "text": "老项目改造的真实链路-从接手到交付人到底做了什么",
+          "link": "/books/claude-code-legacy/01-老项目改造的真实链路-从接手到交付人到底做了什么"
+        },
+        {
+          "text": "Claude-Code-进来后-哪一步变了哪一步没变",
+          "link": "/books/claude-code-legacy/02-Claude-Code-进来后-哪一步变了哪一步没变"
+        },
+        {
+          "text": "理解约束验证-让-AI-可信的三层控制",
+          "link": "/books/claude-code-legacy/03-理解约束验证-让-AI-可信的三层控制"
+        },
+        {
+          "text": "AI-编程工具全景-武器库里有什么什么时候拿哪一件",
+          "link": "/books/claude-code-legacy/04-AI-编程工具全景-武器库里有什么什么时候拿哪一件"
+        },
+        {
+          "text": "业界在做什么2026-年-AI-+-老项目改造的学术与工程全景",
+          "link": "/books/claude-code-legacy/05-业界在做什么2026-年-AI-+-老项目改造的学术与工程全景"
+        },
+        {
+          "text": "了解项目的八步心法-从-README-到核心链路",
+          "link": "/books/claude-code-legacy/06-了解项目的八步心法-从-README-到核心链路"
+        },
+        {
+          "text": "安装画图工具-给-Claude-Code-装上画图-Skill",
+          "link": "/books/claude-code-legacy/07-安装画图工具-给-Claude-Code-装上画图-Skill"
+        },
+        {
+          "text": "俯视项目全景-用提示词画出架构图模块图依赖图",
+          "link": "/books/claude-code-legacy/08-俯视项目全景-用提示词画出架构图模块图依赖图"
+        },
+        {
+          "text": "接口和数据模型-让-AI-产出生成接口清单和-Schema",
+          "link": "/books/claude-code-legacy/09-接口和数据模型-让-AI-产出生成接口清单和-Schema"
+        },
+        {
+          "text": "老项目的-CLAUDE.md-怎么写从五份资产到一份项目常识",
+          "link": "/books/claude-code-legacy/10-老项目的-CLAUDE.md-怎么写从五份资产到一份项目常识"
+        },
+        {
+          "text": "老项目的-Skill-怎么挖把重复流程变成可复用的技能",
+          "link": "/books/claude-code-legacy/11-老项目的-Skill-怎么挖把重复流程变成可复用的技能"
+        },
+        {
+          "text": "实操课-完整摸清一个陌生项目的全流程演示",
+          "link": "/books/claude-code-legacy/12-实操课-完整摸清一个陌生项目的全流程演示"
+        },
+        {
+          "text": "让-AI-当你的环境工程师-依赖编译启动冒烟一把过",
+          "link": "/books/claude-code-legacy/13-让-AI-当你的环境工程师-依赖编译启动冒烟一把过"
+        },
+        {
+          "text": "摸清现有测试-能跑通吗覆盖度怎样",
+          "link": "/books/claude-code-legacy/14-摸清现有测试-能跑通吗覆盖度怎样"
+        },
+        {
+          "text": "补出一套兜底测试-让-AI-用-Characterization-Test-锁住行为",
+          "link": "/books/claude-code-legacy/15-补出一套兜底测试-让-AI-用-Characterization-Test-锁住行为"
+        },
+        {
+          "text": "实操课-给一个老项目建立完整改造前护栏的全流程演示",
+          "link": "/books/claude-code-legacy/16-实操课-给一个老项目建立完整改造前护栏的全流程演示"
+        },
+        {
+          "text": "从一句话需求到需求文档-让-AI-帮你拆需求",
+          "link": "/books/claude-code-legacy/17-从一句话需求到需求文档-让-AI-帮你拆需求"
+        },
+        {
+          "text": "从需求文档到改造方案-让-AI-帮你把改造想透",
+          "link": "/books/claude-code-legacy/18-从需求文档到改造方案-让-AI-帮你把改造想透"
+        },
+        {
+          "text": "执行改造上-后端开发跑通测试",
+          "link": "/books/claude-code-legacy/19-执行改造上-后端开发跑通测试"
+        },
+        {
+          "text": "执行改造下-前端开发和接口对接",
+          "link": "/books/claude-code-legacy/20-执行改造下-前端开发和接口对接"
+        },
+        {
+          "text": "实操课-一次完整改造的全流程演示-+-验收复盘",
+          "link": "/books/claude-code-legacy/21-实操课-一次完整改造的全流程演示-+-验收复盘"
+        },
+        {
+          "text": "开篇词-怎么用-Claude-Code-改好一个跑了几年的老项目",
+          "link": "/books/claude-code-legacy/22-开篇词-怎么用-Claude-Code-改好一个跑了几年的老项目"
+        }
+      ]
+    }
+  ],
+  "/books/mysql-running/": [
+    {
+      "text": "MySQL 是怎样运行的",
+      "items": [
+        {
+          "text": "万里长征第一步非常重要-——-如何愉快的阅读本小册",
+          "link": "/books/mysql-running/01-万里长征第一步非常重要-——-如何愉快的阅读本小册"
+        },
+        {
+          "text": "装作自己是个小白-——-重新认识MySQL",
+          "link": "/books/mysql-running/02-装作自己是个小白-——-重新认识MySQL"
+        },
+        {
+          "text": "MySQL的调控按钮-——-启动选项和系统变量",
+          "link": "/books/mysql-running/03-MySQL的调控按钮-——-启动选项和系统变量"
+        },
+        {
+          "text": "乱码的前世今生-——-字符集和比较规则",
+          "link": "/books/mysql-running/04-乱码的前世今生-——-字符集和比较规则"
+        },
+        {
+          "text": "从一条记录说起——-InnoDB-记录结构",
+          "link": "/books/mysql-running/05-从一条记录说起——-InnoDB-记录结构"
+        },
+        {
+          "text": "盛放记录的大盒子-——-InnoDB-数据页结构",
+          "link": "/books/mysql-running/06-盛放记录的大盒子-——-InnoDB-数据页结构"
+        },
+        {
+          "text": "快速查询的秘籍-——-B+-树索引",
+          "link": "/books/mysql-running/07-快速查询的秘籍-——-B+-树索引"
+        },
+        {
+          "text": "好东西也得先学会怎么用-——-B+-树索引的使用",
+          "link": "/books/mysql-running/08-好东西也得先学会怎么用-——-B+-树索引的使用"
+        },
+        {
+          "text": "数据的家-——-MySQL-的数据目录",
+          "link": "/books/mysql-running/09-数据的家-——-MySQL-的数据目录"
+        },
+        {
+          "text": "存放页面的大池子-——-InnoDB-的表空间",
+          "link": "/books/mysql-running/10-存放页面的大池子-——-InnoDB-的表空间"
+        },
+        {
+          "text": "条条大路通罗马-——-单表访问方法",
+          "link": "/books/mysql-running/11-条条大路通罗马-——-单表访问方法"
+        },
+        {
+          "text": "两个表的亲密接触-——-连接的原理",
+          "link": "/books/mysql-running/12-两个表的亲密接触-——-连接的原理"
+        },
+        {
+          "text": "谁最便宜就选谁-——-MySQL-基于成本的优化",
+          "link": "/books/mysql-running/13-谁最便宜就选谁-——-MySQL-基于成本的优化"
+        },
+        {
+          "text": "兵马未动粮草先行-——-InnoDB-统计数据是如何收集的",
+          "link": "/books/mysql-running/14-兵马未动粮草先行-——-InnoDB-统计数据是如何收集的"
+        },
+        {
+          "text": "不好看就要多整容-——-MySQL-基于规则的优化内含关于子查询优化二三事儿",
+          "link": "/books/mysql-running/15-不好看就要多整容-——-MySQL-基于规则的优化内含关于子查询优化二三事儿"
+        },
+        {
+          "text": "查询优化的百科全书-——-Explain-详解上",
+          "link": "/books/mysql-running/16-查询优化的百科全书-——-Explain-详解上"
+        },
+        {
+          "text": "查询优化的百科全书-——-Explain-详解下",
+          "link": "/books/mysql-running/17-查询优化的百科全书-——-Explain-详解下"
+        },
+        {
+          "text": "神兵利器-——-optimizer-trace-的神器功效",
+          "link": "/books/mysql-running/18-神兵利器-——-optimizer-trace-的神器功效"
+        },
+        {
+          "text": "调节磁盘和CPU的矛盾-——-InnoDB-的-Buffer-Pool",
+          "link": "/books/mysql-running/19-调节磁盘和CPU的矛盾-——-InnoDB-的-Buffer-Pool"
+        },
+        {
+          "text": "从猫爷被杀说起-——-事务简介",
+          "link": "/books/mysql-running/20-从猫爷被杀说起-——-事务简介"
+        },
+        {
+          "text": "说过的话就一定要办到-——-redo-日志上",
+          "link": "/books/mysql-running/21-说过的话就一定要办到-——-redo-日志上"
+        },
+        {
+          "text": "说过的话就一定要办到-——-redo-日志下",
+          "link": "/books/mysql-running/22-说过的话就一定要办到-——-redo-日志下"
+        },
+        {
+          "text": "后悔了怎么办-——-undo-日志",
+          "link": "/books/mysql-running/23-后悔了怎么办-——-undo-日志"
+        },
+        {
+          "text": "工作面试老大难-——-锁",
+          "link": "/books/mysql-running/24-工作面试老大难-——-锁"
+        },
+        {
+          "text": "写作本书时用到的一些重要的参考资料",
+          "link": "/books/mysql-running/25-写作本书时用到的一些重要的参考资料"
+        }
+      ]
+    }
+  ],
+  "/books/typescript-intro/": [
+    {
+      "text": "TypeScript 入门教程",
+      "items": [
+        {
+          "text": "为什么你需要-TypeScript-类型之于-JavaScript",
+          "link": "/books/typescript-intro/01-为什么你需要-TypeScript-类型之于-JavaScript"
+        },
+        {
+          "text": "又一次-Hello-World-TypeScript-开发环境搭建",
+          "link": "/books/typescript-intro/02-又一次-Hello-World-TypeScript-开发环境搭建"
+        },
+        {
+          "text": "原始类型与对象类型-还是熟悉的配方",
+          "link": "/books/typescript-intro/03-原始类型与对象类型-还是熟悉的配方"
+        },
+        {
+          "text": "函数类型与重载-为你的函数调用保驾护航",
+          "link": "/books/typescript-intro/04-函数类型与重载-为你的函数调用保驾护航"
+        },
+        {
+          "text": "TypeScript-中的-Class-重新认识面向对象编程",
+          "link": "/books/typescript-intro/05-TypeScript-中的-Class-重新认识面向对象编程"
+        },
+        {
+          "text": "anyunknown类型与类型断言-让你的类型更听话一些",
+          "link": "/books/typescript-intro/06-anyunknown类型与类型断言-让你的类型更听话一些"
+        },
+        {
+          "text": "类型别名联合类型与交叉类型-类型世界中的逻辑或和逻辑与",
+          "link": "/books/typescript-intro/07-类型别名联合类型与交叉类型-类型世界中的逻辑或和逻辑与"
+        },
+        {
+          "text": "泛型-类型世界的参数",
+          "link": "/books/typescript-intro/08-泛型-类型世界的参数"
+        },
+        {
+          "text": "类型声明-让-JS-和-TS-融合得再紧密一些",
+          "link": "/books/typescript-intro/09-类型声明-让-JS-和-TS-融合得再紧密一些"
+        },
+        {
+          "text": "内置工具类型上-类型世界的内置方法",
+          "link": "/books/typescript-intro/10-内置工具类型上-类型世界的内置方法"
+        },
+        {
+          "text": "内置工具类型下-类型世界的内置方法",
+          "link": "/books/typescript-intro/11-内置工具类型下-类型世界的内置方法"
+        },
+        {
+          "text": "模板字符串类型-最熟悉的陌生人",
+          "link": "/books/typescript-intro/12-模板字符串类型-最熟悉的陌生人"
+        },
+        {
+          "text": "类型学习告一段落-配置你的-TypeScript",
+          "link": "/books/typescript-intro/13-类型学习告一段落-配置你的-TypeScript"
+        },
+        {
+          "text": "实战环节-TypeScript-+-React",
+          "link": "/books/typescript-intro/14-实战环节-TypeScript-+-React"
+        },
+        {
+          "text": "实战环节-npm-包发布",
+          "link": "/books/typescript-intro/15-实战环节-npm-包发布"
+        },
+        {
+          "text": "从-JavaScript-迁移到-TypeScript-让你的项目改头换面",
+          "link": "/books/typescript-intro/16-从-JavaScript-迁移到-TypeScript-让你的项目改头换面"
+        },
+        {
+          "text": "总结与展望",
+          "link": "/books/typescript-intro/17-总结与展望"
+        }
+      ]
+    }
+  ],
+  "/books/typescript-advanced/": [
+    {
+      "text": "TypeScript 全面进阶指南",
+      "items": [
+        {
+          "text": "开篇-用正确的方式学习-TypeScript",
+          "link": "/books/typescript-advanced/01-开篇-用正确的方式学习-TypeScript"
+        },
+        {
+          "text": "工欲善其事-打造最舒适的-TypeScript-开发环境",
+          "link": "/books/typescript-advanced/02-工欲善其事-打造最舒适的-TypeScript-开发环境"
+        },
+        {
+          "text": "进入类型的世界-理解原始类型与对象类型",
+          "link": "/books/typescript-advanced/03-进入类型的世界-理解原始类型与对象类型"
+        },
+        {
+          "text": "掌握字面量类型与枚举让你的类型再精确一些",
+          "link": "/books/typescript-advanced/04-掌握字面量类型与枚举让你的类型再精确一些"
+        },
+        {
+          "text": "函数与-Class-中的类型-详解函数重载与面向对象",
+          "link": "/books/typescript-advanced/05-函数与-Class-中的类型-详解函数重载与面向对象"
+        },
+        {
+          "text": "探秘内置类型-anyunknownnever-与类型断言",
+          "link": "/books/typescript-advanced/06-探秘内置类型-anyunknownnever-与类型断言"
+        },
+        {
+          "text": "类型编程好帮手-TypeScript-类型工具上",
+          "link": "/books/typescript-advanced/07-类型编程好帮手-TypeScript-类型工具上"
+        },
+        {
+          "text": "类型编程好帮手-TypeScript-类型工具下",
+          "link": "/books/typescript-advanced/08-类型编程好帮手-TypeScript-类型工具下"
+        },
+        {
+          "text": "类型编程基石-TypeScript-中无处不在的泛型",
+          "link": "/books/typescript-advanced/09-类型编程基石-TypeScript-中无处不在的泛型"
+        },
+        {
+          "text": "结构化类型系统-类型兼容性判断的幕后",
+          "link": "/books/typescript-advanced/10-结构化类型系统-类型兼容性判断的幕后"
+        },
+        {
+          "text": "类型系统层级-从-Top-Type-到-Bottom-Type",
+          "link": "/books/typescript-advanced/11-类型系统层级-从-Top-Type-到-Bottom-Type"
+        },
+        {
+          "text": "类型里的逻辑运算-条件类型与-infer",
+          "link": "/books/typescript-advanced/12-类型里的逻辑运算-条件类型与-infer"
+        },
+        {
+          "text": "内置工具类型基础-别再妖魔化工具类型了",
+          "link": "/books/typescript-advanced/13-内置工具类型基础-别再妖魔化工具类型了"
+        },
+        {
+          "text": "反方向类型推导-用好上下文相关类型",
+          "link": "/books/typescript-advanced/14-反方向类型推导-用好上下文相关类型"
+        },
+        {
+          "text": "数类型-协变与逆变的比较",
+          "link": "/books/typescript-advanced/15-数类型-协变与逆变的比较"
+        },
+        {
+          "text": "了解类型编程与类型体操的意义找到平衡点",
+          "link": "/books/typescript-advanced/16-了解类型编程与类型体操的意义找到平衡点"
+        },
+        {
+          "text": "内置工具类型进阶-类型编程进阶",
+          "link": "/books/typescript-advanced/17-内置工具类型进阶-类型编程进阶"
+        },
+        {
+          "text": "基础类型新成员-模板字符串类型入门",
+          "link": "/books/typescript-advanced/18-基础类型新成员-模板字符串类型入门"
+        },
+        {
+          "text": "类型编程新范式-模板字符串工具类型进阶",
+          "link": "/books/typescript-advanced/19-类型编程新范式-模板字符串工具类型进阶"
+        },
+        {
+          "text": "工程层面的类型能力-类型声明类型指令与命名空间",
+          "link": "/books/typescript-advanced/20-工程层面的类型能力-类型声明类型指令与命名空间"
+        },
+        {
+          "text": "在-React-中愉快地使用-TypeScript-内置类型与泛型坑位",
+          "link": "/books/typescript-advanced/21-在-React-中愉快地使用-TypeScript-内置类型与泛型坑位"
+        },
+        {
+          "text": "让-ESLint-来约束你的-TypeScript-代码-配置与规则集介绍",
+          "link": "/books/typescript-advanced/22-让-ESLint-来约束你的-TypeScript-代码-配置与规则集介绍"
+        },
+        {
+          "text": "全链路-TypeScript-工具库找到适合你的工具",
+          "link": "/books/typescript-advanced/23-全链路-TypeScript-工具库找到适合你的工具"
+        },
+        {
+          "text": "说说-TypeScript-和-ECMAScript-之间那些事儿",
+          "link": "/books/typescript-advanced/24-说说-TypeScript-和-ECMAScript-之间那些事儿"
+        },
+        {
+          "text": "装饰器与反射元数据-了解装饰器基本原理与应用",
+          "link": "/books/typescript-advanced/25-装饰器与反射元数据-了解装饰器基本原理与应用"
+        },
+        {
+          "text": "控制反转与依赖注入-基于装饰器的依赖注入实现",
+          "link": "/books/typescript-advanced/26-控制反转与依赖注入-基于装饰器的依赖注入实现"
+        },
+        {
+          "text": "TSConfig-全解上-构建相关配置",
+          "link": "/books/typescript-advanced/27-TSConfig-全解上-构建相关配置"
+        },
+        {
+          "text": "TSConfig-全解下-检查相关工程相关配置",
+          "link": "/books/typescript-advanced/28-TSConfig-全解下-检查相关工程相关配置"
+        },
+        {
+          "text": "基于-Prisma-+-NestJs-的-Node-API-前置知识储备",
+          "link": "/books/typescript-advanced/29-基于-Prisma-+-NestJs-的-Node-API-前置知识储备"
+        },
+        {
+          "text": "基于-Prisma-+-NestJs-的-Node-API-项目开发与基于-Heroku-部署",
+          "link": "/books/typescript-advanced/30-基于-Prisma-+-NestJs-的-Node-API-项目开发与基于-Heroku-部署"
+        },
+        {
+          "text": "玩转-TypeScript-AST-AST-Checker-与-CodeMod",
+          "link": "/books/typescript-advanced/31-玩转-TypeScript-AST-AST-Checker-与-CodeMod"
+        },
+        {
+          "text": "感谢相伴-是结束也是开始",
+          "link": "/books/typescript-advanced/32-感谢相伴-是结束也是开始"
+        },
+        {
+          "text": "漫谈篇-面试中的-TypeScript",
+          "link": "/books/typescript-advanced/33-漫谈篇-面试中的-TypeScript"
+        }
+      ]
+    }
+  ],
+  "/books/low-code-platform/": [
+    {
+      "text": "从 0 打造通用型低代码产品",
+      "items": [
+        {
+          "text": "序章-前端的价值",
+          "link": "/books/low-code-platform/01-序章-前端的价值"
+        },
+        {
+          "text": "前言-什么是低代码",
+          "link": "/books/low-code-platform/02-前言-什么是低代码"
+        },
+        {
+          "text": "MRD-产品目标与设计",
+          "link": "/books/low-code-platform/03-MRD-产品目标与设计"
+        },
+        {
+          "text": "架构-Canvas-VS-DOM",
+          "link": "/books/low-code-platform/04-架构-Canvas-VS-DOM"
+        },
+        {
+          "text": "架构-通用-Schema-设计",
+          "link": "/books/low-code-platform/05-架构-通用-Schema-设计"
+        },
+        {
+          "text": "架构-组件与物料设计",
+          "link": "/books/low-code-platform/06-架构-组件与物料设计"
+        },
+        {
+          "text": "架构-模板设计",
+          "link": "/books/low-code-platform/07-架构-模板设计"
+        },
+        {
+          "text": "架构-服务端介绍",
+          "link": "/books/low-code-platform/08-架构-服务端介绍"
+        },
+        {
+          "text": "架构-CLI-设计",
+          "link": "/books/low-code-platform/09-架构-CLI-设计"
+        },
+        {
+          "text": "架构-组件通信设计",
+          "link": "/books/low-code-platform/10-架构-组件通信设计"
+        },
+        {
+          "text": "架构-CI\\CD-设计",
+          "link": "/books/low-code-platform/11-架构-CI\\CD-设计"
+        },
+        {
+          "text": "🏆-学习里程碑-设计篇完结",
+          "link": "/books/low-code-platform/12-🏆-学习里程碑-设计篇完结"
+        },
+        {
+          "text": "服务端实战-初始化项目",
+          "link": "/books/low-code-platform/13-服务端实战-初始化项目"
+        },
+        {
+          "text": "服务端实战-基础大综合",
+          "link": "/books/low-code-platform/14-服务端实战-基础大综合"
+        },
+        {
+          "text": "服务端实战-数据库工具封装",
+          "link": "/books/low-code-platform/15-服务端实战-数据库工具封装"
+        },
+        {
+          "text": "服务端实战-数据库实操MYSQL",
+          "link": "/books/low-code-platform/16-服务端实战-数据库实操MYSQL"
+        },
+        {
+          "text": "服务端实战-数据库实操Mongoose",
+          "link": "/books/low-code-platform/17-服务端实战-数据库实操Mongoose"
+        },
+        {
+          "text": "服务端实战-数据库实操进阶",
+          "link": "/books/low-code-platform/18-服务端实战-数据库实操进阶"
+        },
+        {
+          "text": "服务端实战-CICD-CLI",
+          "link": "/books/low-code-platform/19-服务端实战-CICD-CLI"
+        },
+        {
+          "text": "服务端实战-用户服务开发上",
+          "link": "/books/low-code-platform/20-服务端实战-用户服务开发上"
+        },
+        {
+          "text": "客户端实战-初始化项目",
+          "link": "/books/low-code-platform/21-客户端实战-初始化项目"
+        },
+        {
+          "text": "服务端实战-用户服务开发下",
+          "link": "/books/low-code-platform/22-服务端实战-用户服务开发下"
+        },
+        {
+          "text": "服务端实战-物料服务开发",
+          "link": "/books/low-code-platform/23-服务端实战-物料服务开发"
+        },
+        {
+          "text": "服务端实战-DevOps-服务开发",
+          "link": "/books/low-code-platform/24-服务端实战-DevOps-服务开发"
+        },
+        {
+          "text": "服务端实战-搭建服务开发",
+          "link": "/books/low-code-platform/25-服务端实战-搭建服务开发"
+        },
+        {
+          "text": "CI\\CD-实战-物料与产物",
+          "link": "/books/low-code-platform/26-CI\\CD-实战-物料与产物"
+        },
+        {
+          "text": "服务端实战-服务部署",
+          "link": "/books/low-code-platform/27-服务端实战-服务部署"
+        },
+        {
+          "text": "客户端实战-初始化项目",
+          "link": "/books/low-code-platform/28-客户端实战-初始化项目"
+        },
+        {
+          "text": "客户端实战-拖拽功能实现",
+          "link": "/books/low-code-platform/29-客户端实战-拖拽功能实现"
+        },
+        {
+          "text": "客户端实战-属性编排功能实现",
+          "link": "/books/low-code-platform/30-客户端实战-属性编排功能实现"
+        },
+        {
+          "text": "客户端实战-属性编排功能进阶",
+          "link": "/books/low-code-platform/31-客户端实战-属性编排功能进阶"
+        },
+        {
+          "text": "客户端实战-动态逻辑执行实现",
+          "link": "/books/low-code-platform/32-客户端实战-动态逻辑执行实现"
+        },
+        {
+          "text": "客户端实战-本地预览功能实现",
+          "link": "/books/low-code-platform/33-客户端实战-本地预览功能实现"
+        },
+        {
+          "text": "客户端实战-历史记录与版本功能",
+          "link": "/books/low-code-platform/34-客户端实战-历史记录与版本功能"
+        },
+        {
+          "text": "客户端实战-组件状态绑定实现",
+          "link": "/books/low-code-platform/35-客户端实战-组件状态绑定实现"
+        },
+        {
+          "text": "客户端实战-远程资源加载实现",
+          "link": "/books/low-code-platform/36-客户端实战-远程资源加载实现"
+        },
+        {
+          "text": "客户端实战-远程资源加载应用实现",
+          "link": "/books/low-code-platform/37-客户端实战-远程资源加载应用实现"
+        },
+        {
+          "text": "组件实战-开发套件实现",
+          "link": "/books/low-code-platform/38-组件实战-开发套件实现"
+        },
+        {
+          "text": "组件实战-布局组件实现",
+          "link": "/books/low-code-platform/39-组件实战-布局组件实现"
+        },
+        {
+          "text": "组件实战-表单组件开发",
+          "link": "/books/low-code-platform/40-组件实战-表单组件开发"
+        },
+        {
+          "text": "组件实战-表格组件开发",
+          "link": "/books/low-code-platform/41-组件实战-表格组件开发"
+        },
+        {
+          "text": "组件实战-国际化语言开发实现",
+          "link": "/books/low-code-platform/42-组件实战-国际化语言开发实现"
+        },
+        {
+          "text": "项目进阶-Low-Code-搭建",
+          "link": "/books/low-code-platform/43-项目进阶-Low-Code-搭建"
+        },
+        {
+          "text": "项目进阶-Pro-Code-开发与产物",
+          "link": "/books/low-code-platform/44-项目进阶-Pro-Code-开发与产物"
+        },
+        {
+          "text": "项目进阶-构建前端工程",
+          "link": "/books/low-code-platform/45-项目进阶-构建前端工程"
+        },
+        {
+          "text": "项目进阶-消息通信",
+          "link": "/books/low-code-platform/46-项目进阶-消息通信"
+        },
+        {
+          "text": "项目进阶-消息通信-事件联动",
+          "link": "/books/low-code-platform/47-项目进阶-消息通信-事件联动"
+        },
+        {
+          "text": "项目进阶-D2C-的实现",
+          "link": "/books/low-code-platform/48-项目进阶-D2C-的实现"
+        },
+        {
+          "text": "项目进阶-低代码与-AST",
+          "link": "/books/low-code-platform/49-项目进阶-低代码与-AST"
+        },
+        {
+          "text": "失败的-GPT-接入",
+          "link": "/books/low-code-platform/50-失败的-GPT-接入"
+        },
+        {
+          "text": "🏆-完结撒花-🎉",
+          "link": "/books/low-code-platform/51-🏆-完结撒花-🎉"
+        },
+        {
+          "text": "🥳FAQ",
+          "link": "/books/low-code-platform/52-🥳FAQ"
+        },
+        {
+          "text": "直播&录屏",
+          "link": "/books/low-code-platform/53-直播&录屏"
+        }
+      ]
+    }
+  ],
+  "/books/cicd-guide/": [
+    {
+      "text": "从 0 到 1 实现一套 CI/CD 流程",
+      "items": [
+        {
+          "text": "前言-什么是-CICD-&-为什么要学-CICD",
+          "link": "/books/cicd-guide/01-前言-什么是-CICD-&-为什么要学-CICD"
+        },
+        {
+          "text": "安装-Docker-和-Jenkins-持续构建环境起步",
+          "link": "/books/cicd-guide/02-安装-Docker-和-Jenkins-持续构建环境起步"
+        },
+        {
+          "text": "使用-Jenkins-构建镜像-将你的应用打包成镜像",
+          "link": "/books/cicd-guide/03-使用-Jenkins-构建镜像-将你的应用打包成镜像"
+        },
+        {
+          "text": "将镜像上传至私有镜像库-让镜像管理更私密",
+          "link": "/books/cicd-guide/04-将镜像上传至私有镜像库-让镜像管理更私密"
+        },
+        {
+          "text": "进入-CD-的世界",
+          "link": "/books/cicd-guide/05-进入-CD-的世界"
+        },
+        {
+          "text": "什么是-Kubernetes-&&-搭建-Kubernetes-集群-持续部署环境起步",
+          "link": "/books/cicd-guide/06-什么是-Kubernetes-&&-搭建-Kubernetes-集群-持续部署环境起步"
+        },
+        {
+          "text": "使用-Kubernetes-部署访问你的第一个应用",
+          "link": "/books/cicd-guide/07-使用-Kubernetes-部署访问你的第一个应用"
+        },
+        {
+          "text": "Kubernetes-灰度发布与滚动发布-零宕机发布的奥秘",
+          "link": "/books/cicd-guide/08-Kubernetes-灰度发布与滚动发布-零宕机发布的奥秘"
+        },
+        {
+          "text": "服务可用性探针-如何判断你的服务是否可用",
+          "link": "/books/cicd-guide/09-服务可用性探针-如何判断你的服务是否可用"
+        },
+        {
+          "text": "Kubernetes-Secret-储存你的机密信息",
+          "link": "/books/cicd-guide/10-Kubernetes-Secret-储存你的机密信息"
+        },
+        {
+          "text": "Kubernetes-DNS-策略-将你的服务连接起来",
+          "link": "/books/cicd-guide/11-Kubernetes-DNS-策略-将你的服务连接起来"
+        },
+        {
+          "text": "Kubernetes-ConfigMap-统一管理服务环境变量",
+          "link": "/books/cicd-guide/12-Kubernetes-ConfigMap-统一管理服务环境变量"
+        },
+        {
+          "text": "Kubernetes-污点与容忍-更好地分配集群资源",
+          "link": "/books/cicd-guide/13-Kubernetes-污点与容忍-更好地分配集群资源"
+        },
+        {
+          "text": "实战训练-部署一个前后端分离项目",
+          "link": "/books/cicd-guide/14-实战训练-部署一个前后端分离项目"
+        },
+        {
+          "text": "总结-结束语",
+          "link": "/books/cicd-guide/15-总结-结束语"
+        },
+        {
+          "text": "附录-更新记录",
+          "link": "/books/cicd-guide/16-附录-更新记录"
+        }
+      ]
+    }
+  ],
+  "/books/redis7/": [
+    {
+      "text": "说透 Redis 7",
+      "items": [
+        {
+          "text": "第01章—开篇词-如何才能精通Redis",
+          "link": "/books/redis7/01-第01章—开篇词-如何才能精通Redis"
+        },
+        {
+          "text": "第02章—先导基础篇-初识Redis",
+          "link": "/books/redis7/02-第02章—先导基础篇-初识Redis"
+        },
+        {
+          "text": "第03章—先导基础篇-10分钟C语言入门",
+          "link": "/books/redis7/03-第03章—先导基础篇-10分钟C语言入门"
+        },
+        {
+          "text": "第04章—先导基础篇-Redis7.0环境搭建与PR阅读指导",
+          "link": "/books/redis7/04-第04章—先导基础篇-Redis7.0环境搭建与PR阅读指导"
+        },
+        {
+          "text": "第05章—实战应用篇-RedisString命令与实战",
+          "link": "/books/redis7/05-第05章—实战应用篇-RedisString命令与实战"
+        },
+        {
+          "text": "第06章—实战应用篇-List命令详解与实战上",
+          "link": "/books/redis7/06-第06章—实战应用篇-List命令详解与实战上"
+        },
+        {
+          "text": "第07章—实战应用篇-List命令详解与实战下",
+          "link": "/books/redis7/07-第07章—实战应用篇-List命令详解与实战下"
+        },
+        {
+          "text": "第08章—实战应用篇-Hash命令详解与实战上",
+          "link": "/books/redis7/08-第08章—实战应用篇-Hash命令详解与实战上"
+        },
+        {
+          "text": "第09章—实战应用篇-Hash命令详解与实战下",
+          "link": "/books/redis7/09-第09章—实战应用篇-Hash命令详解与实战下"
+        },
+        {
+          "text": "第10章—实战应用篇-Set命令详解与实战",
+          "link": "/books/redis7/10-第10章—实战应用篇-Set命令详解与实战"
+        },
+        {
+          "text": "第11章—实战应用篇-SortedSet命令详解与实战",
+          "link": "/books/redis7/11-第11章—实战应用篇-SortedSet命令详解与实战"
+        },
+        {
+          "text": "第12章—数据结构篇-深入Redissds",
+          "link": "/books/redis7/12-第12章—数据结构篇-深入Redissds"
+        },
+        {
+          "text": "第13章—数据结构篇-sds核心方法解析",
+          "link": "/books/redis7/13-第13章—数据结构篇-sds核心方法解析"
+        },
+        {
+          "text": "第14章—数据结构篇-深入ziplist之核心结构分析",
+          "link": "/books/redis7/14-第14章—数据结构篇-深入ziplist之核心结构分析"
+        },
+        {
+          "text": "第15章—数据结构篇-深入ziplist之写入数据",
+          "link": "/books/redis7/15-第15章—数据结构篇-深入ziplist之写入数据"
+        },
+        {
+          "text": "第16章—数据结构篇-深入ziplist之查询删除与更新操作详解",
+          "link": "/books/redis7/16-第16章—数据结构篇-深入ziplist之查询删除与更新操作详解"
+        },
+        {
+          "text": "第17章—数据结构篇-深入ziplist的替代者listpack",
+          "link": "/books/redis7/17-第17章—数据结构篇-深入ziplist的替代者listpack"
+        },
+        {
+          "text": "第18章—数据结构篇-quicklist核心原理剖析",
+          "link": "/books/redis7/18-第18章—数据结构篇-quicklist核心原理剖析"
+        },
+        {
+          "text": "第19章—数据结构篇-深入quicklist核心方法",
+          "link": "/books/redis7/19-第19章—数据结构篇-深入quicklist核心方法"
+        },
+        {
+          "text": "第20章—数据结构篇-深入Hash实现",
+          "link": "/books/redis7/20-第20章—数据结构篇-深入Hash实现"
+        },
+        {
+          "text": "第21章—数据结构篇-Hash核心方法剖析",
+          "link": "/books/redis7/21-第21章—数据结构篇-Hash核心方法剖析"
+        },
+        {
+          "text": "第22章—数据结构篇-Hash迭代器实现思想",
+          "link": "/books/redis7/22-第22章—数据结构篇-Hash迭代器实现思想"
+        },
+        {
+          "text": "第23章—数据结构篇-intset优化原理与实现",
+          "link": "/books/redis7/23-第23章—数据结构篇-intset优化原理与实现"
+        },
+        {
+          "text": "第24章—数据结构篇-skiplist原理与实现解析",
+          "link": "/books/redis7/24-第24章—数据结构篇-skiplist原理与实现解析"
+        },
+        {
+          "text": "第25章—数据结构篇-深入Rax树实现",
+          "link": "/books/redis7/25-第25章—数据结构篇-深入Rax树实现"
+        },
+        {
+          "text": "第26章—内核解析篇-Redis核心结构体精讲",
+          "link": "/books/redis7/26-第26章—内核解析篇-Redis核心结构体精讲"
+        },
+        {
+          "text": "第27章—内核解析篇-Redis线程模型与IO模型的进化史",
+          "link": "/books/redis7/27-第27章—内核解析篇-Redis线程模型与IO模型的进化史"
+        },
+        {
+          "text": "第28章—内核解析篇-Redis事件驱动核心框架解析",
+          "link": "/books/redis7/28-第28章—内核解析篇-Redis事件驱动核心框架解析"
+        },
+        {
+          "text": "第29章—内核解析篇-Redis网络建连逻辑详解",
+          "link": "/books/redis7/29-第29章—内核解析篇-Redis网络建连逻辑详解"
+        },
+        {
+          "text": "第30章—内核解析篇-Redis读取与请求核心",
+          "link": "/books/redis7/30-第30章—内核解析篇-Redis读取与请求核心"
+        },
+        {
+          "text": "第31章—内核解析篇-命令解析与执行",
+          "link": "/books/redis7/31-第31章—内核解析篇-命令解析与执行"
+        },
+        {
+          "text": "第32章—内核解析篇-命令响应的核心原理解析",
+          "link": "/books/redis7/32-第32章—内核解析篇-命令响应的核心原理解析"
+        },
+        {
+          "text": "第33章—内核解析篇-Redis时间事件的二三事",
+          "link": "/books/redis7/33-第33章—内核解析篇-Redis时间事件的二三事"
+        },
+        {
+          "text": "第34章—内核解析篇-RedisKey的过期与删除",
+          "link": "/books/redis7/34-第34章—内核解析篇-RedisKey的过期与删除"
+        },
+        {
+          "text": "第35章—内核解析篇-Redis内存淘汰机制",
+          "link": "/books/redis7/35-第35章—内核解析篇-Redis内存淘汰机制"
+        },
+        {
+          "text": "第36章—命令解析篇-通用命令与String命令实现解析",
+          "link": "/books/redis7/36-第36章—命令解析篇-通用命令与String命令实现解析"
+        },
+        {
+          "text": "第37章—命令解析篇-Hash与Set命令的实现原理",
+          "link": "/books/redis7/37-第37章—命令解析篇-Hash与Set命令的实现原理"
+        },
+        {
+          "text": "第38章—命令解析篇-List命令与阻塞操作原理",
+          "link": "/books/redis7/38-第38章—命令解析篇-List命令与阻塞操作原理"
+        },
+        {
+          "text": "第39章—命令解析篇-SortedSet命令实现原理",
+          "link": "/books/redis7/39-第39章—命令解析篇-SortedSet命令实现原理"
+        },
+        {
+          "text": "第40章—命令解析篇-事务命令实现解析",
+          "link": "/books/redis7/40-第40章—命令解析篇-事务命令实现解析"
+        },
+        {
+          "text": "第41章—持久存储篇-RDB持久化关键流程",
+          "link": "/books/redis7/41-第41章—持久存储篇-RDB持久化关键流程"
+        },
+        {
+          "text": "第42章—持久存储篇-RDB格式分析",
+          "link": "/books/redis7/42-第42章—持久存储篇-RDB格式分析"
+        },
+        {
+          "text": "第43章—持久存储篇-后台RDB持久化",
+          "link": "/books/redis7/43-第43章—持久存储篇-后台RDB持久化"
+        },
+        {
+          "text": "第44章—持久存储篇-AOF写入流程分析上",
+          "link": "/books/redis7/44-第44章—持久存储篇-AOF写入流程分析上"
+        },
+        {
+          "text": "第45章—持久存储篇-AOF写入流程分析下",
+          "link": "/books/redis7/45-第45章—持久存储篇-AOF写入流程分析下"
+        },
+        {
+          "text": "第46章—持久存储篇-AOFRewrite机制剖析",
+          "link": "/books/redis7/46-第46章—持久存储篇-AOFRewrite机制剖析"
+        },
+        {
+          "text": "第47章—主从同步篇-主从复制核心原理剖析",
+          "link": "/books/redis7/47-第47章—主从同步篇-主从复制核心原理剖析"
+        },
+        {
+          "text": "第48章—主从同步篇-从库视角下的主从复制上",
+          "link": "/books/redis7/48-第48章—主从同步篇-从库视角下的主从复制上"
+        },
+        {
+          "text": "第49章—主从同步篇-从库视角下的主从复制下",
+          "link": "/books/redis7/49-第49章—主从同步篇-从库视角下的主从复制下"
+        },
+        {
+          "text": "第50章—主从同步篇-主库视角下的主从复制上",
+          "link": "/books/redis7/50-第50章—主从同步篇-主库视角下的主从复制上"
+        },
+        {
+          "text": "第51章—主从同步篇-主库视角下的主从复制中",
+          "link": "/books/redis7/51-第51章—主从同步篇-主库视角下的主从复制中"
+        },
+        {
+          "text": "第52章—主从同步篇-主库视角下的主从复制下",
+          "link": "/books/redis7/52-第52章—主从同步篇-主库视角下的主从复制下"
+        },
+        {
+          "text": "第53章—Sentinel篇-Sentinel核心结构体分析",
+          "link": "/books/redis7/53-第53章—Sentinel篇-Sentinel核心结构体分析"
+        },
+        {
+          "text": "第54章—Sentinel篇-Sentinel监控原理",
+          "link": "/books/redis7/54-第54章—Sentinel篇-Sentinel监控原理"
+        },
+        {
+          "text": "第55章—Sentinel篇-Sentinel故障转移实现解析",
+          "link": "/books/redis7/55-第55章—Sentinel篇-Sentinel故障转移实现解析"
+        },
+        {
+          "text": "第57章—Cluster篇-RedisCluster节点握手流程分析",
+          "link": "/books/redis7/56-第57章—Cluster篇-RedisCluster节点握手流程分析"
+        },
+        {
+          "text": "第58章—Cluster篇-集群配置与slot分配解析",
+          "link": "/books/redis7/57-第58章—Cluster篇-集群配置与slot分配解析"
+        },
+        {
+          "text": "第59章—Cluster篇-RedisCluster中的failover原理",
+          "link": "/books/redis7/58-第59章—Cluster篇-RedisCluster中的failover原理"
+        },
+        {
+          "text": "第60章—Cluster篇-节点迁移与数据迁移实现解析",
+          "link": "/books/redis7/59-第60章—Cluster篇-节点迁移与数据迁移实现解析"
+        },
+        {
+          "text": "第61章—生产者-消费者模式篇-Pub&Sub与ShardPub&Sub解析",
+          "link": "/books/redis7/60-第61章—生产者-消费者模式篇-Pub&Sub与ShardPub&Sub解析"
+        },
+        {
+          "text": "第65章—扩展能力篇-GEO命令的二三事",
+          "link": "/books/redis7/61-第65章—扩展能力篇-GEO命令的二三事"
+        },
+        {
+          "text": "第66章—扩展能力篇-Redis扩展利器之Lua脚本",
+          "link": "/books/redis7/62-第66章—扩展能力篇-Redis扩展利器之Lua脚本"
+        },
+        {
+          "text": "第67章—扩展能力篇-Redis7新特性之Functions原理分析",
+          "link": "/books/redis7/63-第67章—扩展能力篇-Redis7新特性之Functions原理分析"
+        },
+        {
+          "text": "第68章—结束语-点亮你的Redis技能树轻松晋升为行业技术大牛",
+          "link": "/books/redis7/64-第68章—结束语-点亮你的Redis技能树轻松晋升为行业技术大牛"
+        }
+      ]
+    }
+  ],
+  "/books/chrome-devtools/": [
+    {
+      "text": "你不知道的 Chrome 调试技巧",
+      "items": [
+        {
+          "text": "写在前面",
+          "link": "/books/chrome-devtools/01-写在前面"
+        },
+        {
+          "text": "通用篇-copying-&-saving",
+          "link": "/books/chrome-devtools/02-通用篇-copying-&-saving"
+        },
+        {
+          "text": "通用篇-快捷键和通用技巧",
+          "link": "/books/chrome-devtools/03-通用篇-快捷键和通用技巧"
+        },
+        {
+          "text": "通用篇-使用-Command",
+          "link": "/books/chrome-devtools/04-通用篇-使用-Command"
+        },
+        {
+          "text": "通用篇-代码块的使用",
+          "link": "/books/chrome-devtools/05-通用篇-代码块的使用"
+        },
+        {
+          "text": "console-篇-console-中的-'$'",
+          "link": "/books/chrome-devtools/06-console-篇-console-中的-'$'"
+        },
+        {
+          "text": "console-篇-console-的-\"bug\"",
+          "link": "/books/chrome-devtools/07-console-篇-console-的-\"bug\""
+        },
+        {
+          "text": "console-篇-异步的-console",
+          "link": "/books/chrome-devtools/08-console-篇-异步的-console"
+        },
+        {
+          "text": "console-篇-Ninja-console.log-忍者打印",
+          "link": "/books/chrome-devtools/09-console-篇-Ninja-console.log-忍者打印"
+        },
+        {
+          "text": "console-篇-自定义格式转换器",
+          "link": "/books/chrome-devtools/10-console-篇-自定义格式转换器"
+        },
+        {
+          "text": "console-篇-对象-&-方法",
+          "link": "/books/chrome-devtools/11-console-篇-对象-&-方法"
+        },
+        {
+          "text": "console-篇-console-中骚操作",
+          "link": "/books/chrome-devtools/12-console-篇-console-中骚操作"
+        },
+        {
+          "text": "Network-篇-Network-的骚操作",
+          "link": "/books/chrome-devtools/13-Network-篇-Network-的骚操作"
+        },
+        {
+          "text": "元素面板篇-技巧集合",
+          "link": "/books/chrome-devtools/14-元素面板篇-技巧集合"
+        },
+        {
+          "text": "元素面板篇-颜色选择器",
+          "link": "/books/chrome-devtools/15-元素面板篇-颜色选择器"
+        },
+        {
+          "text": "Drawer-篇-Drawer-常识",
+          "link": "/books/chrome-devtools/16-Drawer-篇-Drawer-常识"
+        },
+        {
+          "text": "Workspace-篇-workspace-技巧",
+          "link": "/books/chrome-devtools/17-Workspace-篇-workspace-技巧"
+        },
+        {
+          "text": "结束语",
+          "link": "/books/chrome-devtools/18-结束语"
+        }
+      ]
+    }
+  ],
+  "/books/docker-guide/": [
+    {
+      "text": "开发者必备的 Docker 实践指南",
+      "items": [
+        {
+          "text": "安装运行-搭建-Docker-运行环境",
+          "link": "/books/docker-guide/01-安装运行-搭建-Docker-运行环境"
+        },
+        {
+          "text": "安装运行-在-Windows-和-Mac-中使用-Docker",
+          "link": "/books/docker-guide/02-安装运行-在-Windows-和-Mac-中使用-Docker"
+        },
+        {
+          "text": "百尺竿头更进一步",
+          "link": "/books/docker-guide/03-百尺竿头更进一步"
+        },
+        {
+          "text": "操作镜像-保存和共享镜像",
+          "link": "/books/docker-guide/04-操作镜像-保存和共享镜像"
+        },
+        {
+          "text": "操作镜像-常见的-Dockerfile-使用技巧",
+          "link": "/books/docker-guide/05-操作镜像-常见的-Dockerfile-使用技巧"
+        },
+        {
+          "text": "操作镜像-使用-Docker-Hub-中的镜像",
+          "link": "/books/docker-guide/06-操作镜像-使用-Docker-Hub-中的镜像"
+        },
+        {
+          "text": "操作镜像-通过-Dockerfile-创建镜像",
+          "link": "/books/docker-guide/07-操作镜像-通过-Dockerfile-创建镜像"
+        },
+        {
+          "text": "基础概念-了解-Docker-的核心组成",
+          "link": "/books/docker-guide/08-基础概念-了解-Docker-的核心组成"
+        },
+        {
+          "text": "基础概念-浅谈虚拟化和容器技术",
+          "link": "/books/docker-guide/09-基础概念-浅谈虚拟化和容器技术"
+        },
+        {
+          "text": "基础概念-这是-Docker-的简历",
+          "link": "/books/docker-guide/10-基础概念-这是-Docker-的简历"
+        },
+        {
+          "text": "实践之路-搭建-Java-Web-项目运行环境",
+          "link": "/books/docker-guide/11-实践之路-搭建-Java-Web-项目运行环境"
+        },
+        {
+          "text": "实践之路-在开发环境中使用服务发现",
+          "link": "/books/docker-guide/12-实践之路-在开发环境中使用服务发现"
+        },
+        {
+          "text": "使用容器-从镜像仓库获得镜像",
+          "link": "/books/docker-guide/13-使用容器-从镜像仓库获得镜像"
+        },
+        {
+          "text": "使用容器-管理和存储数据",
+          "link": "/books/docker-guide/14-使用容器-管理和存储数据"
+        },
+        {
+          "text": "使用容器-镜像与容器",
+          "link": "/books/docker-guide/15-使用容器-镜像与容器"
+        },
+        {
+          "text": "使用容器-为容器配置网络",
+          "link": "/books/docker-guide/16-使用容器-为容器配置网络"
+        },
+        {
+          "text": "使用容器-运行和管理容器",
+          "link": "/books/docker-guide/17-使用容器-运行和管理容器"
+        },
+        {
+          "text": "组合应用-编写-Docker-Compose-项目",
+          "link": "/books/docker-guide/18-组合应用-编写-Docker-Compose-项目"
+        },
+        {
+          "text": "组合应用-常用的-Docker-Compose-配置项",
+          "link": "/books/docker-guide/19-组合应用-常用的-Docker-Compose-配置项"
+        },
+        {
+          "text": "组合应用-使用-Docker-Compose-管理容器",
+          "link": "/books/docker-guide/20-组合应用-使用-Docker-Compose-管理容器"
+        },
+        {
+          "text": "组合应用-应用于服务化开发",
+          "link": "/books/docker-guide/21-组合应用-应用于服务化开发"
+        }
+      ]
+    }
+  ],
+  "/books/programmer-essential/": [
+    {
+      "text": "程序员的必修课",
+      "items": [
+        {
+          "text": "第01章—写在前面的话",
+          "link": "/books/programmer-essential/01-第01章—写在前面的话"
+        },
+        {
+          "text": "第02章—二进制-计算机程序的“细胞”",
+          "link": "/books/programmer-essential/02-第02章—二进制-计算机程序的“细胞”"
+        },
+        {
+          "text": "第03章—位运算-程序高速运行的基石",
+          "link": "/books/programmer-essential/03-第03章—位运算-程序高速运行的基石"
+        },
+        {
+          "text": "第04章—代码的基元-初识数据类型",
+          "link": "/books/programmer-essential/04-第04章—代码的基元-初识数据类型"
+        },
+        {
+          "text": "第05章—代码优化-挑选合适的数据类型",
+          "link": "/books/programmer-essential/05-第05章—代码优化-挑选合适的数据类型"
+        },
+        {
+          "text": "第06章—计算机的思维-代码的工作流程",
+          "link": "/books/programmer-essential/06-第06章—计算机的思维-代码的工作流程"
+        },
+        {
+          "text": "第07章—替朋友着想-优化我们的程序流",
+          "link": "/books/programmer-essential/07-第07章—替朋友着想-优化我们的程序流"
+        },
+        {
+          "text": "第08章—不同的思维-面向过程和面向对象",
+          "link": "/books/programmer-essential/08-第08章—不同的思维-面向过程和面向对象"
+        },
+        {
+          "text": "第09章—换位思考-程序该面向谁",
+          "link": "/books/programmer-essential/09-第09章—换位思考-程序该面向谁"
+        },
+        {
+          "text": "第10章—数据结构之基-从根儿上了解数据结构的特性",
+          "link": "/books/programmer-essential/10-第10章—数据结构之基-从根儿上了解数据结构的特性"
+        },
+        {
+          "text": "第11章—数据结构进阶-实现原理和设计思路",
+          "link": "/books/programmer-essential/11-第11章—数据结构进阶-实现原理和设计思路"
+        },
+        {
+          "text": "第12章—数据结构实践-选择合适的数据结构",
+          "link": "/books/programmer-essential/12-第12章—数据结构实践-选择合适的数据结构"
+        },
+        {
+          "text": "第13章—系统的基元-进程和线程",
+          "link": "/books/programmer-essential/13-第13章—系统的基元-进程和线程"
+        },
+        {
+          "text": "第14章—贪心的后果-并发及解决方案",
+          "link": "/books/programmer-essential/14-第14章—贪心的后果-并发及解决方案"
+        },
+        {
+          "text": "第15章—操作系统精粹-调度算法及使用",
+          "link": "/books/programmer-essential/15-第15章—操作系统精粹-调度算法及使用"
+        },
+        {
+          "text": "第16章—森严的等级制度-层级和协议",
+          "link": "/books/programmer-essential/16-第16章—森严的等级制度-层级和协议"
+        },
+        {
+          "text": "第17章—苦累的搬运工-TCP和UDP的传输过程",
+          "link": "/books/programmer-essential/17-第17章—苦累的搬运工-TCP和UDP的传输过程"
+        },
+        {
+          "text": "第18章—网络的实践-优化我们的网络请求",
+          "link": "/books/programmer-essential/18-第18章—网络的实践-优化我们的网络请求"
+        },
+        {
+          "text": "第19章—知己知彼-计算机的工作流程",
+          "link": "/books/programmer-essential/19-第19章—知己知彼-计算机的工作流程"
+        },
+        {
+          "text": "第20章—缓存策略-让程序更快一步",
+          "link": "/books/programmer-essential/20-第20章—缓存策略-让程序更快一步"
+        },
+        {
+          "text": "第21章—架构之基-从根儿上了解设计原则",
+          "link": "/books/programmer-essential/21-第21章—架构之基-从根儿上了解设计原则"
+        },
+        {
+          "text": "第22章—架构进阶-灵活运用设计模式",
+          "link": "/books/programmer-essential/22-第22章—架构进阶-灵活运用设计模式"
+        },
+        {
+          "text": "第23章—架构升华-脱离设计模式",
+          "link": "/books/programmer-essential/23-第23章—架构升华-脱离设计模式"
+        },
+        {
+          "text": "第24章—硬基本功-对象的关系与UML图",
+          "link": "/books/programmer-essential/24-第24章—硬基本功-对象的关系与UML图"
+        },
+        {
+          "text": "第25章—软基本功-需求的评估与反馈",
+          "link": "/books/programmer-essential/25-第25章—软基本功-需求的评估与反馈"
+        },
+        {
+          "text": "第26章—需求分析-直播间的需求评审",
+          "link": "/books/programmer-essential/26-第26章—需求分析-直播间的需求评审"
+        },
+        {
+          "text": "第27章—概要设计-设计我们的项目架构",
+          "link": "/books/programmer-essential/27-第27章—概要设计-设计我们的项目架构"
+        },
+        {
+          "text": "第28章—详细设计-开始实现业务逻辑",
+          "link": "/books/programmer-essential/28-第28章—详细设计-开始实现业务逻辑"
+        },
+        {
+          "text": "第29章—复盘-代码的Review与评估",
+          "link": "/books/programmer-essential/29-第29章—复盘-代码的Review与评估"
+        },
+        {
+          "text": "第30章—Git基础-工作流程和原理",
+          "link": "/books/programmer-essential/30-第30章—Git基础-工作流程和原理"
+        },
+        {
+          "text": "第31章—Git实践-常用的GUI工具和命令",
+          "link": "/books/programmer-essential/31-第31章—Git实践-常用的GUI工具和命令"
+        },
+        {
+          "text": "第32章—做事的核心-可靠",
+          "link": "/books/programmer-essential/32-第32章—做事的核心-可靠"
+        },
+        {
+          "text": "第33章—沟通的核心-高效",
+          "link": "/books/programmer-essential/33-第33章—沟通的核心-高效"
+        },
+        {
+          "text": "第34章—学习的诀窍-总结",
+          "link": "/books/programmer-essential/34-第34章—学习的诀窍-总结"
+        },
+        {
+          "text": "第35章—写在后面的话",
+          "link": "/books/programmer-essential/35-第35章—写在后面的话"
+        }
+      ]
+    }
+  ],
+  "/books/career-guide/": [
+    {
+      "text": "程序员职业小白书",
+      "items": [
+        {
+          "text": "常见问题解答",
+          "link": "/books/career-guide/01-常见问题解答"
+        },
+        {
+          "text": "职业规划-1-通过职业价值论理解一个程序员的真实价值",
+          "link": "/books/career-guide/02-职业规划-1-通过职业价值论理解一个程序员的真实价值"
+        },
+        {
+          "text": "职业规划-1.1-程序员市场的供需关系对求职的影响",
+          "link": "/books/career-guide/03-职业规划-1.1-程序员市场的供需关系对求职的影响"
+        },
+        {
+          "text": "职业规划-1.2-实操职业供需关系的量化分析",
+          "link": "/books/career-guide/04-职业规划-1.2-实操职业供需关系的量化分析"
+        },
+        {
+          "text": "职业规划-1.3-扩展渠道减少信息不对称带来的求职损失",
+          "link": "/books/career-guide/05-职业规划-1.3-扩展渠道减少信息不对称带来的求职损失"
+        },
+        {
+          "text": "职业规划-2.1-通过四大象限和职业路线图理解程序员的主要职业发展路径",
+          "link": "/books/career-guide/06-职业规划-2.1-通过四大象限和职业路线图理解程序员的主要职业发展路径"
+        },
+        {
+          "text": "职业规划-2.2-不同职业发展的程序员的日常",
+          "link": "/books/career-guide/07-职业规划-2.2-不同职业发展的程序员的日常"
+        },
+        {
+          "text": "职业规划-3.1-通过职业画布理解应届生和新手的市场竞争力",
+          "link": "/books/career-guide/08-职业规划-3.1-通过职业画布理解应届生和新手的市场竞争力"
+        },
+        {
+          "text": "职业规划-3.2-如何写出一份专业的技术简历",
+          "link": "/books/career-guide/09-职业规划-3.2-如何写出一份专业的技术简历"
+        },
+        {
+          "text": "职业经营-1-程序员职业的本质",
+          "link": "/books/career-guide/10-职业经营-1-程序员职业的本质"
+        },
+        {
+          "text": "职业经营-2-如何选择技术方向和编程语言",
+          "link": "/books/career-guide/11-职业经营-2-如何选择技术方向和编程语言"
+        },
+        {
+          "text": "职业经营-3.1-新手如何快速起步",
+          "link": "/books/career-guide/12-职业经营-3.1-新手如何快速起步"
+        },
+        {
+          "text": "职业经营-3.2-老手如何远离职业误区",
+          "link": "/books/career-guide/13-职业经营-3.2-老手如何远离职业误区"
+        },
+        {
+          "text": "职业经营-3.3-突破管理岗发展中的主要瓶颈",
+          "link": "/books/career-guide/14-职业经营-3.3-突破管理岗发展中的主要瓶颈"
+        }
+      ]
+    }
+  ],
+  "/books/wechat-miniprogram/": [
+    {
+      "text": "微信小程序开发入门",
+      "items": [
+        {
+          "text": "开篇-微信小程序概述",
+          "link": "/books/wechat-miniprogram/01-开篇-微信小程序概述"
+        },
+        {
+          "text": "基础篇-1-小程序开发基础知识",
+          "link": "/books/wechat-miniprogram/02-基础篇-1-小程序开发基础知识"
+        },
+        {
+          "text": "基础篇-2-小程序云开发基础知识",
+          "link": "/books/wechat-miniprogram/03-基础篇-2-小程序云开发基础知识"
+        },
+        {
+          "text": "基础篇-3-小程序架构及其实现机制",
+          "link": "/books/wechat-miniprogram/04-基础篇-3-小程序架构及其实现机制"
+        },
+        {
+          "text": "实战篇-1-小程序开发环境搭建",
+          "link": "/books/wechat-miniprogram/05-实战篇-1-小程序开发环境搭建"
+        },
+        {
+          "text": "实战篇-2-新鲜天气小程序简介",
+          "link": "/books/wechat-miniprogram/06-实战篇-2-新鲜天气小程序简介"
+        },
+        {
+          "text": "实战篇-3-天气页面样式布局开发",
+          "link": "/books/wechat-miniprogram/07-实战篇-3-天气页面样式布局开发"
+        },
+        {
+          "text": "实战篇-4-天气页面数据获取和交互实现",
+          "link": "/books/wechat-miniprogram/08-实战篇-4-天气页面数据获取和交互实现"
+        },
+        {
+          "text": "实战篇-5-为天气页面制作雨雪效果的粒子系统",
+          "link": "/books/wechat-miniprogram/09-实战篇-5-为天气页面制作雨雪效果的粒子系统"
+        },
+        {
+          "text": "实战篇-6-心情签到页面开发",
+          "link": "/books/wechat-miniprogram/10-实战篇-6-心情签到页面开发"
+        },
+        {
+          "text": "实战篇-7-对小程序进行优化",
+          "link": "/books/wechat-miniprogram/11-实战篇-7-对小程序进行优化"
+        },
+        {
+          "text": "实战篇-8-小程序调试技巧和上线发布",
+          "link": "/books/wechat-miniprogram/12-实战篇-8-小程序调试技巧和上线发布"
+        },
+        {
+          "text": "总结与拓展",
+          "link": "/books/wechat-miniprogram/13-总结与拓展"
+        }
+      ]
+    }
+  ]
+}

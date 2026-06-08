@@ -1,0 +1,14 @@
+{
+  "name": "craftx-books",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "prebuild": "node scripts/escape-vitepress-braces.mjs && node scripts/normalize-missing-assets.mjs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}

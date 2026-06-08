@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# VitePress
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Generated
+migrate.mjs
+fix-vue-syntax.mjs
+
+# Logs
+*.log
+npm-debug.log*
+
+# Source archives kept outside the published VitePress site
+/Claude Code 企业级全链路开发实战/
+/Claude_Code企业级老项目改造实战/
+/MySQL 是怎样运行的：从根儿上理解 MySQL/
+/TypeScript 入门教程/
+/TypeScript全面进阶指南/
+/从 0 打造通用型低代码产品/
+/从0到1实现一套CI_CD流程/
+/你不知道的 Chrome 调试技巧/
+/开发者必备的 Docker 实践指南/
+/微信小程序开发入门：从 0 到 1 实现天气小程序/
+/程序员的必修课/
+/程序员职业小白书 —— 如何规划和经营你的职业/
+/许式伟的架构课/
+/说透Redis7/

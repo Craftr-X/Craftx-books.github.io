@@ -1,0 +1,225 @@
+/* ========== 科技感主题定制 ========== */
+
+:root {
+  /* 主色调 - 靛蓝紫 */
+  --vp-c-brand-1: #818cf8;
+  --vp-c-brand-2: #6366f1;
+  --vp-c-brand-3: #4f46e5;
+  --vp-c-brand-soft: rgba(99, 102, 241, 0.14);
+
+  /* 首页 Hero 渐变 */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #6366f1 30%, #06b6d4);
+
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #6366f1 50%, #06b6d4 50%);
+  --vp-home-hero-image-filter: blur(44px);
+}
+
+.dark {
+  --vp-c-brand-1: #a5b4fc;
+  --vp-c-brand-2: #818cf8;
+  --vp-c-brand-3: #6366f1;
+  --vp-c-brand-soft: rgba(129, 140, 248, 0.14);
+
+  /* 暗黑模式背景 */
+  --vp-c-bg: #0a0a1a;
+  --vp-c-bg-alt: #0f0f2a;
+  --vp-c-bg-elv: #14142b;
+  --vp-c-bg-soft: #1a1a3e;
+}
+
+/* ========== 首页美化 ========== */
+
+.VPHero .VPImage {
+  border-radius: 20px;
+}
+
+.VPHero .name {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.VPHero .tagline {
+  font-size: 20px !important;
+  color: var(--vp-c-text-2);
+}
+
+/* ========== 卡片效果 ========== */
+
+.VPFeature {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background: var(--vp-c-bg-soft);
+}
+
+.VPFeature:hover {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+  transform: translateY(-2px);
+}
+
+.VPFeature .title {
+  color: var(--vp-c-brand-1) !important;
+  font-weight: 600;
+}
+
+/* ========== 侧边栏美化 ========== */
+
+.VPSidebar {
+  border-right: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-alt);
+}
+
+.VPSidebarItem .text {
+  transition: color 0.2s;
+}
+
+.VPSidebarItem.is-active > .item > .indicator {
+  background-color: var(--vp-c-brand-1);
+  width: 3px;
+  border-radius: 2px;
+}
+
+.VPSidebarItem.is-active > .item .text {
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
+}
+
+/* ========== 导航栏美化 ========== */
+
+.VPNavBar {
+  backdrop-filter: blur(12px) !important;
+  background: rgba(10, 10, 26, 0.8) !important;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.VPNavBarTitle .title {
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--vp-c-brand-1), #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== 代码块美化 ========== */
+
+.vp-code-group {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+div[class*='language-'] {
+  border-radius: 8px;
+  border: 1px solid var(--vp-c-divider);
+}
+
+/* ========== 内容区域 ========== */
+
+.vp-doc h1 {
+  background: linear-gradient(135deg, var(--vp-c-brand-1), #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+.vp-doc h2 {
+  border-bottom: 2px solid var(--vp-c-brand-soft);
+  padding-bottom: 8px;
+  margin-top: 40px;
+}
+
+/* 阅读进度条 */
+.vp-doc {
+  position: relative;
+}
+
+/* 链接样式 */
+.vp-doc a {
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.vp-doc a:hover {
+  border-bottom-color: var(--vp-c-brand-1);
+}
+
+/* 表格美化 */
+.vp-doc table {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc th {
+  background: var(--vp-c-brand-soft);
+  font-weight: 600;
+}
+
+/* ========== 滚动条 ========== */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vp-c-divider);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vp-c-brand-1);
+}
+
+/* ========== 底部导航美化 ========== */
+
+.VPDocFooter .pager {
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+  transition: all 0.3s ease;
+}
+
+.VPDocFooter .pager:hover {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.1);
+}
+
+/* ========== 搜索框美化 ========== */
+
+.VPLocalSearchBox {
+  --vp-local-search-bg: var(--vp-c-bg);
+  --vp-local-search-result-bg: var(--vp-c-bg-soft);
+}
+
+/* ========== 动画 ========== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.VPContent {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* ========== 响应式 ========== */
+
+@media (max-width: 768px) {
+  .VPHero .tagline {
+    font-size: 16px !important;
+  }
+}
