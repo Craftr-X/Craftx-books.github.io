@@ -2,12 +2,14 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useData } from 'vitepress'
 
-const { frontmatter, isDark } = useData()
+const { frontmatter } = useData()
 const container = ref<HTMLElement | null>(null)
 const mounted = ref(false)
 const giscusScript = ref<HTMLScriptElement | null>(null)
-const shouldRender = computed(() => frontmatter.value.layout === 'doc' && frontmatter.value.comments !== false)
-const giscusTheme = computed(() => (isDark.value ? 'dark' : 'light'))
+const shouldRender = computed(() => {
+  const layout = frontmatter.value.layout
+  return frontmatter.value.comments !== false && layout !== 'home' && layout !== 'page'
+})
 
 function mountGiscus() {
   if (!container.value || !shouldRender.value) return
@@ -40,7 +42,7 @@ onMounted(() => {
   mountGiscus()
 })
 
-watch([giscusTheme, shouldRender], () => {
+watch(shouldRender, () => {
   if (mounted.value) {
     mountGiscus()
   }
