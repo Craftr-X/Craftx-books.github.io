@@ -8,7 +8,7 @@ import BookComment from './components/BookComment.vue'
 export default {
   extends: DefaultTheme,
   Layout: () => h(DefaultTheme.Layout, null, {
-    'doc-after': () => h(BookComment),
+    'doc-footer-before': () => h(BookComment),
   }),
   enhanceApp({ app }) {
     // 注册全局组件
