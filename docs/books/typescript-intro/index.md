@@ -4,7 +4,6 @@ title: TypeScript 入门教程
 description: 从 JavaScript 到 TypeScript 的第一步
 aside: false
 editLink: false
-comments: false
 ---
 
 # TypeScript 入门教程

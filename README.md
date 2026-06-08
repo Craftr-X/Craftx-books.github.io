@@ -106,6 +106,31 @@ docs/.vitepress/theme/components/BookComment.vue
 Craftr-X/Craftx-books.github.io
 ```
 
+`configure` 示例：
+
+```yaml
+giscus:
+  enable: false
+  repo: # Github repository name
+  repo_id: # Github repository id
+  category: # Github discussion category
+  category_id: # Github discussion category id
+  # Available values: pathname | url | title | og:title
+  mapping: pathname
+  # Available values: 0 | 1
+  reactions_enabled: 1
+  # Available values: 0 | 1
+  emit_metadata: 1
+  # Available values: light | light_high_contrast | light_protanopia | light_tritanopia | dark | dark_h
+  theme: light
+  # Available values: en | zh-CN
+  lang: en
+  # Place the comment box above the comments
+  input_position: bottom
+  # Load the comments lazily
+  loading: lazy
+```
+
 要让评论真正显示，需要在 Giscus 官网生成配置，并补全以下两个值：
 
 ```html

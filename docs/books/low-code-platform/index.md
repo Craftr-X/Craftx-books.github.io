@@ -4,7 +4,6 @@ title: 从 0 打造通用型低代码产品
 description: 低代码平台架构与实现
 aside: false
 editLink: false
-comments: false
 ---
 
 # 从 0 打造通用型低代码产品

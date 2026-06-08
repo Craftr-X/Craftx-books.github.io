@@ -4,7 +4,6 @@ title: 开发者必备的 Docker 实践指南
 description: 容器化技术从入门到实践
 aside: false
 editLink: false
-comments: false
 ---
 
 # 开发者必备的 Docker 实践指南

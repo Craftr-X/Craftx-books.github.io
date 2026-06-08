@@ -4,7 +4,6 @@ title: TypeScript 全面进阶指南
 description: 深入理解 TypeScript 类型系统
 aside: false
 editLink: false
-comments: false
 ---
 
 # TypeScript 全面进阶指南

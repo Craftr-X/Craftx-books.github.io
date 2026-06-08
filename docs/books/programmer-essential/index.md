@@ -4,7 +4,6 @@ title: 程序员的必修课
 description: 计算机基础与编程素养
 aside: false
 editLink: false
-comments: false
 ---
 
 # 程序员的必修课

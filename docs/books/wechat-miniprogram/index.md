@@ -4,7 +4,6 @@ title: 微信小程序开发入门
 description: 从 0 到 1 实现天气小程序
 aside: false
 editLink: false
-comments: false
 ---
 
 # 微信小程序开发入门

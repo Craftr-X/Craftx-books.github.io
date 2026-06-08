@@ -4,7 +4,6 @@ title: MySQL 是怎样运行的
 description: 从根儿上理解 MySQL
 aside: false
 editLink: false
-comments: false
 ---
 
 # MySQL 是怎样运行的

@@ -4,7 +4,6 @@ title: 程序员职业小白书
 description: 如何规划和经营你的职业
 aside: false
 editLink: false
-comments: false
 ---
 
 # 程序员职业小白书

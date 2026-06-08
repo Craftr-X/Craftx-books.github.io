@@ -4,7 +4,6 @@ title: Claude Code 企业级全链路开发实战
 description: 一个人用 Claude Code 造一个简版 Dify
 aside: false
 editLink: false
-comments: false
 ---
 
 # Claude Code 企业级全链路开发实战

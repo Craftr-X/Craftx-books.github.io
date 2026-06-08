@@ -4,7 +4,6 @@ title: 说透 Redis 7
 description: 深度解析 Redis 核心原理与实战
 aside: false
 editLink: false
-comments: false
 ---
 
 # 说透 Redis 7

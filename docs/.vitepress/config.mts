@@ -32,6 +32,7 @@ export default defineConfig({
   title: 'CraftX Books',
   description: '技术小册合集 — 沉浸式阅读体验',
   lang: 'zh-CN',
+  base: '/Craftx-books.github.io/',
   outDir: '../dist',
   cleanUrls: true,
   ignoreDeadLinks: true,

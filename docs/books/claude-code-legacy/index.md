@@ -4,7 +4,6 @@ title: Claude Code 企业级老项目改造实战
 description: 用 AI 重构遗留代码的实战指南
 aside: false
 editLink: false
-comments: false
 ---
 
 # Claude Code 企业级老项目改造实战
