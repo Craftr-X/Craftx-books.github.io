@@ -1,25 +1,49 @@
 # CraftX Books
 
-技术小册合集站点，基于 VitePress 构建，发布到 GitHub Pages。
+[![VitePress](https://img.shields.io/badge/VitePress-1.6.4-646cff?logo=vite&logoColor=white)](https://vitepress.dev/)
+[![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-222?logo=github)](https://github.com/Craftr-X/Craftx-books.github.io/actions)
 
-## 项目结构
+CraftX Books 是一个基于 VitePress 构建的技术小册合集站点，发布到 GitHub Pages。站点聚合多本技术小册，支持在线阅读、目录导航、本地搜索、深浅色主题切换和章节评论讨论，适合沉浸式阅读与系统化学习。
 
-```text
-.
-├── docs/                         # VitePress 文档站点源码
-│   ├── .vitepress/               # VitePress 配置、主题和组件
-│   ├── books/                    # 小册正文
-│   ├── public/                   # 静态资源
-│   └── index.md                  # 首页入口
-├── scripts/                      # 构建前处理脚本
-├── sidebar-generated.json        # 侧边栏配置
-├── package.json                  # npm 脚本与依赖
-└── .github/workflows/deploy.yml  # GitHub Pages 自动部署流程
-```
+> 仓库地址：<https://github.com/Craftr-X/Craftx-books.github.io>
 
-根目录下的原始中文书籍文件夹只作为本地素材保留，已经在 `.gitignore` 中排除，不会随站点源码提交。
+## ✨ 主要特性
 
-## 本地运行
+- 📚 技术小册在线阅读：所有小册统一放在 `docs/books/` 下，按目录生成阅读路径。
+- 🧭 自动化导航：通过 VitePress 导航、侧边栏和页面目录提供清晰的章节浏览体验。
+- 🔎 本地搜索：使用 VitePress 内置 local search，支持站内内容检索。
+- 💬 评论讨论：章节页接入 Giscus，基于 GitHub Discussions 承载读者交流。
+- 🌓 主题切换：沿用 VitePress 深色/浅色模式，评论主题跟随系统偏好。
+- 🧩 内容预处理：构建前自动处理 Markdown 兼容问题和缺失资源占位。
+- 🚀 自动部署：推送到 `main` 分支后通过 GitHub Actions 构建并发布到 GitHub Pages。
+
+## 📖 技术小册
+
+以下顺序与站点导航配置保持一致：
+
+| 小册 | 简介 | 阅读链接 |
+| --- | --- | --- |
+| Claude Code 企业级全链路开发实战 | 一个人用 Claude Code 造一个简版 Dify | [开始阅读](./docs/books/claude-code-dev/) |
+| Claude Code 企业级老项目改造实战 | 用 AI 重构遗留代码的实战指南 | [开始阅读](./docs/books/claude-code-legacy/) |
+| MySQL 是怎样运行的 | 从根儿上理解 MySQL | [开始阅读](./docs/books/mysql-running/) |
+| TypeScript 入门教程 | 从 JavaScript 到 TypeScript 的第一步 | [开始阅读](./docs/books/typescript-intro/) |
+| TypeScript 全面进阶指南 | 深入理解 TypeScript 类型系统 | [开始阅读](./docs/books/typescript-advanced/) |
+| 从 0 打造通用型低代码产品 | 低代码平台架构与实现 | [开始阅读](./docs/books/low-code-platform/) |
+| 从 0 到 1 实现一套 CI/CD 流程 | Jenkins + Kubernetes 持续集成部署 | [开始阅读](./docs/books/cicd-guide/) |
+| 说透 Redis 7 | 深度解析 Redis 核心原理与实战 | [开始阅读](./docs/books/redis7/) |
+| 你不知道的 Chrome 调试技巧 | 提升前端调试效率的实用技巧 | [开始阅读](./docs/books/chrome-devtools/) |
+| 开发者必备的 Docker 实践指南 | 容器化技术从入门到实践 | [开始阅读](./docs/books/docker-guide/) |
+| 程序员的必修课 | 计算机基础与编程素养 | [开始阅读](./docs/books/programmer-essential/) |
+| 程序员职业小白书 | 如何规划和经营你的职业 | [开始阅读](./docs/books/career-guide/) |
+| 微信小程序开发入门 | 从 0 到 1 实现天气小程序 | [开始阅读](./docs/books/wechat-miniprogram/) |
+| 从0开始构建AgentHarness | 从零开始构建 Agent Harness 的完整指南 | [开始阅读](./docs/books/build-agent-harness/) |
+
+## 🚀 快速开始
+
+环境要求：
+
+- Node.js 20 或更高版本
+- npm
 
 安装依赖：
 
@@ -45,7 +69,58 @@ npm run build
 npm run preview
 ```
 
-## 构建说明
+## 💬 评论功能说明
+
+评论组件位于：
+
+```text
+docs/.vitepress/theme/components/BookComment.vue
+```
+
+当前使用 Giscus，并绑定到以下 GitHub 仓库与 Discussions 分类：
+
+```text
+repo: Craftr-X/Craftx-books.github.io
+category: Announcements
+mapping: pathname
+theme: preferred_color_scheme
+lang: zh-CN
+```
+
+评论默认在普通章节页渲染，首页、页面型内容以及各小册首页不会显示评论区。评论能力依赖目标仓库开启 GitHub Discussions，并正确安装或启用 Giscus。
+
+## 🖼️ 页面截图
+
+![screenshot](待添加)
+
+## 🧱 技术栈
+
+- VitePress `^1.6.4`
+- Vue 3 / VitePress 默认主题扩展
+- Markdown 内容体系
+- Giscus + GitHub Discussions
+- GitHub Actions
+- GitHub Pages
+- Node.js 20
+
+## 📁 项目结构
+
+```text
+.
+├── docs/                         # VitePress 文档站点源码
+│   ├── .vitepress/               # VitePress 配置、主题和组件
+│   ├── books/                    # 小册正文
+│   ├── public/                   # 静态资源
+│   └── index.md                  # 首页入口
+├── scripts/                      # 构建前处理脚本
+├── sidebar-generated.json        # 侧边栏配置
+├── package.json                  # npm 脚本与依赖
+└── .github/workflows/deploy.yml  # GitHub Pages 自动部署流程
+```
+
+根目录下的原始中文书籍文件夹只作为本地素材保留，已经在 `.gitignore` 中排除，不会随站点源码提交。
+
+## 🛠️ 构建说明
 
 `npm run build` 会先执行 `prebuild`：
 
@@ -58,13 +133,7 @@ node scripts/normalize-missing-assets.mjs
 
 构建过程中可能出现代码块语言名降级警告，例如部分 Markdown 使用了不标准的语言标识。这类警告不影响站点发布。
 
-## GitHub Pages 部署
-
-当前仓库远端：
-
-```bash
-git@github.com:Craftr-X/Craftx-books.github.io.git
-```
+## 🚢 GitHub Pages 部署
 
 部署流程已经写在 `.github/workflows/deploy.yml` 中。每次推送到 `main` 分支后，GitHub Actions 会自动：
 
@@ -92,68 +161,21 @@ git push
 
 站点发布地址以 GitHub Pages 页面显示的 URL 为准。
 
-## 评论配置
-
-评论组件位于：
-
-```text
-docs/.vitepress/theme/components/BookComment.vue
-```
-
-当前使用 Giscus，仓库配置为：
-
-```text
-Craftr-X/Craftx-books.github.io
-```
-
-`configure` 示例：
-
-```yaml
-giscus:
-  enable: false
-  repo: # Github repository name
-  repo_id: # Github repository id
-  category: # Github discussion category
-  category_id: # Github discussion category id
-  # Available values: pathname | url | title | og:title
-  mapping: pathname
-  # Available values: 0 | 1
-  reactions_enabled: 1
-  # Available values: 0 | 1
-  emit_metadata: 1
-  # Available values: light | light_high_contrast | light_protanopia | light_tritanopia | dark | dark_h
-  theme: light
-  # Available values: en | zh-CN
-  lang: en
-  # Place the comment box above the comments
-  input_position: bottom
-  # Load the comments lazily
-  loading: lazy
-```
-
-要让评论真正显示，需要在 Giscus 官网生成配置，并补全以下两个值：
-
-```html
-data-repo-id="..."
-data-category-id="..."
-```
-
-补全位置在 `BookComment.vue` 中：
-
-```ts
-script.setAttribute('data-repo-id', '')
-script.setAttribute('data-category-id', '')
-```
-
-同时需要确保目标 GitHub 仓库已开启 Discussions，并安装或启用 Giscus。
-
-## 维护说明
+## 🔧 维护说明
 
 - 修改首页：`docs/index.md`
 - 修改主题样式：`docs/.vitepress/theme/custom.css`
 - 修改 VitePress 配置：`docs/.vitepress/config.mts`
 - 修改书籍目录：`docs/books/`
 - 修改侧边栏：`sidebar-generated.json`
+- 修改评论组件：`docs/.vitepress/theme/components/BookComment.vue`
+
+新增技术小册时，建议同步更新：
+
+1. `docs/books/<book-slug>/`
+2. `docs/.vitepress/config.mts` 中的小册元数据
+3. `sidebar-generated.json`
+4. 本 README 的“技术小册”表格
 
 更新内容后建议先执行：
 
@@ -162,3 +184,11 @@ npm run build
 ```
 
 确认本地构建通过后再提交推送。
+
+## 📄 开源协议
+
+当前仓库未包含独立的 `LICENSE` 文件。使用或转载代码与内容前，请先与仓库维护者确认授权范围。
+
+## 🤝 致谢 / 贡献指南
+
+欢迎通过 Issue 或 Pull Request 反馈错别字、失效链接、章节排版问题或新增小册内容。提交前请先运行 `npm run build`，确保站点可以正常构建。
