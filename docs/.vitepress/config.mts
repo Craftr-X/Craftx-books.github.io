@@ -26,6 +26,7 @@ const books = [
   { slug: 'programmer-essential', title: '程序员的必修课', desc: '计算机基础与编程素养' },
   { slug: 'career-guide', title: '程序员职业小白书', desc: '如何规划和经营你的职业' },
   { slug: 'wechat-miniprogram', title: '微信小程序开发入门', desc: '从 0 到 1 实现天气小程序' },
+  { slug: 'build-agent-harness', title: '从0开始构建AgentHarness', desc: '从零开始构建 Agent Harness 的完整指南' },
 ]
 
 export default defineConfig({

@@ -1152,8 +1152,8 @@
           "link": "/books/chrome-devtools/06-console-篇-console-中的-'$'"
         },
         {
-          "text": "console-篇-console-的-\"bug\"",
-          "link": "/books/chrome-devtools/07-console-篇-console-的-\"bug\""
+          "text": "console-篇-console-的-bug",
+          "link": "/books/chrome-devtools/07-console-篇-console-的-bug"
         },
         {
           "text": "console-篇-异步的-console",
@@ -1558,6 +1558,101 @@
         {
           "text": "总结与拓展",
           "link": "/books/wechat-miniprogram/13-总结与拓展"
+        }
+      ]
+    }
+  ],
+  "/books/build-agent-harness/": [
+    {
+      "text": "从0开始构建AgentHarness",
+      "items": [
+        {
+          "text": "开篇词｜框架正在坍塌：像写操作系统一样，复刻OpenClaw的底层Harness",
+          "link": "/books/build-agent-harness/开篇词｜框架正在坍塌：像写操作系统一样，复刻OpenClaw的底层Harness"
+        },
+        {
+          "text": "01｜架构演进：从Framework到Harness，Agent到底需要怎样的底层支撑？",
+          "link": "/books/build-agent-harness/01｜架构演进：从Framework到Harness，Agent到底需要怎样的底层支撑？"
+        },
+        {
+          "text": "02｜核心心脏：手写Agent的MainLoop",
+          "link": "/books/build-agent-harness/02｜核心心脏：手写Agent的MainLoop"
+        },
+        {
+          "text": "03｜慢思考与自省：在ReAct循环中剥离独立的Thinking阶段",
+          "link": "/books/build-agent-harness/03｜慢思考与自省：在ReAct循环中剥离独立的Thinking阶段"
+        },
+        {
+          "text": "04｜大脑接入：抽象Provider接口，适配Claude与OpenAI兼容大模型",
+          "link": "/books/build-agent-harness/04｜大脑接入：抽象Provider接口，适配Claude与OpenAI兼容大模型"
+        },
+        {
+          "text": "05｜动作延伸：构建强扩展性的ToolRegistry与分发机制",
+          "link": "/books/build-agent-harness/05｜动作延伸：构建强扩展性的ToolRegistry与分发机制"
+        },
+        {
+          "text": "06｜大道至简：解密OpenClaw最简工具集法则与YOLO执行哲学",
+          "link": "/books/build-agent-harness/06｜大道至简：解密OpenClaw最简工具集法则与YOLO执行哲学"
+        },
+        {
+          "text": "07｜容错艺术：实现支持多级模糊匹配的稳健Edit工具",
+          "link": "/books/build-agent-harness/07｜容错艺术：实现支持多级模糊匹配的稳健Edit工具"
+        },
+        {
+          "text": "08｜并发提效：如何让Agent在单轮中并行调用多个互相独立的工具？",
+          "link": "/books/build-agent-harness/08｜并发提效：如何让Agent在单轮中并行调用多个互相独立的工具？"
+        },
+        {
+          "text": "09｜飞书集成：打通真实世界，将go-tiny-claw接入飞书机器人的事件流",
+          "link": "/books/build-agent-harness/09｜飞书集成：打通真实世界，将go-tiny-claw接入飞书机器人的事件流"
+        },
+        {
+          "text": "10｜提示词组装：告别面条代码，动态加载AGENTS.md与外挂Skills.md",
+          "link": "/books/build-agent-harness/10｜提示词组装：告别面条代码，动态加载AGENTS.md与外挂Skills.md"
+        },
+        {
+          "text": "11｜会话管理：Session物理隔离与WorkingMemory的底层实现",
+          "link": "/books/build-agent-harness/11｜会话管理：Session物理隔离与WorkingMemory的底层实现"
+        },
+        {
+          "text": "12｜突破内存：基于阶梯降级的ContextCompaction策略",
+          "link": "/books/build-agent-harness/12｜突破内存：基于阶梯降级的ContextCompaction策略"
+        },
+        {
+          "text": "13｜记忆沉淀：状态外部化，基于文件系统的持久化记忆与待办管理",
+          "link": "/books/build-agent-harness/13｜记忆沉淀：状态外部化，基于文件系统的持久化记忆与待办管理"
+        },
+        {
+          "text": "14｜错误自愈：上下文感知的ErrorRecovery提示模板注入机制",
+          "link": "/books/build-agent-harness/14｜错误自愈：上下文感知的ErrorRecovery提示模板注入机制"
+        },
+        {
+          "text": "15｜行为干预：防止Agent陷入“死循环”的SystemReminders机制",
+          "link": "/books/build-agent-harness/15｜行为干预：防止Agent陷入“死循环”的SystemReminders机制"
+        },
+        {
+          "text": "16｜防御纵深：利用Middleware实现高危命令拦截与飞书人工审批",
+          "link": "/books/build-agent-harness/16｜防御纵深：利用Middleware实现高危命令拦截与飞书人工审批"
+        },
+        {
+          "text": "17｜任务委派：引入Subagent隔离复杂探索任务的上下文瓶颈",
+          "link": "/books/build-agent-harness/17｜任务委派：引入Subagent隔离复杂探索任务的上下文瓶颈"
+        },
+        {
+          "text": "18｜成本与状态追踪：在Harness层拦截并记录Token消耗与执行耗时",
+          "link": "/books/build-agent-harness/18｜成本与状态追踪：在Harness层拦截并记录Token消耗与执行耗时"
+        },
+        {
+          "text": "19｜洞察黑盒：为Agent引入Tracing机制复盘失败决策路径",
+          "link": "/books/build-agent-harness/19｜洞察黑盒：为Agent引入Tracing机制复盘失败决策路径"
+        },
+        {
+          "text": "20｜科学度量：如何构建Benchmark自动化评估脚本，科学量化Harness引擎性能？",
+          "link": "/books/build-agent-harness/20｜科学度量：如何构建Benchmark自动化评估脚本，科学量化Harness引擎性能？"
+        },
+        {
+          "text": "阶段作业｜让你的Agent学会“慢思考+动手做事”",
+          "link": "/books/build-agent-harness/阶段作业｜让你的Agent学会“慢思考+动手做事”"
         }
       ]
     }

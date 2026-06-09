@@ -49,6 +49,10 @@ features:
     title: 程序员职业规划
     details: 求职、职业发展、技术方向选择，程序员的成长之路
     link: /books/career-guide/
+  - icon: 🤖
+    title: 从0开始构建AgentHarness
+    details: 从零开始构建 Agent Harness 的完整指南
+    link: /books/build-agent-harness/
 ---
 
 <HomePage />
