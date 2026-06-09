@@ -11,23 +11,13 @@ try {
   sidebarConfig = {}
 }
 
-// 小册元数据
-const books = [
-  { slug: 'claude-code-dev', title: 'Claude Code 企业级全链路开发实战', desc: '一个人用 Claude Code 造一个简版 Dify' },
-  { slug: 'claude-code-legacy', title: 'Claude Code 企业级老项目改造实战', desc: '用 AI 重构遗留代码的实战指南' },
-  { slug: 'mysql-running', title: 'MySQL 是怎样运行的', desc: '从根儿上理解 MySQL' },
-  { slug: 'typescript-intro', title: 'TypeScript 入门教程', desc: '从 JavaScript 到 TypeScript 的第一步' },
-  { slug: 'typescript-advanced', title: 'TypeScript 全面进阶指南', desc: '深入理解 TypeScript 类型系统' },
-  { slug: 'low-code-platform', title: '从 0 打造通用型低代码产品', desc: '低代码平台架构与实现' },
-  { slug: 'cicd-guide', title: '从 0 到 1 实现一套 CI/CD 流程', desc: 'Jenkins + Kubernetes 持续集成部署' },
-  { slug: 'redis7', title: '说透 Redis 7', desc: '深度解析 Redis 核心原理与实战' },
-  { slug: 'chrome-devtools', title: '你不知道的 Chrome 调试技巧', desc: '提升前端调试效率的实用技巧' },
-  { slug: 'docker-guide', title: '开发者必备的 Docker 实践指南', desc: '容器化技术从入门到实践' },
-  { slug: 'programmer-essential', title: '程序员的必修课', desc: '计算机基础与编程素养' },
-  { slug: 'career-guide', title: '程序员职业小白书', desc: '如何规划和经营你的职业' },
-  { slug: 'wechat-miniprogram', title: '微信小程序开发入门', desc: '从 0 到 1 实现天气小程序' },
-  { slug: 'build-agent-harness', title: '从0开始构建AgentHarness', desc: '从零开始构建 Agent Harness 的完整指南' },
-]
+const booksPath = join(__dirname, '../../books.json')
+let books: Array<{ slug: string; title: string; desc?: string }> = []
+try {
+  books = JSON.parse(readFileSync(booksPath, 'utf-8'))
+} catch {
+  books = []
+}
 
 export default defineConfig({
   title: 'CraftX Books',

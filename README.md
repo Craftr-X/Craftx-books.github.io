@@ -168,14 +168,21 @@ git push
 - 修改 VitePress 配置：`docs/.vitepress/config.mts`
 - 修改书籍目录：`docs/books/`
 - 修改侧边栏：`sidebar-generated.json`
+- 修改书籍元数据：`books.json`
 - 修改评论组件：`docs/.vitepress/theme/components/BookComment.vue`
 
-新增技术小册时，建议同步更新：
+本地导入技术小册时，使用 CLI：
 
-1. `docs/books/<book-slug>/`
-2. `docs/.vitepress/config.mts` 中的小册元数据
-3. `sidebar-generated.json`
-4. 本 README 的“技术小册”表格
+```bash
+npm run import:book -- ./path/to/markdown-folder --slug my-book
+npm run import:book -- ./path/to/book.epub --slug my-book
+```
+
+导入工具仅支持 Markdown 文件夹或无 DRM 的 EPUB 文件。默认禁止覆盖已有 `docs/books/<book-slug>/`，需要覆盖时显式添加 `--force`；只预览不写入时添加 `--dry-run`。导入完成后会写入 `docs/books/<book-slug>/`，并更新 `books.json` 和 `sidebar-generated.json`。
+
+完整说明见：[`docs/local-import-guide.md`](./docs/local-import-guide.md)
+
+新增技术小册后，建议人工同步更新本 README 的“技术小册”表格。
 
 更新内容后建议先执行：
 

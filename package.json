@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vitepress dev docs",
+    "import:book": "node scripts/import-book.mjs",
+    "generate:sidebar": "node scripts/generate-sidebar.mjs",
     "prebuild": "node scripts/escape-vitepress-braces.mjs && node scripts/normalize-missing-assets.mjs",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs"
