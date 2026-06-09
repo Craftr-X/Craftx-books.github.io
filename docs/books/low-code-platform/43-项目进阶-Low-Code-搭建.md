@@ -193,7 +193,7 @@ model PageTable {
 
 > 目前的表结构设计后续还会更新，总体的设计并不会改变，会在当前的表中新增相关的字段设计。
 
-```curl
+```bash
 curl -X 'POST' \
   'http://127.0.0.1:10018/page-table/create' \
   -H 'accept: application/json' \

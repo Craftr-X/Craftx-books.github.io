@@ -161,7 +161,7 @@ module.exports = {
 
 创建忽略文件 .prettierignore：
 
-```init
+```text
 build
 dist
 out

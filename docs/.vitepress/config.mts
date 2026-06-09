@@ -37,6 +37,12 @@ export default defineConfig({
   outDir: '../dist',
   cleanUrls: true,
   ignoreDeadLinks: true,
+  vite: {
+    build: {
+      // Local search emits a large index chunk; regular page chunks should remain small.
+      chunkSizeWarningLimit: 9000,
+    },
+  },
 
   head: [
     ['link', { rel: 'icon', href: '/favicon.svg' }],
