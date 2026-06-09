@@ -18,7 +18,7 @@ editLink: false
 - [通用篇-使用-Command](./04-通用篇-使用-Command.md)
 - [通用篇-代码块的使用](./05-通用篇-代码块的使用.md)
 - [console-篇-console-中的-'$'](./06-console-篇-console-中的-'$'.md)
-- [console-篇-console-的-"bug"](./07-console-篇-console-的-"bug".md)
+- [console-篇-console-的-bug](./07-console-篇-console-的-bug.md)
 - [console-篇-异步的-console](./08-console-篇-异步的-console.md)
 - [console-篇-Ninja-console.log-忍者打印](./09-console-篇-Ninja-console.log-忍者打印.md)
 - [console-篇-自定义格式转换器](./10-console-篇-自定义格式转换器.md)
