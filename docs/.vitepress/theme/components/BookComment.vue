@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useData } from 'vitepress'
+import { useData, useRoute } from 'vitepress'
 
 const { frontmatter } = useData()
+const route = useRoute()
 const container = ref<HTMLElement | null>(null)
 const mounted = ref(false)
 const giscusScript = ref<HTMLScriptElement | null>(null)
+const isBookIndex = computed(() => /^\/books\/[^/]+\/?$/.test(route.path))
 const shouldRender = computed(() => {
   const layout = frontmatter.value.layout
-  return frontmatter.value.comments !== false && layout !== 'home' && layout !== 'page'
+  return frontmatter.value.comments !== false && layout !== 'home' && layout !== 'page' && !isBookIndex.value
 })
 
 function mountGiscus() {
+  if (container.value) {
+    container.value.innerHTML = ''
+  }
+  giscusScript.value = null
   if (!container.value || !shouldRender.value) return
-
-  container.value.innerHTML = ''
 
   const script = document.createElement('script')
   script.src = 'https://giscus.app/client.js'
@@ -42,7 +46,7 @@ onMounted(() => {
   mountGiscus()
 })
 
-watch(shouldRender, () => {
+watch([shouldRender, () => route.path], () => {
   if (mounted.value) {
     mountGiscus()
   }
