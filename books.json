@@ -73,5 +73,10 @@
     "slug": "rich-dad-poor-dad",
     "title": "富爸爸穷爸爸",
     "desc": "全球最佳财商教育系列"
+  },
+  {
+    "slug": "ai-model-beauty",
+    "title": "AI 大模型之美",
+    "desc": "大语言模型与生成式 AI 应用实战"
   }
 ]
