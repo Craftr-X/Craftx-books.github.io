@@ -38,7 +38,10 @@ export function installImageZoom(router: Router) {
 
   scheduleBindImageZoom()
 
-  router.onAfterRouteChange = () => {
+  const previousOnAfterRouteChange = router.onAfterRouteChange
+
+  router.onAfterRouteChange = async to => {
+    await previousOnAfterRouteChange?.(to)
     scheduleBindImageZoom()
   }
 }
