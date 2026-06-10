@@ -93,6 +93,8 @@ lang: zh-CN
 
 ## 🖼️ 页面截图
 
+> 网站地址：<https://craftr-x.github.io/Craftx-books.github.io/>
+
 ![screenshot](./docs/public/index.png)
 
 ## 🧱 技术栈
