@@ -23,10 +23,18 @@ function normalize(file, input) {
   let output = input
 
   output = output.replace(
-    /!?\[([^\]]*)\]\((_assets\/[^)]+)\)/g,
+    /!\[([^\]]*)\]\(((?:_assets|images)\/[^)]+)\)/g,
     (match, alt, assetPath) => {
       if (localAssetExists(file, assetPath)) return match
       return `[${alt || '缺失资源'}：${assetPath}]`
+    },
+  )
+
+  output = output.replace(
+    /\[([^\]]*)\]\((_assets\/[^)]+)\)/g,
+    (match, text, assetPath) => {
+      if (localAssetExists(file, assetPath)) return match
+      return `[${text || '缺失资源'}：${assetPath}]`
     },
   )
 
