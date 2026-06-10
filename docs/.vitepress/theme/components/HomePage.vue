@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { useData } from 'vitepress'
-
-const { frontmatter } = useData()
+import books from '../../../../books.json'
 
 const stats = [
-  { label: '技术小册', value: '13', icon: '📚' },
+  { label: '技术小册', value: books.length, icon: '📚' },
   { label: '文章总数', value: '368+', icon: '📄' },
   { label: '技术方向', value: '10+', icon: '🎯' },
   { icon: '⚡', label: '持续更新', value: '进行中' },
