@@ -147,6 +147,18 @@ div[class*='language-'] {
   border-bottom-color: var(--vp-c-brand-1);
 }
 
+.vp-doc img:not([data-no-zoom]) {
+  cursor: zoom-in;
+}
+
+.medium-zoom-overlay {
+  z-index: 1000;
+}
+
+.medium-zoom-image--opened {
+  z-index: 1001;
+}
+
 .image-fallback-card,
 .missing-asset-card {
   display: block;
