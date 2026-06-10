@@ -147,6 +147,39 @@ div[class*='language-'] {
   border-bottom-color: var(--vp-c-brand-1);
 }
 
+.image-fallback-card,
+.missing-asset-card {
+  display: block;
+  margin: 16px 0;
+  padding: 12px 14px;
+  border: 1px dashed var(--vp-c-danger-2);
+  border-radius: 8px;
+  background: var(--vp-c-danger-soft);
+  color: var(--vp-c-text-1);
+  line-height: 1.6;
+}
+
+.image-fallback-card strong,
+.missing-asset-card strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--vp-c-danger-1);
+}
+
+.image-fallback-card span,
+.missing-asset-card span {
+  display: block;
+  color: var(--vp-c-text-2);
+}
+
+.image-fallback-card code,
+.missing-asset-card code {
+  display: block;
+  margin-top: 6px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 /* 表格美化 */
 .vp-doc table {
   border-radius: 8px;

@@ -19,6 +19,57 @@ try {
   books = []
 }
 
+function renderMissingAssetPlaceholders(md: any) {
+  const pattern = /\[(图片|缺失资源)：([^\]]+)\]/g
+
+  md.core.ruler.after('inline', 'render_missing_asset_placeholders', state => {
+    for (const token of state.tokens) {
+      if (token.type !== 'inline' || !token.children) continue
+
+      const nextChildren = []
+      for (const child of token.children) {
+        if (child.type !== 'text' || !pattern.test(child.content)) {
+          pattern.lastIndex = 0
+          nextChildren.push(child)
+          continue
+        }
+
+        pattern.lastIndex = 0
+        let lastIndex = 0
+        for (const match of child.content.matchAll(pattern)) {
+          const index = match.index ?? 0
+          if (index > lastIndex) {
+            const text = new state.Token('text', '', 0)
+            text.content = child.content.slice(lastIndex, index)
+            nextChildren.push(text)
+          }
+
+          const kind = md.utils.escapeHtml(match[1])
+          const assetPath = md.utils.escapeHtml(match[2])
+          const html = new state.Token('html_inline', '', 0)
+          html.content = [
+            `<span class="missing-asset-card" data-asset-kind="${kind}" data-asset-src="${assetPath}">`,
+            '<strong>图片资源未随文档入库</strong>',
+            '<span>未下载全量图片，可按这个路径回源或补入单张资源。</span>',
+            `<code>${assetPath}</code>`,
+            '</span>',
+          ].join('')
+          nextChildren.push(html)
+          lastIndex = index + match[0].length
+        }
+
+        if (lastIndex < child.content.length) {
+          const text = new state.Token('text', '', 0)
+          text.content = child.content.slice(lastIndex)
+          nextChildren.push(text)
+        }
+      }
+
+      token.children = nextChildren
+    }
+  })
+}
+
 export default defineConfig({
   title: 'CraftX Books',
   description: '技术小册合集 — 沉浸式阅读体验',
@@ -100,6 +151,9 @@ export default defineConfig({
     lineNumbers: true,
     image: {
       lazyLoading: true,
+    },
+    config(md) {
+      renderMissingAssetPlaceholders(md)
     },
   },
 })
