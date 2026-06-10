@@ -93,9 +93,7 @@ lang: zh-CN
 
 ## 🖼️ 页面截图
 
-![富爸爸穷爸爸封面](./docs/books/rich-dad-poor-dad/_assets/image-028.jpg)
-
-![AI 大模型之美示例图](./docs/books/ai-model-beauty/images/641701/8e1477c0e300dcbbcb1e1e53335bb2cb.png)
+![screenshot](./docs/public/index.png)
 
 ## 🧱 技术栈
 
