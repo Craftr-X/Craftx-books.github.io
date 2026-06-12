@@ -76,7 +76,7 @@ function renderMissingAssetPlaceholders(md: any) {
 
 export default defineConfig({
   title: 'CraftX Books',
-  description: '技术小册合集 — 沉浸式阅读体验',
+  description: '技术小册与电子书 — 沉浸式阅读体验',
   lang: 'zh-CN',
   base: '/Craftx-books.github.io/',
   outDir: '../dist',
@@ -95,7 +95,7 @@ export default defineConfig({
     ['meta', { name: 'theme-color', content: '#6366f1' }],
     ['meta', { name: 'og:type', content: 'website' }],
     ['meta', { name: 'og:title', content: 'CraftX Books' }],
-    ['meta', { name: 'og:description', content: '技术小册合集 — 沉浸式阅读体验' }],
+    ['meta', { name: 'og:description', content: '技术小册与电子书 — 沉浸式阅读体验' }],
   ],
 
   themeConfig: {

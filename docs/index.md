@@ -3,7 +3,7 @@ layout: home
 comments: false
 hero:
   name: CraftX Books
-  text: 技术小册合集
+  text: 技术小册与电子书
   tagline: 沉浸式阅读，系统化学习
   image:
     src: /logo.svg

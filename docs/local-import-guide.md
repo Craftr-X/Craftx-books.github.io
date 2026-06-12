@@ -1,6 +1,6 @@
 # 本地导入工具使用说明
 
-这个工具用于把本地 Markdown 文件夹或 EPUB 文件导入为本站标准 VitePress 小册。导入后内容会生成到 `docs/books/<book-slug>/`，并自动更新 `books.json` 与 `sidebar-generated.json`。
+这个工具用于把本地 Markdown 文件夹或 EPUB 文件导入为本站标准 VitePress 阅读内容。导入后内容会生成到 `docs/books/<book-slug>/`，并自动更新 `books.json` 与 `sidebar-generated.json`。
 
 线上站点仍然是 GitHub Pages 静态发布，不提供网页上传后台。
 
@@ -35,6 +35,11 @@ docs/books/my-book/
 books.json
 sidebar-generated.json
 ```
+
+同时会写入内容分类：
+
+- Markdown 文件夹默认写入 `category: "booklet"`，归入“技术小册”。
+- EPUB 文件默认写入 `category: "ebook"`，归入“电子书”。
 
 ## 常用参数
 
@@ -89,7 +94,7 @@ git commit -m "Add my-book"
 git push
 ```
 
-README 的“技术小册”表格目前仍需要人工维护。
+README 的“内容目录”表格目前仍需要人工维护；站点顶部导航和首页数量会根据 `books.json` 自动更新。
 
 ## Markdown 文件夹导入
 
@@ -176,11 +181,13 @@ npm run import:book -- ./source/my-book --slug my-book --force
 - `docs/books/<book-slug>/`
 - `books.json`
 - `sidebar-generated.json`
+- 顶部导航分组
+- 首页技术小册和电子书数量
 
 仍建议人工检查或维护：
 
-- `README.md` 的“技术小册”表格。
-- 首页 `docs/index.md` 是否需要展示新书。
+- `README.md` 的“内容目录”表格。
+- 首页 `docs/index.md` 的精选推荐是否需要展示新书。
 - 导入后的章节标题、图片路径和排版效果。
 
 ## 常见问题
@@ -212,7 +219,7 @@ npm run import:book -- ./source/my-book --slug my-book --force
 npm run build
 ```
 
-如果构建正常，再检查 `README.md` 或首页是否需要人工补链接。
+如果构建正常，再检查 `books.json` 里的 `category` 是否正确，必要时更新 `README.md` 或首页精选推荐。
 
 ### 图片不显示
 
@@ -228,4 +235,4 @@ EPUB 导入会把图片复制到 `_assets/` 目录。若图片缺失，导入报
 - 图片资源可以访问。
 - `books.json` 包含新书元数据。
 - `sidebar-generated.json` 包含新书侧边栏。
-- README 表格按需更新。
+- README 内容目录表格按需更新。

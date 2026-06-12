@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import books from '../../../../books.json'
 
+const categoryCount = (category: string) => books
+  .filter(book => (book.category || 'booklet') === category)
+  .length
+
 const stats = [
-  { label: '技术小册', value: books.length, icon: '📚' },
+  { label: '技术小册', value: categoryCount('booklet'), icon: '📚' },
+  { label: '电子书', value: categoryCount('ebook'), icon: '📖' },
   { label: '文章总数', value: '368+', icon: '📄' },
-  { label: '技术方向', value: '10+', icon: '🎯' },
   { icon: '⚡', label: '持续更新', value: '进行中' },
 ]
 </script>
