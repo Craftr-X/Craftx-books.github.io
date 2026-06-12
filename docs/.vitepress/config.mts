@@ -12,12 +12,16 @@ try {
 }
 
 const booksPath = join(__dirname, '../../books.json')
-let books: Array<{ slug: string; title: string; desc?: string }> = []
+let books: Array<{ slug: string; title: string; desc?: string; category?: string }> = []
 try {
   books = JSON.parse(readFileSync(booksPath, 'utf-8'))
 } catch {
   books = []
 }
+
+const navItems = (category: string) => books
+  .filter(book => (book.category || 'booklet') === category)
+  .map(book => ({ text: book.title, link: `/books/${book.slug}/` }))
 
 function renderMissingAssetPlaceholders(md: any) {
   const pattern = /\[(图片|缺失资源)：([^\]]+)\]/g
@@ -101,8 +105,12 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       {
-        text: '小册目录',
-        items: books.map(b => ({ text: b.title, link: `/books/${b.slug}/` }))
+        text: '技术小册',
+        items: navItems('booklet')
+      },
+      {
+        text: '电子书',
+        items: navItems('ebook')
       },
     ],
 

@@ -515,7 +515,12 @@ function preview(info, targetDir) {
 function updateBooks(info) {
   const books = readJson(booksPath, [])
   const next = books.filter(book => book.slug !== info.slug)
-  next.push({ slug: info.slug, title: info.title, desc: info.desc })
+  next.push({
+    slug: info.slug,
+    title: info.title,
+    desc: info.desc,
+    category: info.kind === 'epub' ? 'ebook' : 'booklet',
+  })
   writeJson(booksPath, next)
 }
 
