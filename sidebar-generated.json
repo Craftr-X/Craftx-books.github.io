@@ -1921,5 +1921,16 @@
         }
       ]
     }
+  ],
+  "/books/zhi-shen-ding-nei/": [
+    {
+      "text": "置身钉内",
+      "items": [
+        {
+          "text": "01-置身钉内",
+          "link": "/books/zhi-shen-ding-nei/01-置身钉内"
+        }
+      ]
+    }
   ]
 }
