@@ -22,6 +22,19 @@ Use two-space indentation in JavaScript, TypeScript, Vue, JSON, and Markdown-adj
 
 There is no full site test framework; the required validation is `npm run build`. For script logic, add focused tests with Node’s built-in `node:test` and `node:assert/strict`, following `scripts/import-book.test.mjs`. Run script tests when changing import or normalization behavior, and run a full build before opening a PR.
 
+## Branch & Workflow Guidelines
+
+This project follows a **branch-based workflow**. Never commit directly to `main`.
+
+1. **Create a feature branch** from `main` before making changes. Use descriptive branch names:
+   - `feat/xxx` for new features
+   - `fix/xxx` for bug fixes
+   - `docs/xxx` for documentation or content updates
+   - `chore/xxx` for maintenance tasks
+2. **Commit and push** to the feature branch. Run `npm run build` locally to validate before pushing.
+3. **Open a Pull Request** targeting `main`. The CI workflow will automatically run build validation and tests.
+4. **After review and CI pass**, merge the PR into `main`. The deploy workflow will automatically build and publish to GitHub Pages.
+
 ## Commit & Pull Request Guidelines
 
 Recent commits follow Conventional Commit-style prefixes such as `docs:`, `fix:`, and `feat:`. Use concise subject lines, for example `fix: normalize missing image assets`. Pull requests should describe the change, list validation commands run, link related issues when available, and include screenshots for visible site or theme changes. For new books, mention the slug and confirm `books.json`, `sidebar-generated.json`, and the README book list were updated when applicable.
