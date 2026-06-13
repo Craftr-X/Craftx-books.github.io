@@ -145,6 +145,34 @@ test('verifyImport accepts a complete imported book', () => {
   }
 })
 
+test('verifyImport does not require hidden numbered pages in index.md', () => {
+  const root = makeProject()
+  try {
+    writeJson(join(root, 'books.json'), [{ slug: 'alpha', title: 'Alpha', category: 'ebook' }])
+    writeJson(join(root, 'sidebar-generated.json'), {
+      '/books/alpha/': [{ text: 'Alpha', items: [{ text: '02-body', link: '/books/alpha/02-body' }] }],
+    })
+    writeFileSync(join(root, 'README.md'), '[Alpha](./docs/books/alpha/)\n')
+    mkdirSync(join(root, 'docs', 'books', 'alpha'), { recursive: true })
+    writeFileSync(join(root, 'docs', 'books', 'alpha', 'index.md'), '- [Body](./02-body.md)\n')
+    writeFileSync(join(root, 'docs', 'books', 'alpha', '01-cover.md'), [
+      '---',
+      'sidebar: false',
+      '---',
+      '# Cover',
+      '',
+    ].join('\n'))
+    writeFileSync(join(root, 'docs', 'books', 'alpha', '02-body.md'), '# Body\n')
+
+    const results = verify('alpha', { root, runBuild: false })
+    const indexCheck = results.find(result => result.check === 'index.md links to all chapters')
+
+    assert.equal(indexCheck.status, 'pass')
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
 test('verifyImport rejects broken local assets, links, and EPUB leftovers', () => {
   const root = makeProject()
   try {
