@@ -95,9 +95,16 @@ function parseFrontmatter(content) {
   if (!match) return {};
   const yaml = match[1];
   const asideMatch = yaml.match(/aside:\s*(true|false)/);
+  const sidebarMatch = yaml.match(/^sidebar:\s*(true|false)\s*$/m);
   return {
     aside: asideMatch ? asideMatch[1] === 'true' : undefined,
+    sidebar: sidebarMatch ? sidebarMatch[1] === 'true' : undefined,
   };
+}
+
+function isSidebarVisible(filePath) {
+  const content = readFileSync(filePath, 'utf-8');
+  return parseFrontmatter(content).sidebar !== false;
 }
 
 function verify(slug, options = {}) {
@@ -135,7 +142,8 @@ function verify(slug, options = {}) {
   // 4. index.md links to all chapters
   const indexContent = readFileSync(indexPath, 'utf-8');
   const indexLinks = extractLinks(indexContent);
-  const chapterBasenames = new Set(chapterFiles.map(f => f.replace(/\.md$/, '')));
+  const visibleChapterFiles = chapterFiles.filter(f => isSidebarVisible(join(bookDir, f)));
+  const chapterBasenames = new Set(visibleChapterFiles.map(f => f.replace(/\.md$/, '')));
   const linkedChapters = new Set();
   for (const link of indexLinks) {
     // Normalize: ./01-Foo.md -> 01-Foo, /books/slug/01-Foo -> 01-Foo, etc.
