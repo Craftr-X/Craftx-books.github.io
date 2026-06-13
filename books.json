@@ -84,6 +84,12 @@
     "category": "booklet"
   },
   {
+    "slug": "money-dog",
+    "title": "小狗钱钱",
+    "desc": "作者：[德] 博多·舍费尔",
+    "category": "ebook"
+  },
+  {
     "slug": "rich-dad-poor-dad",
     "title": "富爸爸穷爸爸",
     "desc": "全球最佳财商教育系列",
@@ -102,21 +108,15 @@
     "category": "ebook"
   },
   {
-    "slug": "zhi-shen-ding-nei",
-    "title": "置身钉内",
-    "desc": "钉钉 ONE 项目复盘与产品、设计、协作实践记录",
-    "category": "ebook"
-  },
-  {
-    "slug": "money-dog",
-    "title": "小狗钱钱",
-    "desc": "作者：[德] 博多·舍费尔",
-    "category": "ebook"
-  },
-  {
     "slug": "renzhi-qudong",
     "title": "认知驱动",
     "desc": "作者：周岭",
+    "category": "ebook"
+  },
+  {
+    "slug": "zhi-shen-ding-nei",
+    "title": "置身钉内",
+    "desc": "钉钉 ONE 项目复盘与产品、设计、协作实践记录",
     "category": "ebook"
   }
 ]
