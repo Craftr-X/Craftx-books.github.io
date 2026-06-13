@@ -49,8 +49,8 @@ CraftX Books 是一个基于 VitePress 构建的在线阅读站点，发布到 G
 | 富爸爸穷爸爸 | 全球最佳财商教育系列 | [开始阅读](./docs/books/rich-dad-poor-dad/) |
 | 认知觉醒 | 开启自我改变的原动力 | [开始阅读](./docs/books/renzhi-juexing/) |
 | 置身钉内 | 钉钉 ONE 项目复盘与产品、设计、协作实践记录 | [开始阅读](./docs/books/zhi-shen-ding-nei/) |
-| 小狗钱钱（套装全2册） | 博多·舍费尔财商教育童话 | [开始阅读](./docs/books/money-dog/) |
-| 认知驱动：做成一件对他人很有用的事 | 《认知觉醒》姊妹篇，有效行动，用实践创造可控人生 | [开始阅读](./docs/books/renzhi-qudong/) |
+| 小狗钱钱 | 博多·舍费尔财商教育童话 | [开始阅读](./docs/books/money-dog/) |
+| 认知驱动 | 《认知觉醒》姊妹篇，有效行动，用实践创造可控人生 | [开始阅读](./docs/books/renzhi-qudong/) |
 
 ## 🚀 快速开始
 

@@ -2,10 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { basename, dirname, extname, join, relative, resolve, sep } from 'path'
 import { fileURLToPath } from 'url'
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const docsBooksDir = join(root, 'docs', 'books')
-const booksPath = join(root, 'books.json')
-const sidebarPath = join(root, 'sidebar-generated.json')
+const defaultRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
 function readJson(file, fallback) {
   try {
@@ -29,7 +26,14 @@ function walkMarkdown(dir, out = []) {
 }
 
 function titleFromMarkdown(file) {
-  return basename(file, '.md')
+  return basename(file, '.md').replace(/^\d+-/, '')
+}
+
+function sidebarVisible(file) {
+  const content = readFileSync(file, 'utf8')
+  const frontmatter = content.match(/^---\n([\s\S]*?)\n---/)
+  if (!frontmatter) return true
+  return !/^sidebar:\s*false\s*$/m.test(frontmatter[1])
 }
 
 function orderKey(file) {
@@ -48,13 +52,33 @@ function sortMarkdown(a, b) {
   return ak.name.localeCompare(bk.name, 'zh-CN', { numeric: true })
 }
 
-function toLink(slug, file) {
+function toLink(docsBooksDir, slug, file) {
   const rel = relative(join(docsBooksDir, slug), file)
   const withoutExt = rel.slice(0, -extname(rel).length).split(sep).join('/')
   return `/books/${slug}/${withoutExt}`
 }
 
-function generateSidebar() {
+function existingTextByLink(sidebarEntry) {
+  const map = new Map()
+  for (const section of sidebarEntry || []) {
+    for (const item of section.items || []) {
+      if (item.link && item.text) map.set(item.link, item.text)
+    }
+  }
+  return map
+}
+
+function pathsFor(root) {
+  return {
+    docsBooksDir: join(root, 'docs', 'books'),
+    booksPath: join(root, 'books.json'),
+    sidebarPath: join(root, 'sidebar-generated.json'),
+  }
+}
+
+function generateSidebar(options = {}) {
+  const root = options.root || defaultRoot
+  const { docsBooksDir, booksPath, sidebarPath } = pathsFor(root)
   const books = readJson(booksPath, [])
   const sidebar = readJson(sidebarPath, {})
   const activeBookKeys = new Set()
@@ -65,21 +89,24 @@ function generateSidebar() {
     const key = `/books/${book.slug}/`
     activeBookKeys.add(key)
 
+    const existingTexts = existingTextByLink(sidebar[key])
     const items = walkMarkdown(bookDir)
       .sort(sortMarkdown)
-      .map(file => ({
-        text: titleFromMarkdown(file),
-        link: toLink(book.slug, file),
-      }))
+      .filter(sidebarVisible)
+      .map(file => {
+        const link = toLink(docsBooksDir, book.slug, file)
+        return {
+          text: existingTexts.get(link) || titleFromMarkdown(file),
+          link,
+        }
+      })
 
-    if (!sidebar[key]) {
-      sidebar[key] = [
-        {
-          text: book.title,
-          items,
-        },
-      ]
-    }
+    sidebar[key] = [
+      {
+        text: book.title,
+        items,
+      },
+    ]
   }
 
   for (const key of Object.keys(sidebar)) {
@@ -92,16 +119,19 @@ function generateSidebar() {
   return sidebar
 }
 
-export function updateSidebarForBook(book) {
+export function updateSidebarForBook(book, options = {}) {
+  const root = options.root || defaultRoot
+  const { docsBooksDir, sidebarPath } = pathsFor(root)
   const bookDir = join(docsBooksDir, book.slug)
   if (!existsSync(bookDir)) throw new Error(`书籍目录不存在：${bookDir}`)
 
   const sidebar = readJson(sidebarPath, {})
   const items = walkMarkdown(bookDir)
     .sort(sortMarkdown)
+    .filter(sidebarVisible)
     .map(file => ({
       text: titleFromMarkdown(file),
-      link: toLink(book.slug, file),
+      link: toLink(docsBooksDir, book.slug, file),
     }))
 
   sidebar[`/books/${book.slug}/`] = [
@@ -117,3 +147,5 @@ export function updateSidebarForBook(book) {
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   generateSidebar()
 }
+
+export { generateSidebar }

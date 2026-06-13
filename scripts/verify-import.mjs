@@ -12,9 +12,9 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, resolve, dirname, relative } from 'node:path';
 import { execSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(import.meta.dirname, '..');
-const BOOKS_DIR = join(ROOT, 'docs', 'books');
 
 function fail(check, detail) {
   return { check, status: 'fail', detail };
@@ -100,9 +100,12 @@ function parseFrontmatter(content) {
   };
 }
 
-function verify(slug) {
+function verify(slug, options = {}) {
+  const root = options.root || ROOT;
+  const runBuild = options.runBuild !== false;
+  const booksDir = join(root, 'docs', 'books');
   const results = [];
-  const bookDir = join(BOOKS_DIR, slug);
+  const bookDir = join(booksDir, slug);
 
   // 1. Book directory exists
   if (!existsSync(bookDir)) {
@@ -152,7 +155,7 @@ function verify(slug) {
   }
 
   // 5. books.json contains this slug
-  const booksPath = join(ROOT, 'books.json');
+  const booksPath = join(root, 'books.json');
   let books = [];
   try {
     books = JSON.parse(readFileSync(booksPath, 'utf-8'));
@@ -174,7 +177,7 @@ function verify(slug) {
   }
 
   // 6. sidebar-generated.json contains this slug
-  const sidebarPath = join(ROOT, 'sidebar-generated.json');
+  const sidebarPath = join(root, 'sidebar-generated.json');
   let sidebar = {};
   try {
     sidebar = JSON.parse(readFileSync(sidebarPath, 'utf-8'));
@@ -209,7 +212,7 @@ function verify(slug) {
   }
 
   // 7. README.md contains this slug
-  const readmePath = join(ROOT, 'README.md');
+  const readmePath = join(root, 'README.md');
   if (existsSync(readmePath)) {
     const readmeContent = readFileSync(readmePath, 'utf-8');
     if (readmeContent.includes(slug)) {
@@ -228,7 +231,7 @@ function verify(slug) {
     const content = readFileSync(file, 'utf-8');
     const hits = findResiduals(content, file);
     if (hits.length > 0) {
-      const rel = relative(ROOT, file);
+      const rel = relative(root, file);
       residualFiles.push(`${rel}: ${hits.join(', ')}`);
     }
   }
@@ -249,7 +252,7 @@ function verify(slug) {
       if (img.startsWith('http://') || img.startsWith('https://')) continue;
       const imgPath = resolve(fileDir, img);
       if (!existsSync(imgPath)) {
-        const rel = relative(ROOT, file);
+        const rel = relative(root, file);
         brokenImages.push(`${rel}: ${img}`);
       }
     }
@@ -265,7 +268,7 @@ function verify(slug) {
   for (const file of allMdFiles) {
     const content = readFileSync(file, 'utf-8');
     if (/\.html(?:#|$|\s)/.test(content) || /filepos/.test(content)) {
-      const rel = relative(ROOT, file);
+      const rel = relative(root, file);
       htmlLinkFiles.push(rel);
     }
   }
@@ -282,7 +285,7 @@ function verify(slug) {
     const content = readFileSync(file, 'utf-8');
     const fm = parseFrontmatter(content);
     if (fm.aside === false) {
-      const rel = relative(ROOT, file);
+      const rel = relative(root, file);
       asideViolations.push(rel);
     }
   }
@@ -293,12 +296,14 @@ function verify(slug) {
   }
 
   // 12. Build passes
-  try {
-    execSync('npm run build', { cwd: ROOT, stdio: 'pipe', timeout: 120_000 });
-    results.push(pass('npm run build passes'));
-  } catch (e) {
-    const stderr = e.stderr ? e.stderr.toString().slice(0, 500) : '';
-    results.push(fail('npm run build passes', stderr));
+  if (runBuild) {
+    try {
+      execSync('npm run build', { cwd: root, stdio: 'pipe', timeout: 120_000 });
+      results.push(pass('npm run build passes'));
+    } catch (e) {
+      const stderr = e.stderr ? e.stderr.toString().slice(0, 500) : '';
+      results.push(fail('npm run build passes', stderr));
+    }
   }
 
   return results;
@@ -306,25 +311,29 @@ function verify(slug) {
 
 // --- CLI ---
 
-const slug = process.argv[2];
-if (!slug) {
-  console.error('Usage: node scripts/verify-import.mjs <slug>');
-  process.exit(2);
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const slug = process.argv[2];
+  if (!slug) {
+    console.error('Usage: node scripts/verify-import.mjs <slug>');
+    process.exit(2);
+  }
+
+  const results = verify(slug);
+  const passed = results.filter(r => r.status === 'pass').length;
+  const failed = results.filter(r => r.status === 'fail').length;
+
+  const report = {
+    slug,
+    passed,
+    failed,
+    results,
+  };
+
+  console.log(JSON.stringify(report, null, 2));
+
+  if (failed > 0) {
+    process.exit(1);
+  }
 }
 
-const results = verify(slug);
-const passed = results.filter(r => r.status === 'pass').length;
-const failed = results.filter(r => r.status === 'fail').length;
-
-const report = {
-  slug,
-  passed,
-  failed,
-  results,
-};
-
-console.log(JSON.stringify(report, null, 2));
-
-if (failed > 0) {
-  process.exit(1);
-}
+export { verify };

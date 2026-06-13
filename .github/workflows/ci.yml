@@ -27,4 +27,4 @@ jobs:
         run: npm run build
 
       - name: Run tests
-        run: node --test scripts/import-book.test.mjs
+        run: npm test
