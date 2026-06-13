@@ -1932,5 +1932,176 @@
         }
       ]
     }
+  ],
+  "/books/money-dog/": [
+    {
+      "text": "小狗钱钱（套装全2册）",
+      "items": [
+        {
+          "text": "01-目录",
+          "link": "/books/money-dog/01-目录"
+        },
+        {
+          "text": "02-小狗钱钱1",
+          "link": "/books/money-dog/02-小狗钱钱1"
+        },
+        {
+          "text": "03-童话与理财",
+          "link": "/books/money-dog/03-童话与理财"
+        },
+        {
+          "text": "04-前言",
+          "link": "/books/money-dog/04-前言"
+        },
+        {
+          "text": "05-第一章-白色的拉布拉多犬",
+          "link": "/books/money-dog/05-第一章-白色的拉布拉多犬"
+        },
+        {
+          "text": "06-第二章-梦想储蓄罐和梦想相册",
+          "link": "/books/money-dog/06-第二章-梦想储蓄罐和梦想相册"
+        },
+        {
+          "text": "07-第三章-达瑞，一个很会挣钱的男孩",
+          "link": "/books/money-dog/07-第三章-达瑞，一个很会挣钱的男孩"
+        },
+        {
+          "text": "08-第四章-堂兄的挣钱之道",
+          "link": "/books/money-dog/08-第四章-堂兄的挣钱之道"
+        },
+        {
+          "text": "09-第五章-钱钱以前的主人",
+          "link": "/books/money-dog/09-第五章-钱钱以前的主人"
+        },
+        {
+          "text": "10-第六章-爸爸妈妈犯下的错误",
+          "link": "/books/money-dog/10-第六章-爸爸妈妈犯下的错误"
+        },
+        {
+          "text": "11-第七章-在金先生家",
+          "link": "/books/money-dog/11-第七章-在金先生家"
+        },
+        {
+          "text": "12-第八章-陶穆太太",
+          "link": "/books/money-dog/12-第八章-陶穆太太"
+        },
+        {
+          "text": "13-第九章-冒险经历",
+          "link": "/books/money-dog/13-第九章-冒险经历"
+        },
+        {
+          "text": "14-第十章-在地下室里",
+          "link": "/books/money-dog/14-第十章-在地下室里"
+        },
+        {
+          "text": "15-第十一章-爸爸妈妈不明白",
+          "link": "/books/money-dog/15-第十一章-爸爸妈妈不明白"
+        },
+        {
+          "text": "16-第十二章-陶穆太太归来",
+          "link": "/books/money-dog/16-第十二章-陶穆太太归来"
+        },
+        {
+          "text": "17-第十三章-巨大的危机",
+          "link": "/books/money-dog/17-第十三章-巨大的危机"
+        },
+        {
+          "text": "18-第十四章-投资俱乐部",
+          "link": "/books/money-dog/18-第十四章-投资俱乐部"
+        },
+        {
+          "text": "19-第十五章-演-讲",
+          "link": "/books/money-dog/19-第十五章-演-讲"
+        },
+        {
+          "text": "20-第十六章-俱乐部的投资行动",
+          "link": "/books/money-dog/20-第十六章-俱乐部的投资行动"
+        },
+        {
+          "text": "21-第十七章-爷爷奶奶害怕风险",
+          "link": "/books/money-dog/21-第十七章-爷爷奶奶害怕风险"
+        },
+        {
+          "text": "22-第十八章-大冒险的结局",
+          "link": "/books/money-dog/22-第十八章-大冒险的结局"
+        },
+        {
+          "text": "23-自力更生——写给成年人的后记",
+          "link": "/books/money-dog/23-自力更生——写给成年人的后记"
+        },
+        {
+          "text": "24-附-录",
+          "link": "/books/money-dog/24-附-录"
+        },
+        {
+          "text": "25-小狗钱钱2",
+          "link": "/books/money-dog/25-小狗钱钱2"
+        },
+        {
+          "text": "26-童话与理财",
+          "link": "/books/money-dog/26-童话与理财"
+        },
+        {
+          "text": "27-第一章-奖学金",
+          "link": "/books/money-dog/27-第一章-奖学金"
+        },
+        {
+          "text": "28-第二章-白色石头",
+          "link": "/books/money-dog/28-第二章-白色石头"
+        },
+        {
+          "text": "29-第三章-放大镜",
+          "link": "/books/money-dog/29-第三章-放大镜"
+        },
+        {
+          "text": "30-第四章-论文",
+          "link": "/books/money-dog/30-第四章-论文"
+        },
+        {
+          "text": "31-第五章-前往加利福尼亚",
+          "link": "/books/money-dog/31-第五章-前往加利福尼亚"
+        },
+        {
+          "text": "32-第六章-寄宿学校",
+          "link": "/books/money-dog/32-第六章-寄宿学校"
+        },
+        {
+          "text": "33-第七章-好老师",
+          "link": "/books/money-dog/33-第七章-好老师"
+        },
+        {
+          "text": "34-第八章-危险",
+          "link": "/books/money-dog/34-第八章-危险"
+        },
+        {
+          "text": "35-第九章-好老师的秘密",
+          "link": "/books/money-dog/35-第九章-好老师的秘密"
+        },
+        {
+          "text": "36-第十章-7条准则",
+          "link": "/books/money-dog/36-第十章-7条准则"
+        },
+        {
+          "text": "37-第十一章-演讲比赛",
+          "link": "/books/money-dog/37-第十一章-演讲比赛"
+        },
+        {
+          "text": "38-第十二章-事件",
+          "link": "/books/money-dog/38-第十二章-事件"
+        },
+        {
+          "text": "39-第十三章-回家",
+          "link": "/books/money-dog/39-第十三章-回家"
+        },
+        {
+          "text": "40-第十四章-道别",
+          "link": "/books/money-dog/40-第十四章-道别"
+        },
+        {
+          "text": "41-养成优秀品格的7条准则",
+          "link": "/books/money-dog/41-养成优秀品格的7条准则"
+        }
+      ]
+    }
   ]
 }
