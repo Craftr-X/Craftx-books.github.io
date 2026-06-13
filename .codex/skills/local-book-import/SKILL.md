@@ -1,117 +1,132 @@
 ---
 name: local-book-import
-description: Project-specific workflow for importing a local technical booklet into this VitePress books site. Use when the user gives a local folder or EPUB path and asks Codex to import it, convert EPUB to Markdown when needed, preserve local images, filter non-page files such as PDF/audio/text, validate rendered pages and image resources, and update README.md with the new booklet.
+description: Import a local technical booklet or EPUB ebook into this VitePress books site with full validation.
 ---
 
 # Local Book Import
 
-Use this skill to import one local booklet into this repository. The finished state must be a working VitePress book under `docs/books/<slug>/`, registered in `books.json` and `sidebar-generated.json`, with images rendering correctly, build passing, and `README.md` updated.
+Use this skill whenever importing a technical booklet or EPUB ebook into this repository. The finished state must be a working VitePress book under `docs/books/<slug>/`, registered in `books.json` and `sidebar-generated.json`, listed in `README.md`, with images, chapter navigation, page content, and build validation all passing.
 
-## Core Rules
+## Design Boundary
 
-- Treat "Markdown only" as "Markdown pages plus required image assets". Do not drop images referenced by Markdown.
-- Filter non-page source files by default: `.pdf`, `.mp3`, `.wav`, `.m4a`, `.txt`, and similar sidecar files.
-- Preserve or copy only assets required by Markdown whenever practical. Copying the whole image asset directory is acceptable when selective copying is risky or time-sensitive.
-- Never leave `[图片：...]`, `[缺失资源：...]`, `alt="缺失资源"`, or broken local image links in the imported book.
-- Do not overwrite an existing `docs/books/<slug>/` unless the user explicitly requests replacement or `--force` is appropriate.
-- Verify with commands, not visual assumption.
+- Scope each import to one book slug unless the user explicitly asks for multiple books.
+- Expected changed files for a normal import:
+  - `docs/books/<slug>/`
+  - `books.json`
+  - `sidebar-generated.json`
+  - `README.md`
+  - `scripts/import-book.mjs` and `scripts/import-book.test.mjs` only when importer behavior must be fixed.
+- Do not edit existing book content, site theme, VitePress config, deploy settings, comments, search, or generated `dist/` unless the user explicitly asks or the import cannot work without a narrowly scoped fix.
+- Do not overwrite an existing `docs/books/<slug>/` unless the user explicitly requests replacement and `--force` is appropriate.
+- Do not commit private source books, credentials, local logs, `dist/`, dependencies, or caches.
+- Follow the branch workflow in `AGENTS.md`: do not commit directly to `main`.
+
+## Input Types
+
+- Markdown folder: import `.md` pages and required local assets.
+- EPUB file: use `scripts/import-book.mjs`; it converts EPUB HTML to Markdown and copies image assets.
+- Mixed local folder: create a temporary Markdown-only source before import, excluding PDFs, audio, TXT sidecars, logs, and unrelated files.
+- Unsupported source: stop and report clearly.
+
+## Import Contract
+
+The imported book must provide:
+
+- **Book registry**: one `books.json` entry with stable lowercase kebab-case `slug`, clear `title`, concise `desc`, and correct `category` (`booklet` for Markdown folders, `ebook` for EPUBs unless the user says otherwise).
+- **Book directory**: `docs/books/<slug>/index.md` plus numbered chapter Markdown files such as `01-开篇.md`.
+- **Left chapter sidebar**: `sidebar-generated.json` must include `/books/<slug>/` with all chapter pages in reading order.
+- **Center content**: each chapter must render as normal VitePress Markdown, not raw EPUB HTML fragments.
+- **Right page outline**: preserve or generate meaningful Markdown headings from the source so VitePress can show the page outline. Do not disable `aside` on chapter pages. A book `index.md` may use `aside: false`.
+- **Images**: all referenced local images must exist beside the book, commonly in `_assets/` or `images/`, and render through VitePress.
+- **Internal links**: EPUB source links such as `text00000.html#filepos...` must be rewritten to generated Markdown links such as `./05-章节.md`, or removed if they cannot be resolved safely.
+- **README**: add one row to the correct README table, matching `books.json` category and linking to `./docs/books/<slug>/`.
 
 ## Workflow
 
-1. Inspect the source path.
-   - If it is a directory, scan recursively for `.md` files and local asset directories such as `images/`, `_assets/`, `assets/`, `img/`.
-   - If it is an `.epub`, use the existing importer first because `scripts/import-book.mjs` supports EPUB conversion.
-   - If it is neither a Markdown folder nor EPUB, stop and report the unsupported type.
+1. Inspect current state.
+   - Run `git status --short --branch`.
+   - If on `main`, create a feature/docs branch before edits.
+   - Check whether `docs/books/<slug>/` already exists.
 
-2. Choose slug, title, and description.
-   - Prefer a user-provided slug/title if present.
-   - Otherwise derive title from the folder/file name or the first Markdown heading.
-   - Use a stable lowercase hyphen slug.
+2. Inspect the source path.
+   - Directory: scan recursively for `.md` files and asset directories such as `images/`, `_assets/`, `assets/`, `img/`.
+   - EPUB: run the existing importer first; do not hand-convert unless the importer fails and needs a fix.
+   - Confirm title, slug, description, and category. Prefer user-provided values.
 
-3. Prepare Markdown-folder input when needed.
-   - For a mixed local folder, create a temporary md-only import source.
-   - Copy all `.md` files that should become pages.
-   - Copy local image assets referenced by those Markdown files, preserving relative paths.
-   - Do not copy PDFs, audio, TXT course sidecars, or unrelated files.
-   - Before import, confirm the temp source contains `.md` and image files only, unless another asset type is explicitly required by Markdown.
+3. Prepare input when needed.
+   - For mixed folders, copy only Markdown pages and required assets to a temp source.
+   - Preserve relative image paths.
+   - Exclude non-page source files unless Markdown directly requires them.
 
 4. Import.
    - Run:
-     ```powershell
-     npm.cmd run import:book -- "<input-path>" --slug <slug> --title "<title>" --desc "<desc>"
+     ```bash
+     npm run import:book -- "<input-path>" --slug <slug> --title "<title>" --desc "<desc>"
      ```
-   - For replacement only when intended, add `--force`.
-   - The importer should update `docs/books/<slug>/`, `books.json`, and `sidebar-generated.json`.
+   - Add `--force` only for an intentional replacement.
+   - Confirm importer updated `docs/books/<slug>/`, `books.json`, and `sidebar-generated.json`.
 
-5. Restore and validate image paths.
-   - Search imported Markdown for placeholder text:
-     ```powershell
-     rg -n -F "[图片：" docs\books\<slug>
-     rg -n -F "[缺失资源：" docs\books\<slug>
-     rg -n -F "缺失资源" docs\books\<slug>
+5. Validate and repair generated content.
+   - Search for missing-resource placeholders and EPUB source links:
+     ```bash
+     rg -n "\\[图片：|\\[缺失资源：|缺失资源|图片未找到|text[0-9]+\\.html|filepos" docs/books/<slug>
      ```
-   - If placeholders exist because a previous pass normalized missing assets, restore Markdown image syntax and copy the referenced assets from the source.
-   - Validate local image references resolve from each Markdown file's directory.
+   - Validate all local Markdown links and image links resolve from each Markdown file.
+   - Fix unresolved internal links to point at generated `.md` files.
+   - Fix missing images by copying assets from the source or restoring Markdown image syntax.
 
-6. Build.
-   - Run:
-     ```powershell
-     npm.cmd run build
+6. Update documentation.
+   - Add the book to `README.md` under `技术小册` or `电子书`.
+   - Keep the row concise: title, short description, `./docs/books/<slug>/`.
+
+7. Test and validate.
+   - If import scripts changed, add focused `node:test` coverage and run:
+     ```bash
+     node --test scripts/import-book.test.mjs
      ```
-   - Fix any unresolved asset, Markdown, or VitePress error before proceeding.
-   - Existing syntax-highlight warnings such as unloaded `vbnet` are non-blocking if the build succeeds.
-
-7. Runtime verification.
-   - Start or reuse local preview. Prefer the project static server after build:
-     ```powershell
-     node scripts\serve-built.mjs
+   - Run the automated verification script:
+     ```bash
+     node scripts/verify-import.mjs <slug>
      ```
-     It serves `http://127.0.0.1:4173/Craftx-books.github.io/` unless the port is already occupied.
-   - Request the book index and representative chapters with `Invoke-WebRequest`.
-   - Inspect rendered HTML or built JS for imported image URLs under `/Craftx-books.github.io/assets/...`, then request at least one representative image URL and confirm HTTP `200`.
-   - For higher confidence, scan all imported Markdown image references and ensure the source files exist before build; build success then verifies VitePress can bundle them.
+   - Fix any failed checks before proceeding.
+   - Always run:
+     ```bash
+     npm run build
+     ```
+   - Existing syntax-highlight warnings such as unloaded `vbnet` are non-blocking only if the build succeeds.
 
-8. Update `README.md`.
-   - Add the new booklet to the existing technical booklet list/table using the repository's current format.
-   - Include the title, slug/link, and concise description.
-   - Keep README changes scoped to the new booklet entry.
+8. Runtime verification when feasible.
+   - Start preview or serve the built site.
+   - Confirm the book index and representative chapters return HTTP 200.
+   - Confirm at least one imported image URL returns HTTP 200.
+   - Check a representative chapter has left sidebar, center content, images, and right outline when the chapter has headings.
 
 9. Final checks.
    - Run:
-     ```powershell
-     git status --short
+     ```bash
+     git status --short --branch
      git diff --stat
      ```
-   - Confirm the expected changed files normally include:
-     - `docs/books/<slug>/`
-     - `books.json`
-     - `sidebar-generated.json`
-     - `README.md`
-     - any narrowly scoped script fix if required
+   - Ensure changes stay inside the intended import boundary.
 
-## Common Fixes
+## EPUB Quality Rules
 
-### Markdown Imported Without Images
-
-If pages show text like `[图片：images/foo.png]`, the previous import dropped images and the missing-asset normalizer converted image Markdown to text. Fix by copying the source image directory or referenced files into `docs/books/<slug>/`, then replace:
-
-```text
-[图片：images/foo.png] -> ![图片](images/foo.png)
-[缺失资源：images/foo.png] -> ![图片](images/foo.png)
-```
-
-Also normalize `![缺失资源](images/foo.png)` to `![图片](images/foo.png)`.
-
-### EPUB Import
-
-Use `npm run import:book` directly on the EPUB first. The importer converts EPUB content to Markdown and copies EPUB images into the generated book. After import, still run the same build and image verification steps. If EPUB extraction produces missing image markers, fix the extracted asset mapping before declaring success.
+- Prefer EPUB navigation/NCX titles over generic spine filenames.
+- If one EPUB HTML file contains multiple TOC anchor chapters, split it into separate numbered Markdown files.
+- If TOC anchors cannot be found in HTML, do not drop content. Import the full spine file as one chapter and record a warning.
+- Decode HTML entities in titles, links, and image alt text.
+- Rewrite EPUB internal links after final Markdown filenames are known.
+- Never leave source `.html` links or `filepos` anchors in generated Markdown.
+- Add or update tests when changing EPUB parsing, splitting, title extraction, asset mapping, or internal link rewriting.
 
 ## Completion Criteria
 
-The task is complete only when:
+The import is complete only when all are true:
 
-- `npm.cmd run build` succeeds.
-- The new book index and at least one chapter page return HTTP `200` in local preview.
-- At least one imported image URL from the rendered page returns HTTP `200`.
-- The imported book contains no `[图片：...]`, `[缺失资源：...]`, or `缺失资源` residue.
-- `README.md` mentions the new technical booklet.
+- `docs/books/<slug>/index.md` exists and links to all chapters.
+- `books.json`, `sidebar-generated.json`, and `README.md` include the new book.
+- No missing-resource placeholders, unresolved local images, source EPUB HTML links, or broken local Markdown links remain in the imported book.
+- `node scripts/verify-import.mjs <slug>` reports all checks passed.
+- `node --test scripts/import-book.test.mjs` passes if import code changed.
+- `npm run build` passes.
+- Existing books and shared site behavior were not changed outside the documented scope.
