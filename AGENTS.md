@@ -13,6 +13,7 @@ This repository is a VitePress books site. Main site content lives in `docs/`, w
 - `npm run generate:sidebar`: regenerate `sidebar-generated.json` after content structure changes.
 - `npm run import:book -- ./path/to/book --slug my-book`: import a Markdown folder or EPUB into `docs/books/`.
 - `node --test scripts/import-book.test.mjs`: run the Node test suite for the import script.
+- `node scripts/verify-import.mjs <slug>`: run post-import verification (pass/fail JSON report).
 
 ## Coding Style & Naming Conventions
 
@@ -21,6 +22,64 @@ Use two-space indentation in JavaScript, TypeScript, Vue, JSON, and Markdown-adj
 ## Testing Guidelines
 
 There is no full site test framework; the required validation is `npm run build`. For script logic, add focused tests with Node’s built-in `node:test` and `node:assert/strict`, following `scripts/import-book.test.mjs`. Run script tests when changing import or normalization behavior, and run a full build before opening a PR.
+
+## Book Import Spec
+
+Use this spec whenever importing a technical booklet, Markdown source, or EPUB ebook. The goal is a complete VitePress reading experience without regressions to existing books or shared site behavior.
+
+**Input type**
+
+- EPUB file → run `npm run import:book` to convert EPUB HTML to Markdown, then import.
+- Markdown folder → import `.md` pages and required image assets directly.
+- Mixed folder → copy Markdown pages and required assets to a temp source, excluding PDFs, audio, TXT sidecars, logs, caches, and unrelated source files.
+
+**Scope and boundaries**
+
+- Keep the scope to one book slug unless explicitly asked otherwise. Normal imports should only change `docs/books/<slug>/`, `books.json`, `sidebar-generated.json`, `README.md`, and narrowly scoped importer/test files when needed.
+- Do not edit existing book content, site theme, VitePress config, deploy settings, comments, search, or `dist/` unless the user explicitly asks or the import cannot work without a narrowly scoped fix.
+- Do not overwrite an existing `docs/books/<slug>/` unless the user explicitly requests replacement and `--force` is appropriate.
+- Use `npm run import:book -- <source> --slug <slug> --title "<title>" --desc "<desc>"` for Markdown folders and EPUB files. Use `--force` only for an intentional replacement.
+
+**Required output**
+
+- `docs/books/<slug>/` must contain an `index.md` and numbered chapter Markdown files. Chapter filenames should be readable and ordered, for example `01-开篇.md`.
+- `books.json` is the source registry. Use `category: "booklet"` for Markdown folders and `category: "ebook"` for EPUBs unless the user says otherwise. Use stable lowercase kebab-case slugs.
+- `sidebar-generated.json` must contain `/books/<slug>/` so the left chapter sidebar shows all chapters in reading order.
+- Chapter Markdown should render as normal VitePress Markdown, not raw EPUB HTML fragments. Preserve meaningful headings so the right page outline can work. Do not disable `aside` on chapter pages; a book `index.md` may use `aside: false`.
+- All local images referenced by Markdown must exist beside the book, usually in `_assets/` or `images/`, and render in VitePress.
+- EPUB internal links rewritten from source paths like `text00000.html#filepos...` to generated Markdown links like `./05-章节.md`, or removed if they cannot be resolved safely.
+- Add the new book to the correct `README.md` table with title, short description, and `./docs/books/<slug>/` link.
+
+**EPUB conversion rules**
+
+- Prefer EPUB nav/NCX titles over generic spine filenames.
+- Split one HTML spine file into multiple Markdown chapters when the TOC points to anchors inside that file.
+- If TOC anchors are missing in HTML, do not drop content; import the full spine file as one chapter and report a warning.
+- Decode HTML entities in titles, links, and alt text.
+- After final Markdown filenames are known, rewrite EPUB internal links to those generated files, or remove them if they cannot be resolved safely.
+- Never leave source `.html` links or `filepos` anchors in generated Markdown.
+
+**Validation checklist**
+
+- Run a residual scan and fix every match:
+  ```bash
+  rg -n "\\[图片：|\\[缺失资源：|缺失资源|图片未找到|text[0-9]+\\.html|filepos" docs/books/<slug>
+  ```
+- Validate local Markdown links and image references from each imported Markdown file. Build success alone is not enough because `ignoreDeadLinks: true` is enabled.
+- If importer logic changes, add focused tests in `scripts/import-book.test.mjs` and run `node --test scripts/import-book.test.mjs`.
+- Always run `npm run build`; existing code-block language warnings are non-blocking only when the build exits successfully.
+
+**Completion criteria**
+
+The import is complete only when all are true:
+
+- `docs/books/<slug>/index.md` exists and links to all chapters.
+- `books.json`, `sidebar-generated.json`, and `README.md` include the new book.
+- No missing-resource placeholders, unresolved local images, source EPUB HTML links, or broken local Markdown links remain in the imported book.
+- `node scripts/verify-import.mjs <slug>` reports all checks passed.
+- `node --test scripts/import-book.test.mjs` passes if import code changed.
+- `npm run build` passes.
+- Existing books and shared site behavior were not changed outside the documented scope.
 
 ## Branch & Workflow Guidelines
 
