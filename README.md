@@ -51,6 +51,7 @@ CraftX Books 是一个基于 VitePress 构建的在线阅读站点，发布到 G
 | 认知觉醒 | 开启自我改变的原动力 | [开始阅读](./docs/books/renzhi-juexing/) |
 | 认知驱动 | 《认知觉醒》姊妹篇，有效行动，用实践创造可控人生 | [开始阅读](./docs/books/renzhi-qudong/) |
 | 置身钉内 | 钉钉 ONE 项目复盘与产品、设计、协作实践记录 | [开始阅读](./docs/books/zhi-shen-ding-nei/) |
+| 学会提问 | 批判性思维入门经典，原书第12版 | [开始阅读](./docs/books/xuehui-tiwen/) |
 
 ## 🚀 快速开始
 
