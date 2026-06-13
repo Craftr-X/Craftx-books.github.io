@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import books from '../../../../books.json'
+import contentStats from '../../../../content-stats.json'
 
 const categoryCount = (category: string) => books
   .filter(book => (book.category || 'booklet') === category)
@@ -8,7 +9,7 @@ const categoryCount = (category: string) => books
 const stats = [
   { label: '技术小册', value: categoryCount('booklet'), icon: '📚' },
   { label: '电子书', value: categoryCount('ebook'), icon: '📖' },
-  { label: '文章总数', value: '368+', icon: '📄' },
+  { label: '文章总数', value: contentStats.chapterCount, icon: '📄' },
   { icon: '⚡', label: '持续更新', value: '进行中' },
 ]
 </script>

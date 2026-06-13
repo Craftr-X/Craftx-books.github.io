@@ -6,9 +6,11 @@
     "dev": "vitepress dev docs",
     "import:book": "node scripts/import-book.mjs",
     "generate:sidebar": "node scripts/generate-sidebar.mjs",
-    "prebuild": "node scripts/escape-vitepress-braces.mjs && node scripts/normalize-missing-assets.mjs",
+    "generate:stats": "node scripts/generate-content-stats.mjs",
+    "prebuild": "node scripts/generate-sidebar.mjs && node scripts/generate-content-stats.mjs && node scripts/escape-vitepress-braces.mjs && node scripts/normalize-missing-assets.mjs",
     "build": "vitepress build docs",
-    "preview": "vitepress preview docs"
+    "preview": "vitepress preview docs",
+    "test": "node --test scripts/*.test.mjs"
   },
   "devDependencies": {
     "medium-zoom": "^1.1.0",
