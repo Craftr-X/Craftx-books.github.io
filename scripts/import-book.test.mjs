@@ -1,7 +1,11 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
+import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import {
   cleanTitle,
+  importEpub,
   normalizeHref,
   parseNavDocToc,
   parseNcxToc,
@@ -43,8 +47,86 @@ test('parses EPUB2 NCX toc titles by normalized href', () => {
     </ncx>
   `, 'OPS/toc.ncx')
 
-  assert.equal(toc.get('OPS/Text/vol1.xhtml'), '第一卷')
-  assert.equal(toc.get('OPS/Text/chapter-001.xhtml'), '中国社会各阶级的分析')
+  assert.equal(toc.toc.get('OPS/Text/vol1.xhtml'), '第一卷')
+  assert.equal(toc.toc.get('OPS/Text/chapter-001.xhtml'), '中国社会各阶级的分析')
+  assert.deepEqual(toc.anchors.get('OPS/Text/vol1.xhtml'), [{ fragment: 'toc', title: '第一卷' }])
+})
+
+test('imports EPUB spine files split by NCX anchors', () => {
+  const tempDir = mkdtempSync(join(tmpdir(), 'import-book-anchor-'))
+  try {
+    const info = {
+      title: '锚点书',
+      desc: '测试',
+      warnings: [],
+      entries: new Map([
+        ['OPS/Text/vol.xhtml', Buffer.from(`
+          <html><body>
+            <p><a href="vol.xhtml#chapter-two">跳到第二章</a></p>
+            <p>卷首内容</p>
+            <h2 id="chapter-one">第一章</h2><p>第一章正文</p>
+            <h2 name="chapter-two">第二章</h2><p>第二章正文</p>
+          </body></html>
+        `)],
+      ]),
+      opf: {
+        manifest: new Map(),
+        spine: [{ href: 'OPS/Text/vol.xhtml' }],
+        tocTitleMap: new Map([['OPS/Text/vol.xhtml', '卷首']]),
+        fileAnchors: new Map([[
+          'OPS/Text/vol.xhtml',
+          [
+            { fragment: 'chapter-one', title: '第一章' },
+            { fragment: 'chapter-two', title: '第二章' },
+          ],
+        ]]),
+      },
+    }
+
+    importEpub(tempDir, info)
+
+    const files = readdirSync(tempDir).filter(file => file.endsWith('.md')).sort()
+    assert.deepEqual(files, ['01-卷首.md', '02-第一章.md', '03-第二章.md', 'index.md'])
+    assert.match(readFileSync(join(tempDir, '01-卷首.md'), 'utf8'), /\[跳到第二章\]\(\.\/03-第二章\.md\)/)
+    assert.match(readFileSync(join(tempDir, '02-第一章.md'), 'utf8'), /第一章正文/)
+    assert.match(readFileSync(join(tempDir, '03-第二章.md'), 'utf8'), /第二章正文/)
+    assert.equal(info.chapterCount, 3)
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true })
+  }
+})
+
+test('imports full EPUB spine file when NCX anchors are missing in HTML', () => {
+  const tempDir = mkdtempSync(join(tmpdir(), 'import-book-missing-anchor-'))
+  try {
+    const info = {
+      title: '缺失锚点书',
+      desc: '测试',
+      warnings: [],
+      entries: new Map([
+        ['OPS/Text/vol.xhtml', Buffer.from('<html><body><p>完整正文</p></body></html>')],
+      ]),
+      opf: {
+        manifest: new Map(),
+        spine: [{ href: 'OPS/Text/vol.xhtml' }],
+        tocTitleMap: new Map([['OPS/Text/vol.xhtml', '完整章节']]),
+        fileAnchors: new Map([[
+          'OPS/Text/vol.xhtml',
+          [{ fragment: 'missing-anchor', title: '不会匹配' }],
+        ]]),
+      },
+    }
+
+    importEpub(tempDir, info)
+
+    const files = readdirSync(tempDir).filter(file => file.endsWith('.md')).sort()
+    assert.deepEqual(files, ['01-完整章节.md', 'index.md'])
+    assert.match(readFileSync(join(tempDir, '01-完整章节.md'), 'utf8'), /完整正文/)
+    assert.match(info.warnings.join('\n'), /章节锚点未匹配/)
+    assert.equal(info.chapterCount, 1)
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true })
+  }
 })
 
 test('cleans noisy titles and keeps Chinese punctuation', () => {

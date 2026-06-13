@@ -281,6 +281,13 @@ function normalizeHref(href, baseDir = '') {
   return normalizePosix(joinPosix(baseDir, decodeHtml(withoutQuery)))
 }
 
+function normalizeHrefWithFragment(href, baseDir = '') {
+  const raw = String(href || '')
+  const fragment = raw.includes('#') ? raw.split('#').slice(1).join('#') : ''
+  const normalized = normalizeHref(raw, baseDir)
+  return fragment ? `${normalized}#${decodeHtml(fragment)}` : normalized
+}
+
 function firstChildTagContent(text, tag) {
   const match = text.match(new RegExp(`<[^:>]*:?${tag}\\b[^>]*>([\\s\\S]*?)<\\/[^:>]*:?${tag}>`, 'i'))
   return match ? match[1] : ''
@@ -313,18 +320,27 @@ function parseNavDocToc(navHtml, navPath = '') {
 function parseNcxToc(ncxXml, ncxPath = '') {
   const ncxDir = dirnamePosix(ncxPath)
   const toc = new Map()
-  for (const match of ncxXml.matchAll(/<content\b[^>]*src=["'][^"']+["'][^>]*>/gi)) {
+  /** @type {Map<string, Array<{fragment: string, title: string}>>} */
+  const anchors = new Map()
+  for (const match of ncxXml.matchAll(/<content\b[^>]*src=["']([^"']+)["'][^>]*>/gi)) {
     const navPointStart = ncxXml.lastIndexOf('<navPoint', match.index)
     const blockBeforeContent = navPointStart === -1 ? ncxXml.slice(0, match.index) : ncxXml.slice(navPointStart, match.index)
     const labelMatches = [...blockBeforeContent.matchAll(/<navLabel\b[^>]*>[\s\S]*?<\/navLabel>/gi)]
     const labelBlock = labelMatches.length > 0 ? labelMatches[labelMatches.length - 1][0] : ''
-    const src = attr(match[0], 'src')
+    const src = decodeHtml(match[1])
     const label = firstChildTagContent(labelBlock, 'text')
     const href = normalizeHref(src, ncxDir)
     const title = cleanTitle(label)
     if (href && title && !toc.has(href)) toc.set(href, title)
+    // Track anchor-based entries for splitting multi-chapter HTML files
+    const rawSrc = src
+    const fragment = rawSrc.includes('#') ? rawSrc.split('#').slice(1).join('#') : ''
+    if (fragment && href && title) {
+      if (!anchors.has(href)) anchors.set(href, [])
+      anchors.get(href).push({ fragment, title })
+    }
   }
-  return toc
+  return { toc, anchors }
 }
 
 function mergeTocTitleMap(target, source) {
@@ -332,6 +348,13 @@ function mergeTocTitleMap(target, source) {
     if (href && title && !target.has(href)) target.set(href, title)
   }
   return target
+}
+
+function mergeAnchors(target, source) {
+  for (const [href, items] of source) {
+    if (!target.has(href)) target.set(href, [])
+    target.get(href).push(...items)
+  }
 }
 
 function parseOpf(entries) {
@@ -366,6 +389,8 @@ function parseOpf(entries) {
   }
 
   const tocTitleMap = new Map()
+  /** @type {Map<string, Array<{fragment: string, title: string}>>} */
+  const fileAnchors = new Map()
   const navItems = [...manifest.values()].filter(item => /\bnav\b/i.test(item.properties || ''))
   for (const item of navItems) {
     const navHtml = textEntry(entries, item.href)
@@ -378,7 +403,12 @@ function parseOpf(entries) {
     ].filter(Boolean)
     for (const item of ncxItems) {
       const ncxXml = textEntry(entries, item.href)
-      if (ncxXml) mergeTocTitleMap(tocTitleMap, parseNcxToc(ncxXml, item.href))
+      if (ncxXml) {
+        const result = parseNcxToc(ncxXml, item.href)
+        const tocMap = result instanceof Map ? result : result.toc
+        mergeTocTitleMap(tocTitleMap, tocMap)
+        if (!(result instanceof Map) && result.anchors) mergeAnchors(fileAnchors, result.anchors)
+      }
       if (tocTitleMap.size > 0) break
     }
   }
@@ -390,10 +420,11 @@ function parseOpf(entries) {
     manifest,
     spine,
     tocTitleMap,
+    fileAnchors,
   }
 }
 
-function htmlToMarkdown(html, assets, chapterPath) {
+function htmlToMarkdown(html, assets, chapterPath, links = new Map()) {
   let body = html.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] || html
   body = body.replace(/<script\b[\s\S]*?<\/script>/gi, '')
   body = body.replace(/<style\b[\s\S]*?<\/style>/gi, '')
@@ -410,7 +441,11 @@ function htmlToMarkdown(html, assets, chapterPath) {
     return local ? `\n\n![${decodeHtml(alt)}](${local})\n\n` : `\n\n[图片未找到：${src}]\n\n`
   })
   body = body.replace(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi, (_, href, content) => {
-    return `[${decodeHtml(stripTags(content)).trim()}](${href})`
+    const label = decodeHtml(stripTags(content)).trim()
+    const decodedHref = decodeHtml(href)
+    const baseDir = dirnamePosix(chapterPath)
+    const target = links.get(normalizeHrefWithFragment(decodedHref, baseDir)) || links.get(normalizeHref(decodedHref, baseDir)) || decodedHref
+    return `[${label}](${target})`
   })
   body = body.replace(/<\/(p|div|section|article|header|footer|blockquote)>/gi, '\n\n')
   body = body.replace(/<br\s*\/?>/gi, '\n')
@@ -450,7 +485,16 @@ function detectEpub(inputPath, args) {
     title,
     desc: args.desc || (opf.creator ? `作者：${opf.creator}` : ''),
     slug: slugify(args.slug || title),
-    chapterCount: opf.spine.length,
+    chapterCount: (() => {
+      if (!opf.fileAnchors || opf.fileAnchors.size === 0) return opf.spine.length
+      let total = 0
+      for (const item of opf.spine) {
+        const href = normalizeHref(item.href)
+        const anchors = opf.fileAnchors.get(href)
+        total += (anchors && anchors.length > 0) ? anchors.length : 1
+      }
+      return total
+    })(),
     warnings: ['EPUB 转 Markdown 会丢弃复杂 CSS 样式；表格会尽量转为文本管道格式。'],
     entries,
     opf,
@@ -476,20 +520,73 @@ function importEpub(tempDir, info) {
 
   const chapters = []
   const usedFileNames = new Set()
-  info.opf.spine.forEach((item, index) => {
+  const plannedChapters = []
+  let chapterIndex = 0
+  const planChapter = (title, item, html, fragment = '') => {
+    const fileName = safeFileName(chapterIndex, title, usedFileNames)
+    chapterIndex += 1
+    const targetPath = join(tempDir, fileName)
+    plannedChapters.push({ title, item, html, targetPath, fileName, fragment })
+    chapters.push(targetPath)
+    return fileName
+  }
+  info.opf.spine.forEach((item) => {
     const html = textEntry(info.entries, item.href)
     if (!html) {
       info.warnings.push(`章节缺失：${item.href}`)
       return
     }
+    const normalizedHref = normalizeHref(item.href)
+    const itemAnchors = (info.opf.fileAnchors && info.opf.fileAnchors.get(normalizedHref)) || []
     const h1 = html.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/i)?.[0] || ''
-    const title = cleanTitle(info.opf.tocTitleMap.get(normalizeHref(item.href)) || '') || tagText(html, 'title') || cleanTitle(h1) || `第 ${index + 1} 章`
-    const fileName = safeFileName(index, title, usedFileNames)
-    const md = htmlToMarkdown(html, assets, item.href)
-    writeFileSync(join(tempDir, fileName), md || `# ${title}\n`, 'utf8')
-    chapters.push(join(tempDir, fileName))
+    const fallbackTitle = cleanTitle(info.opf.tocTitleMap.get(normalizedHref) || '') || tagText(html, 'title') || cleanTitle(h1) || `第 ${chapterIndex + 1} 章`
+
+    if (itemAnchors.length > 0) {
+      const bodyHtml = html.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] || html
+      const splitPoints = []
+      for (const anc of itemAnchors) {
+        const escapedFragment = anc.fragment.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        const anchorRe = new RegExp(`<[^>]*(?:name|id)=["']${escapedFragment}["'][^>]*>`, 'i')
+        const m = bodyHtml.match(anchorRe)
+        if (m) splitPoints.push({ pos: m.index, title: anc.title, fragment: anc.fragment })
+      }
+      splitPoints.sort((a, b) => a.pos - b.pos)
+      if (fallbackTitle && splitPoints.length > 0 && splitPoints[0].pos > 0) {
+        splitPoints.unshift({ pos: 0, title: fallbackTitle })
+      }
+
+      if (splitPoints.length > 0) {
+        for (let i = 0; i < splitPoints.length; i++) {
+          const start = splitPoints[i].pos
+          const end = i + 1 < splitPoints.length ? splitPoints[i + 1].pos : bodyHtml.length
+          const chunk = bodyHtml.slice(start, end)
+          planChapter(splitPoints[i].title, item, chunk, splitPoints[i].fragment || '')
+        }
+        return
+      }
+
+      info.warnings.push(`章节锚点未匹配，已按完整章节导入：${item.href}`)
+    } else {
+      planChapter(fallbackTitle, item, html)
+      return
+    }
+
+    planChapter(fallbackTitle, item, html)
   })
 
+  const links = new Map()
+  for (const chapter of plannedChapters) {
+    const href = normalizeHref(chapter.item.href)
+    const local = `./${chapter.fileName}`
+    if (!links.has(href)) links.set(href, local)
+    if (chapter.fragment) links.set(`${href}#${chapter.fragment}`, local)
+  }
+  for (const chapter of plannedChapters) {
+    const md = htmlToMarkdown(chapter.html, assets, chapter.item.href, links)
+    writeFileSync(chapter.targetPath, md || `# ${chapter.title}\n`, 'utf8')
+  }
+
+  info.chapterCount = chapters.length
   writeIndex(tempDir, info.title, info.desc, chapters)
 }
 
@@ -602,6 +699,7 @@ export {
   parseNavDocToc,
   parseNcxToc,
   parseOpf,
+  importEpub,
   safeFileName,
   titleFileSegment,
 }
