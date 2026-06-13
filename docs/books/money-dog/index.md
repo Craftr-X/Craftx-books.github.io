@@ -1,11 +1,11 @@
 ---
 layout: doc
-title: 小狗钱钱（套装全2册）
+title: 小狗钱钱
 description: 作者：[德] 博多·舍费尔
 aside: false
 editLink: false
 ---
-# 小狗钱钱（套装全2册）
+# 小狗钱钱
 > 作者：[德] 博多·舍费尔
 
 ## 目录

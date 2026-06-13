@@ -1935,7 +1935,7 @@
   ],
   "/books/money-dog/": [
     {
-      "text": "小狗钱钱（套装全2册）",
+      "text": "小狗钱钱",
       "items": [
         {
           "text": "01-目录",
@@ -2106,12 +2106,8 @@
   ],
   "/books/renzhi-qudong/": [
     {
-      "text": "认知驱动：做成一件对他人很有用的事（《认知觉醒》姊妹篇！有效行动，用实践创造可控人生！）",
+      "text": "认知驱动",
       "items": [
-        {
-          "text": "01-Cover",
-          "link": "/books/renzhi-qudong/01-Cover"
-        },
         {
           "text": "02-扉页",
           "link": "/books/renzhi-qudong/02-扉页"
@@ -2119,14 +2115,6 @@
         {
           "text": "03-版权信息",
           "link": "/books/renzhi-qudong/03-版权信息"
-        },
-        {
-          "text": "04-目录",
-          "link": "/books/renzhi-qudong/04-目录"
-        },
-        {
-          "text": "05-未知",
-          "link": "/books/renzhi-qudong/05-未知"
         },
         {
           "text": "06-前言-为什么我们很努力却总是看不到希望",
