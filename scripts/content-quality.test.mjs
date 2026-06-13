@@ -91,6 +91,33 @@ test('generateSidebar refreshes existing book entries', () => {
   }
 })
 
+test('generateSidebar skips hidden pages while preserving numbered order', () => {
+  const root = makeProject()
+  try {
+    writeJson(join(root, 'books.json'), [{ slug: 'alpha', title: 'Alpha', category: 'ebook' }])
+    writeJson(join(root, 'sidebar-generated.json'), {})
+    mkdirSync(join(root, 'docs', 'books', 'alpha'))
+    writeFileSync(join(root, 'docs', 'books', 'alpha', '01-cover.md'), [
+      '---',
+      'sidebar: false',
+      '---',
+      '# Cover',
+      '',
+    ].join('\n'))
+    writeFileSync(join(root, 'docs', 'books', 'alpha', '02-preface.md'), '# Preface\n')
+    writeFileSync(join(root, 'docs', 'books', 'alpha', '03-body.md'), '# Body\n')
+
+    const sidebar = generateSidebar({ root })
+
+    assert.deepEqual(sidebar['/books/alpha/'][0].items, [
+      { text: 'preface', link: '/books/alpha/02-preface' },
+      { text: 'body', link: '/books/alpha/03-body' },
+    ])
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
 test('verifyImport accepts a complete imported book', () => {
   const root = makeProject()
   try {

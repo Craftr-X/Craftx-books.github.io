@@ -29,6 +29,13 @@ function titleFromMarkdown(file) {
   return basename(file, '.md').replace(/^\d+-/, '')
 }
 
+function sidebarVisible(file) {
+  const content = readFileSync(file, 'utf8')
+  const frontmatter = content.match(/^---\n([\s\S]*?)\n---/)
+  if (!frontmatter) return true
+  return !/^sidebar:\s*false\s*$/m.test(frontmatter[1])
+}
+
 function orderKey(file) {
   const name = basename(file, '.md')
   const numeric = name.match(/^(\d+)/)
@@ -85,6 +92,7 @@ function generateSidebar(options = {}) {
     const existingTexts = existingTextByLink(sidebar[key])
     const items = walkMarkdown(bookDir)
       .sort(sortMarkdown)
+      .filter(sidebarVisible)
       .map(file => {
         const link = toLink(docsBooksDir, book.slug, file)
         return {
@@ -120,6 +128,7 @@ export function updateSidebarForBook(book, options = {}) {
   const sidebar = readJson(sidebarPath, {})
   const items = walkMarkdown(bookDir)
     .sort(sortMarkdown)
+    .filter(sidebarVisible)
     .map(file => ({
       text: titleFromMarkdown(file),
       link: toLink(docsBooksDir, book.slug, file),
