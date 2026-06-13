@@ -2254,5 +2254,464 @@
         }
       ]
     }
+  ],
+  "/books/xuehui-tiwen/": [
+    {
+      "text": "学会提问",
+      "items": [
+        {
+          "text": "版权信息",
+          "link": "/books/xuehui-tiwen/02-版权信息"
+        },
+        {
+          "text": "目录",
+          "link": "/books/xuehui-tiwen/03-目录"
+        },
+        {
+          "text": "赞誉",
+          "link": "/books/xuehui-tiwen/04-赞誉"
+        },
+        {
+          "text": "前言",
+          "link": "/books/xuehui-tiwen/05-前言"
+        },
+        {
+          "text": "第1章-正确提问的益处和方法",
+          "link": "/books/xuehui-tiwen/06-第1章-正确提问的益处和方法"
+        },
+        {
+          "text": "我们生活在嘈杂、混乱的世界",
+          "link": "/books/xuehui-tiwen/07-我们生活在嘈杂、混乱的世界"
+        },
+        {
+          "text": "专家说得再动听，也不一定靠得住",
+          "link": "/books/xuehui-tiwen/08-专家说得再动听，也不一定靠得住"
+        },
+        {
+          "text": "靠大脑理性思考",
+          "link": "/books/xuehui-tiwen/09-靠大脑理性思考"
+        },
+        {
+          "text": "激发你的批判性思维",
+          "link": "/books/xuehui-tiwen/10-激发你的批判性思维"
+        },
+        {
+          "text": "海绵式思维和淘金式思维",
+          "link": "/books/xuehui-tiwen/11-海绵式思维和淘金式思维"
+        },
+        {
+          "text": "弱势批判性思维和强势批判性思维",
+          "link": "/books/xuehui-tiwen/12-弱势批判性思维和强势批判性思维"
+        },
+        {
+          "text": "价值观影响人与人之间的互动",
+          "link": "/books/xuehui-tiwen/13-价值观影响人与人之间的互动"
+        },
+        {
+          "text": "让对话有效进行下去",
+          "link": "/books/xuehui-tiwen/14-让对话有效进行下去"
+        },
+        {
+          "text": "像批判性思维者那样写作和发言",
+          "link": "/books/xuehui-tiwen/15-像批判性思维者那样写作和发言"
+        },
+        {
+          "text": "第2章-论题和结论是什么",
+          "link": "/books/xuehui-tiwen/16-第2章-论题和结论是什么"
+        },
+        {
+          "text": "描述型论题和规定性论题",
+          "link": "/books/xuehui-tiwen/17-描述型论题和规定性论题"
+        },
+        {
+          "text": "寻找论题",
+          "link": "/books/xuehui-tiwen/18-寻找论题"
+        },
+        {
+          "text": "寻找结论",
+          "link": "/books/xuehui-tiwen/19-寻找结论"
+        },
+        {
+          "text": "找到结论的5条线索",
+          "link": "/books/xuehui-tiwen/20-找到结论的5条线索"
+        },
+        {
+          "text": "第3章-理由是什么",
+          "link": "/books/xuehui-tiwen/21-第3章-理由是什么"
+        },
+        {
+          "text": "为什么相信这个结论",
+          "link": "/books/xuehui-tiwen/22-为什么相信这个结论"
+        },
+        {
+          "text": "通过提示词寻找理由",
+          "link": "/books/xuehui-tiwen/23-通过提示词寻找理由"
+        },
+        {
+          "text": "让理由和结论一目了然",
+          "link": "/books/xuehui-tiwen/24-让理由和结论一目了然"
+        },
+        {
+          "text": "像批判性思维者那样写作和发言",
+          "link": "/books/xuehui-tiwen/25-像批判性思维者那样写作和发言"
+        },
+        {
+          "text": "第4章-哪些词语意思不明确",
+          "link": "/books/xuehui-tiwen/26-第4章-哪些词语意思不明确"
+        },
+        {
+          "text": "让人捉摸不透的多义词",
+          "link": "/books/xuehui-tiwen/27-让人捉摸不透的多义词"
+        },
+        {
+          "text": "找准关键词",
+          "link": "/books/xuehui-tiwen/28-找准关键词"
+        },
+        {
+          "text": "检查有没有歧义",
+          "link": "/books/xuehui-tiwen/29-检查有没有歧义"
+        },
+        {
+          "text": "判定歧义",
+          "link": "/books/xuehui-tiwen/30-判定歧义"
+        },
+        {
+          "text": "根据上下文找出真正含义",
+          "link": "/books/xuehui-tiwen/31-根据上下文找出真正含义"
+        },
+        {
+          "text": "字典里的定义不一定适合文章里的情境",
+          "link": "/books/xuehui-tiwen/32-字典里的定义不一定适合文章里的情境"
+        },
+        {
+          "text": "谁想说服你，谁就要负责解释清楚",
+          "link": "/books/xuehui-tiwen/33-谁想说服你，谁就要负责解释清楚"
+        },
+        {
+          "text": "像批判性思维者那样写作和发言",
+          "link": "/books/xuehui-tiwen/34-像批判性思维者那样写作和发言"
+        },
+        {
+          "text": "第5章-价值观假设和描述性假设是什么",
+          "link": "/books/xuehui-tiwen/35-第5章-价值观假设和描述性假设是什么"
+        },
+        {
+          "text": "到哪儿去找假设",
+          "link": "/books/xuehui-tiwen/36-到哪儿去找假设"
+        },
+        {
+          "text": "价值观冲突和价值观假设",
+          "link": "/books/xuehui-tiwen/37-价值观冲突和价值观假设"
+        },
+        {
+          "text": "两种价值观冲突时选择哪一个",
+          "link": "/books/xuehui-tiwen/38-两种价值观冲突时选择哪一个"
+        },
+        {
+          "text": "典型的价值观冲突",
+          "link": "/books/xuehui-tiwen/39-典型的价值观冲突"
+        },
+        {
+          "text": "把立论者的背景作为寻找价值观假设的线索",
+          "link": "/books/xuehui-tiwen/40-把立论者的背景作为寻找价值观假设的线索"
+        },
+        {
+          "text": "把可能发生的后果作为寻找价值观假设的线索",
+          "link": "/books/xuehui-tiwen/41-把可能发生的后果作为寻找价值观假设的线索"
+        },
+        {
+          "text": "寻找价值观假设的其他方法",
+          "link": "/books/xuehui-tiwen/42-寻找价值观假设的其他方法"
+        },
+        {
+          "text": "了解其他人的价值倾向的价值",
+          "link": "/books/xuehui-tiwen/43-了解其他人的价值倾向的价值"
+        },
+        {
+          "text": "价值观与相对性",
+          "link": "/books/xuehui-tiwen/44-价值观与相对性"
+        },
+        {
+          "text": "找出描述性假设",
+          "link": "/books/xuehui-tiwen/45-找出描述性假设"
+        },
+        {
+          "text": "描述性假设举例说明",
+          "link": "/books/xuehui-tiwen/46-描述性假设举例说明"
+        },
+        {
+          "text": "常见的描述性假设",
+          "link": "/books/xuehui-tiwen/47-常见的描述性假设"
+        },
+        {
+          "text": "找到假设的线索",
+          "link": "/books/xuehui-tiwen/48-找到假设的线索"
+        },
+        {
+          "text": "像批判性思维者那样写作和发言",
+          "link": "/books/xuehui-tiwen/49-像批判性思维者那样写作和发言"
+        },
+        {
+          "text": "第6章-论证中有没有谬误",
+          "link": "/books/xuehui-tiwen/50-第6章-论证中有没有谬误"
+        },
+        {
+          "text": "用提问的方法找出论证中的谬误",
+          "link": "/books/xuehui-tiwen/51-用提问的方法找出论证中的谬误"
+        },
+        {
+          "text": "从假设中寻找谬误",
+          "link": "/books/xuehui-tiwen/52-从假设中寻找谬误"
+        },
+        {
+          "text": "其他常见的论证谬误",
+          "link": "/books/xuehui-tiwen/53-其他常见的论证谬误"
+        },
+        {
+          "text": "警惕分散注意力的干扰",
+          "link": "/books/xuehui-tiwen/54-警惕分散注意力的干扰"
+        },
+        {
+          "text": "愚弄人的循环论证",
+          "link": "/books/xuehui-tiwen/55-愚弄人的循环论证"
+        },
+        {
+          "text": "论证谬误小结",
+          "link": "/books/xuehui-tiwen/56-论证谬误小结"
+        },
+        {
+          "text": "扩展关于谬误的知识",
+          "link": "/books/xuehui-tiwen/57-扩展关于谬误的知识"
+        },
+        {
+          "text": "第7章-证据的效力：个人经历、典型案例、当事人证言和专家陈述",
+          "link": "/books/xuehui-tiwen/58-第7章-证据的效力：个人经历、典型案例、当事人证言和专家陈述"
+        },
+        {
+          "text": "事实还是见解",
+          "link": "/books/xuehui-tiwen/59-事实还是见解"
+        },
+        {
+          "text": "我们需要可靠的证据",
+          "link": "/books/xuehui-tiwen/60-我们需要可靠的证据"
+        },
+        {
+          "text": "证据的来源",
+          "link": "/books/xuehui-tiwen/61-证据的来源"
+        },
+        {
+          "text": "以个人经历作为证据可靠吗",
+          "link": "/books/xuehui-tiwen/62-以个人经历作为证据可靠吗"
+        },
+        {
+          "text": "以典型案例作为证据可靠吗",
+          "link": "/books/xuehui-tiwen/63-以典型案例作为证据可靠吗"
+        },
+        {
+          "text": "以当事人证言作为证据可靠吗",
+          "link": "/books/xuehui-tiwen/64-以当事人证言作为证据可靠吗"
+        },
+        {
+          "text": "以专家意见作为证据可靠吗",
+          "link": "/books/xuehui-tiwen/65-以专家意见作为证据可靠吗"
+        },
+        {
+          "text": "第8章-证据的效力：个人观察和调查研究",
+          "link": "/books/xuehui-tiwen/66-第8章-证据的效力：个人观察和调查研究"
+        },
+        {
+          "text": "以个人观察作为证据可靠吗",
+          "link": "/books/xuehui-tiwen/67-以个人观察作为证据可靠吗"
+        },
+        {
+          "text": "有偏差的调查和问卷",
+          "link": "/books/xuehui-tiwen/68-有偏差的调查和问卷"
+        },
+        {
+          "text": "以研究报告作为证据可靠吗",
+          "link": "/books/xuehui-tiwen/69-以研究报告作为证据可靠吗"
+        },
+        {
+          "text": "样本能够代表总体吗",
+          "link": "/books/xuehui-tiwen/70-样本能够代表总体吗"
+        },
+        {
+          "text": "测量方法可靠吗",
+          "link": "/books/xuehui-tiwen/71-测量方法可靠吗"
+        },
+        {
+          "text": "专家观点什么时候最可信",
+          "link": "/books/xuehui-tiwen/72-专家观点什么时候最可信"
+        },
+        {
+          "text": "像批判性思维者那样写作和发言",
+          "link": "/books/xuehui-tiwen/73-像批判性思维者那样写作和发言"
+        },
+        {
+          "text": "第9章-有没有替代原因",
+          "link": "/books/xuehui-tiwen/74-第9章-有没有替代原因"
+        },
+        {
+          "text": "可能存在替代原因",
+          "link": "/books/xuehui-tiwen/75-可能存在替代原因"
+        },
+        {
+          "text": "替代原因的说服力",
+          "link": "/books/xuehui-tiwen/76-替代原因的说服力"
+        },
+        {
+          "text": "寻找替代原因",
+          "link": "/books/xuehui-tiwen/77-寻找替代原因"
+        },
+        {
+          "text": "唯一的原因，还是原因之一",
+          "link": "/books/xuehui-tiwen/78-唯一的原因，还是原因之一"
+        },
+        {
+          "text": "警惕“确认偏误”",
+          "link": "/books/xuehui-tiwen/79-警惕“确认偏误”"
+        },
+        {
+          "text": "混淆相关性和因果关系",
+          "link": "/books/xuehui-tiwen/80-混淆相关性和因果关系"
+        },
+        {
+          "text": "混淆“在此之后”与“因此”",
+          "link": "/books/xuehui-tiwen/81-混淆“在此之后”与“因此”"
+        },
+        {
+          "text": "解释单个事件或行为",
+          "link": "/books/xuehui-tiwen/82-解释单个事件或行为"
+        },
+        {
+          "text": "评价替代原因",
+          "link": "/books/xuehui-tiwen/83-评价替代原因"
+        },
+        {
+          "text": "替代原因与你的表达和交流",
+          "link": "/books/xuehui-tiwen/84-替代原因与你的表达和交流"
+        },
+        {
+          "text": "第10章-数据有没有欺骗性",
+          "link": "/books/xuehui-tiwen/85-第10章-数据有没有欺骗性"
+        },
+        {
+          "text": "识别不知来历和有偏差的数据",
+          "link": "/books/xuehui-tiwen/86-识别不知来历和有偏差的数据"
+        },
+        {
+          "text": "令人困惑的平均值",
+          "link": "/books/xuehui-tiwen/87-令人困惑的平均值"
+        },
+        {
+          "text": "测量误差",
+          "link": "/books/xuehui-tiwen/88-测量误差"
+        },
+        {
+          "text": "错把一件事的结论用来证明另一件事",
+          "link": "/books/xuehui-tiwen/89-错把一件事的结论用来证明另一件事"
+        },
+        {
+          "text": "通过省略信息进行欺骗",
+          "link": "/books/xuehui-tiwen/90-通过省略信息进行欺骗"
+        },
+        {
+          "text": "在自己的写作中使用统计数字",
+          "link": "/books/xuehui-tiwen/91-在自己的写作中使用统计数字"
+        },
+        {
+          "text": "第11章-有什么重要信息被省略了",
+          "link": "/books/xuehui-tiwen/92-第11章-有什么重要信息被省略了"
+        },
+        {
+          "text": "找到省略信息的益处",
+          "link": "/books/xuehui-tiwen/93-找到省略信息的益处"
+        },
+        {
+          "text": "不完整的论证在所难免",
+          "link": "/books/xuehui-tiwen/94-不完整的论证在所难免"
+        },
+        {
+          "text": "帮你识别省略信息的问题",
+          "link": "/books/xuehui-tiwen/95-帮你识别省略信息的问题"
+        },
+        {
+          "text": "我们需要知道确切的数字",
+          "link": "/books/xuehui-tiwen/96-我们需要知道确切的数字"
+        },
+        {
+          "text": "负面视角的重要性",
+          "link": "/books/xuehui-tiwen/97-负面视角的重要性"
+        },
+        {
+          "text": "面对信息缺失的现实",
+          "link": "/books/xuehui-tiwen/98-面对信息缺失的现实"
+        },
+        {
+          "text": "像批判性思维者那样写作和发言",
+          "link": "/books/xuehui-tiwen/99-像批判性思维者那样写作和发言"
+        },
+        {
+          "text": "第12章-能得出哪些合理的结论",
+          "link": "/books/xuehui-tiwen/100-第12章-能得出哪些合理的结论"
+        },
+        {
+          "text": "二分式思维：妨碍我们考虑多种可能性",
+          "link": "/books/xuehui-tiwen/101-二分式思维：妨碍我们考虑多种可能性"
+        },
+        {
+          "text": "灰度思维：两面还是多面",
+          "link": "/books/xuehui-tiwen/102-灰度思维：两面还是多面"
+        },
+        {
+          "text": "条件的重要性",
+          "link": "/books/xuehui-tiwen/103-条件的重要性"
+        },
+        {
+          "text": "解放思维",
+          "link": "/books/xuehui-tiwen/104-解放思维"
+        },
+        {
+          "text": "更多可能的结论，更多可能的自由选择",
+          "link": "/books/xuehui-tiwen/105-更多可能的结论，更多可能的自由选择"
+        },
+        {
+          "text": "第13章-干扰批判性思维的障碍",
+          "link": "/books/xuehui-tiwen/106-第13章-干扰批判性思维的障碍"
+        },
+        {
+          "text": "正确提问带给人的不快",
+          "link": "/books/xuehui-tiwen/107-正确提问带给人的不快"
+        },
+        {
+          "text": "思考过快",
+          "link": "/books/xuehui-tiwen/108-思考过快"
+        },
+        {
+          "text": "刻板印象",
+          "link": "/books/xuehui-tiwen/109-刻板印象"
+        },
+        {
+          "text": "背叛我们的思维习惯",
+          "link": "/books/xuehui-tiwen/110-背叛我们的思维习惯"
+        },
+        {
+          "text": "自我中心",
+          "link": "/books/xuehui-tiwen/111-自我中心"
+        },
+        {
+          "text": "一厢情愿：批判性思维最大的障碍",
+          "link": "/books/xuehui-tiwen/112-一厢情愿：批判性思维最大的障碍"
+        },
+        {
+          "text": "成为一个批判性思维者",
+          "link": "/books/xuehui-tiwen/113-成为一个批判性思维者"
+        },
+        {
+          "text": "译后记",
+          "link": "/books/xuehui-tiwen/114-译后记"
+        }
+      ]
+    }
   ]
 }
