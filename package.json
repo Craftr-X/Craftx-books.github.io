@@ -11,9 +11,12 @@
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
     "check:deadlinks": "node scripts/check-deadlinks.mjs",
+    "lint": "markdownlint-cli2",
+    "lint:fix": "markdownlint-cli2 --fix",
     "test": "node --test scripts/*.test.mjs"
   },
   "devDependencies": {
+    "markdownlint-cli2": "^0.17.0",
     "medium-zoom": "^1.1.0",
     "vitepress": "^1.6.4"
   }

@@ -151,6 +151,32 @@ node scripts/normalize-missing-assets.mjs
 
 构建过程中可能出现代码块语言名降级警告，例如部分 Markdown 使用了不标准的语言标识。这类警告不影响站点发布。
 
+## 🧹 Markdown Lint
+
+全站 Markdown 通过 [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) 检查纯格式问题。CI 会在每次 PR 自动执行 `npm run lint`。
+
+```bash
+npm run lint       # 检查全站 Markdown 格式（CI 使用）
+npm run lint:fix   # 自动修复可修复的格式问题（行尾空格、空行、换行等）
+```
+
+配置在 [`.markdownlint-cli2.yaml`](./.markdownlint-cli2.yaml)，遵循「只管纯格式、不碰结构和内容」的原则：
+
+- **保留开启**：行尾空格、多余空行、标题/列表/代码块前后空行、文件结尾换行、硬 tab 等机械格式规则。
+- **关闭的结构性规则**：MD001（标题跳级）、MD025（多 H1）、MD041（首行须 H1）—— 中文小册源（EPUB/掘金）的标题结构已定，章节标题由文件名承载。
+- **关闭的内容治理类规则**：见下方 TODO。
+
+lint 与 `prebuild` 隔离，不会修改 `escape-vitepress-braces.mjs` / `normalize-missing-assets.mjs` 的产物；`lint:fix` 应在本地独立运行后再提交。
+
+### 待治理的内容问题（未纳入 lint）
+
+以下问题属于书源内容残留，无法机械修复，已记为 TODO，留待后续梯队单独治理：
+
+- **代码块缺语言标识**（MD040，约 800 处）：影响 VitePress 语法高亮，需按书内容推断补全（如 redis7→`c`、mysql-running→`sql`）。
+- **图片缺 alt 文本**（MD045，约 900 处）：EPUB/掘金迁移的 `![]()` 空_alt，需语义补全以改善无障碍访问。
+- **裸 HTML 标签**（约 174 文件）：主要是 `<p align=center><img></p>` 居中图片，可批量转为 VitePress 兼容写法；少量孤例坏链接（MD042）、未用引用定义（MD053）同属此类。
+- **标题风格/重复**：书源评论区的 `----` 分隔线（MD003 误报）、不同章节同名小标题（MD024）等结构特性，已关闭对应规则。
+
 ## 🚢 GitHub Pages 部署
 
 部署流程已经写在 `.github/workflows/deploy.yml` 中。每次推送到 `main` 分支后，GitHub Actions 会自动：
