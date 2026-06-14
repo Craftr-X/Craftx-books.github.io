@@ -1,32 +1,10 @@
-import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs'
-import { basename, extname, join, resolve } from 'path'
+import { readFileSync, writeFileSync } from 'fs'
+import { basename, dirname, join, resolve } from 'path'
 import { fileURLToPath } from 'url'
-import { dirname } from 'path'
 import { estimateMinutes } from './reading-time-core.mjs'
+import { readJson, walkMarkdown } from './content-utils.mjs'
 
 const defaultRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-
-function readJson(file, fallback) {
-  try {
-    return JSON.parse(readFileSync(file, 'utf8'))
-  } catch {
-    return fallback
-  }
-}
-
-function walkMarkdown(dir, out = []) {
-  if (!existsSync(dir)) return out
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry)
-    const stat = statSync(full)
-    if (stat.isDirectory()) {
-      walkMarkdown(full, out)
-    } else if (extname(entry).toLowerCase() === '.md' && entry.toLowerCase() !== 'index.md') {
-      out.push(full)
-    }
-  }
-  return out
-}
 
 /**
  * 计算单本书的阅读时长明细。

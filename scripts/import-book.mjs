@@ -3,6 +3,7 @@ import { basename, dirname, extname, join, relative, resolve, sep } from 'path'
 import { inflateRawSync } from 'zlib'
 import { fileURLToPath } from 'url'
 import { updateSidebarForBook } from './generate-sidebar.mjs'
+import { readJson, walkMarkdown, sortMarkdown } from './content-utils.mjs'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const docsBooksDir = join(root, 'docs', 'books')
@@ -32,14 +33,6 @@ function usage() {
     '',
     '仅支持 Markdown 文件夹或 EPUB 文件。',
   ].join('\n')
-}
-
-function readJson(file, fallback) {
-  try {
-    return JSON.parse(readFileSync(file, 'utf8'))
-  } catch {
-    return fallback
-  }
 }
 
 function writeJson(file, value) {
@@ -98,22 +91,6 @@ function markdownDisplayTitle(file) {
   return firstHeading(file) || basename(file, '.md')
 }
 
-function orderKey(file) {
-  const name = basename(file, '.md')
-  const numeric = name.match(/^(\d+)/)
-  return {
-    numeric: numeric ? Number(numeric[1]) : Number.MAX_SAFE_INTEGER,
-    name,
-  }
-}
-
-function sortMarkdown(a, b) {
-  const ak = orderKey(a)
-  const bk = orderKey(b)
-  if (ak.numeric !== bk.numeric) return ak.numeric - bk.numeric
-  return ak.name.localeCompare(bk.name, 'zh-CN', { numeric: true })
-}
-
 function markdownLinkFromTarget(bookDir, file) {
   const rel = relative(bookDir, file).split(sep).join('/')
   return `./${rel}`
@@ -165,7 +142,7 @@ function detectMarkdownFolder(inputPath, args) {
 
 function importMarkdownFolder(inputPath, tempDir, info) {
   cpSync(inputPath, tempDir, { recursive: true })
-  const mdFiles = walk(tempDir, file => extname(file).toLowerCase() === '.md' && basename(file).toLowerCase() !== 'index.md').sort(sortMarkdown)
+  const mdFiles = walkMarkdown(tempDir).sort(sortMarkdown)
   writeIndex(tempDir, info.title, info.desc, mdFiles)
 }
 
