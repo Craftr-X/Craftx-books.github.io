@@ -6,11 +6,18 @@ const categoryCount = (category: string) => books
   .filter(book => (book.category || 'booklet') === category)
   .length
 
+const formatMinutes = (min: number): string => {
+  if (min < 60) return `${min} 分`
+  const hours = Math.floor(min / 60)
+  const rest = min % 60
+  return rest === 0 ? `${hours} 小时` : `${hours} 小时`
+}
+
 const stats = [
   { label: '技术小册', value: categoryCount('booklet'), icon: '📚' },
   { label: '电子书', value: categoryCount('ebook'), icon: '📖' },
   { label: '文章总数', value: contentStats.chapterCount, icon: '📄' },
-  { icon: '⚡', label: '持续更新', value: '进行中' },
+  { label: '总阅读时长', value: formatMinutes(contentStats.totalReadingMinutes), icon: '⏱' },
 ]
 </script>
 

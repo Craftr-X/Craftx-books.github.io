@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useData, useRoute } from 'vitepress'
+import { useData } from 'vitepress'
 import {
   getProgress,
   trackScroll,
   scrollToRatio,
   PROGRESS_CONSTANTS,
 } from '../readingProgress'
+import { useNormalizedPath } from '../routePath'
 
 const { frontmatter } = useData()
-const route = useRoute()
+const path = useNormalizedPath()
 
 const ratio = ref(0)
 const showResumeHint = ref(false)
@@ -18,8 +19,8 @@ let cleanup: (() => void) | null = null
 let hintTimer: ReturnType<typeof setTimeout> | null = null
 
 // 仅在「章节页」渲染：排除 home/page 布局、comments:false、书 index 页、首页
-const isBookIndex = computed(() => /^\/books\/[^/]+\/?$/.test(route.path))
-const isHomePage = computed(() => route.path === '/' || route.path === '/index.html')
+const isBookIndex = computed(() => /^\/books\/[^/]+\/?$/.test(path.value))
+const isHomePage = computed(() => path.value === '/' || path.value === '/index.html')
 const shouldRender = computed(() => {
   const layout = frontmatter.value.layout
   return (
@@ -28,7 +29,7 @@ const shouldRender = computed(() => {
     layout !== 'page' &&
     !isBookIndex.value &&
     !isHomePage.value &&
-    /^\/books\/[^/]+\//.test(route.path) // 必须是书内章节
+    /^\/books\/[^/]+\//.test(path.value) // 必须是书内章节
   )
 })
 
@@ -38,8 +39,8 @@ function updateRatio() {
   ratio.value = scrollHeight <= 0 ? 0 : Math.min(1, Math.max(0, el.scrollTop / scrollHeight))
 }
 
-function checkResumeHint(path: string) {
-  const progress = getProgress(path)
+function checkResumeHint(currentPath: string) {
+  const progress = getProgress(currentPath)
   // 仅当之前读过一定深度（避免刚打开就提示），且当前不在顶部附近时显示
   if (
     progress &&
@@ -72,12 +73,12 @@ function dismissHint() {
 function bind() {
   unbind()
   if (!shouldRender.value) return
-  // 滚动监听写入进度 + 更新顶部进度条
-  cleanup = trackScroll(() => route.path)
+  // 滚动监听写入进度 + 更新顶部进度条（用归一化路径作为进度 key）
+  cleanup = trackScroll(() => path.value)
   window.addEventListener('scroll', updateRatio, { passive: true })
   updateRatio()
   // 延迟一帧检查「回到上次位置」提示（等 DOM 高度稳定）
-  requestAnimationFrame(() => checkResumeHint(route.path))
+  requestAnimationFrame(() => checkResumeHint(path.value))
 }
 
 function unbind() {
@@ -97,7 +98,7 @@ onMounted(() => {
   bind()
 })
 
-watch([shouldRender, () => route.path], () => {
+watch([shouldRender, path], () => {
   if (shouldRender.value) {
     bind()
   } else {

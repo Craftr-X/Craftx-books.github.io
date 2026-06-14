@@ -1,7 +1,8 @@
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs'
-import { extname, join, resolve } from 'path'
+import { basename, extname, join, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
+import { estimateMinutes } from './reading-time-core.mjs'
 
 const defaultRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -27,6 +28,28 @@ function walkMarkdown(dir, out = []) {
   return out
 }
 
+/**
+ * 计算单本书的阅读时长明细。
+ * 返回 { chapterCount, readingMinutes, chapters: { "<basename 无 .md>": minutes } }
+ */
+function bookReadingStats(bookDir) {
+  const files = walkMarkdown(bookDir)
+  const chapters = {}
+  let readingMinutes = 0
+  for (const file of files) {
+    const key = basename(file, '.md')
+    const raw = readFileSync(file, 'utf8')
+    const minutes = estimateMinutes(raw)
+    chapters[key] = minutes
+    readingMinutes += minutes
+  }
+  return {
+    chapterCount: files.length,
+    readingMinutes,
+    chapters,
+  }
+}
+
 function generateContentStats(options = {}) {
   const root = options.root || defaultRoot
   const books = readJson(join(root, 'books.json'), [])
@@ -40,8 +63,20 @@ function generateContentStats(options = {}) {
     chapterCount: books.reduce((sum, book) => sum + walkMarkdown(join(docsBooksDir, book.slug)).length, 0),
   }
   const countsChanged = Object.entries(counts).some(([key, value]) => previous[key] !== value)
+
+  // 按书计算阅读时长明细
+  const booksDetail = {}
+  let totalReadingMinutes = 0
+  for (const book of books) {
+    const detail = bookReadingStats(join(docsBooksDir, book.slug))
+    booksDetail[book.slug] = detail
+    totalReadingMinutes += detail.readingMinutes
+  }
+
   const stats = {
     ...counts,
+    totalReadingMinutes,
+    books: booksDetail,
     generatedAt: countsChanged
       ? options.generatedAt || new Date().toISOString()
       : previous.generatedAt || options.generatedAt || new Date().toISOString(),

@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useData, useRoute } from 'vitepress'
+import { useData } from 'vitepress'
+import { useNormalizedPath } from '../routePath'
 
 const { frontmatter } = useData()
-const route = useRoute()
+const path = useNormalizedPath()
 const container = ref<HTMLElement | null>(null)
 const mounted = ref(false)
 const giscusScript = ref<HTMLScriptElement | null>(null)
-const isBookIndex = computed(() => /^\/books\/[^/]+\/?$/.test(route.path))
+const isBookIndex = computed(() => /^\/books\/[^/]+\/?$/.test(path.value))
 const shouldRender = computed(() => {
   const layout = frontmatter.value.layout
   return frontmatter.value.comments !== false && layout !== 'home' && layout !== 'page' && !isBookIndex.value
@@ -46,7 +47,7 @@ onMounted(() => {
   mountGiscus()
 })
 
-watch([shouldRender, () => route.path], () => {
+watch([shouldRender, path], () => {
   if (mounted.value) {
     mountGiscus()
   }
