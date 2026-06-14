@@ -81,6 +81,7 @@ test('generateSidebar refreshes existing book entries', () => {
 
     assert.deepEqual(sidebar['/books/alpha/'], [{
       text: 'Alpha',
+      collapsible: true,
       items: [
         { text: 'first', link: '/books/alpha/01-first' },
         { text: 'second', link: '/books/alpha/02-second' },
@@ -372,6 +373,196 @@ test('regenerateBookIndex preserves content after the TOC block', () => {
     const firstIdx = content.indexOf('- [first](./01-first.md)')
     const afterIdx = content.indexOf('## 后记')
     assert.ok(firstIdx > 0 && afterIdx > firstIdx)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+// ===== E1: 长书侧边栏 collapsible 分组 =====
+
+test('generateSidebar keeps short books flat (no grouping)', () => {
+  const root = makeProject()
+  try {
+    writeJson(join(root, 'books.json'), [{ slug: 'alpha', title: 'Alpha', category: 'ebook' }])
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'), '# Alpha\n')
+    // 5 章：远低于 20 章阈值，应保持扁平
+    for (let i = 1; i <= 5; i += 1) {
+      writeFileSync(join(bookDir, `${String(i).padStart(2, '0')}-ch${i}.md`), `# Ch${i}\n`)
+    }
+
+    const sidebar = generateSidebar({ root })
+    const section = sidebar['/books/alpha/'][0]
+
+    assert.equal(section.collapsible, true) // 顶层 section 始终可折叠
+    // items 应全部是叶子节点（带 link），无嵌套分组
+    const hasNestedGroup = section.items.some(item => item.items && !item.link)
+    assert.equal(hasNestedGroup, false)
+    assert.equal(section.items.length, 5)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('generateSidebar does not group at exactly GROUP_THRESHOLD (20 chapters stays flat)', () => {
+  const root = makeProject()
+  try {
+    writeJson(join(root, 'books.json'), [{ slug: 'alpha', title: 'Alpha', category: 'ebook' }])
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'), '# Alpha\n')
+    // 恰好 20 章：阈值是 > 20 才分组，20 章应保持扁平
+    for (let i = 1; i <= 20; i += 1) {
+      writeFileSync(join(bookDir, `${String(i).padStart(2, '0')}-ch${i}.md`), `# Ch${i}\n`)
+    }
+
+    const sidebar = generateSidebar({ root })
+    const section = sidebar['/books/alpha/'][0]
+    const hasNestedGroup = section.items.some(item => item.items && !item.link)
+
+    assert.equal(hasNestedGroup, false)
+    assert.equal(section.items.length, 20)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('generateSidebar groups at GROUP_THRESHOLD + 1 (21 chapters triggers grouping)', () => {
+  const root = makeProject()
+  try {
+    writeJson(join(root, 'books.json'), [{ slug: 'alpha', title: 'Alpha', category: 'ebook' }])
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'), '# Alpha\n')
+    // 21 章：超过阈值，应分组为 01-10、11-20、21-30（尾组 1 章）
+    for (let i = 1; i <= 21; i += 1) {
+      writeFileSync(join(bookDir, `${String(i).padStart(2, '0')}-ch${i}.md`), `# Ch${i}\n`)
+    }
+
+    const sidebar = generateSidebar({ root })
+    const section = sidebar['/books/alpha/'][0]
+    const groups = section.items.filter(item => item.items)
+
+    assert.equal(groups.length, 3)
+    assert.equal(groups[2].text, '第 21-30 章')
+    assert.equal(groups[2].items.length, 1)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('generateSidebar groups long books into collapsible decades', () => {
+  const root = makeProject()
+  try {
+    writeJson(join(root, 'books.json'), [{ slug: 'alpha', title: 'Alpha', category: 'ebook' }])
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'), '# Alpha\n')
+    // 25 章：超过 20 章阈值，应分组
+    for (let i = 1; i <= 25; i += 1) {
+      writeFileSync(join(bookDir, `${String(i).padStart(2, '0')}-ch${i}.md`), `# Ch${i}\n`)
+    }
+
+    const sidebar = generateSidebar({ root })
+    const section = sidebar['/books/alpha/'][0]
+
+    assert.equal(section.collapsible, true)
+    // 应有 3 个分组：01-10、11-20、21-30（最后一组只有 5 章）
+    const groups = section.items.filter(item => item.items)
+    assert.equal(groups.length, 3)
+    assert.equal(groups[0].text, '第 01-10 章')
+    assert.equal(groups[0].collapsible, true)
+    assert.equal(groups[1].text, '第 11-20 章')
+    assert.equal(groups[1].items.length, 10)
+    assert.equal(groups[2].text, '第 21-30 章')
+    assert.equal(groups[2].items.length, 5)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('generateSidebar puts non-numbered chapters in an 其他 group', () => {
+  const root = makeProject()
+  try {
+    writeJson(join(root, 'books.json'), [{ slug: 'alpha', title: 'Alpha', category: 'ebook' }])
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'), '# Alpha\n')
+    // 无数字前缀的章节（开篇词、序）+ 22 个数字章节（触发分组）
+    writeFileSync(join(bookDir, '开篇词.md'), '# 开篇词\n')
+    writeFileSync(join(bookDir, '序.md'), '# 序\n')
+    for (let i = 1; i <= 22; i += 1) {
+      writeFileSync(join(bookDir, `${String(i).padStart(2, '0')}-ch${i}.md`), `# Ch${i}\n`)
+    }
+
+    const sidebar = generateSidebar({ root })
+    const section = sidebar['/books/alpha/'][0]
+    const groups = section.items.filter(item => item.items)
+
+    // 第一个分组应是「其他」，包含无前缀章节
+    assert.equal(groups[0].text, '其他')
+    assert.equal(groups[0].items.length, 2)
+    assert.equal(groups[0].collapsed, false) // 其他组默认展开
+    // 后续分组按数字前缀
+    assert.equal(groups[1].text, '第 01-10 章')
+    assert.equal(groups[2].text, '第 11-20 章')
+    assert.equal(groups[3].text, '第 21-30 章')
+    assert.equal(groups[3].items.length, 2)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('generateSidebar keeps index.md flat even when sidebar is grouped', () => {
+  const root = makeProject()
+  try {
+    writeJson(join(root, 'books.json'), [{ slug: 'alpha', title: 'Alpha', category: 'ebook' }])
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'), '# Alpha\n\n## 目录\n')
+    for (let i = 1; i <= 25; i += 1) {
+      writeFileSync(join(bookDir, `${String(i).padStart(2, '0')}-ch${i}.md`), `# Ch${i}\n`)
+    }
+
+    generateSidebar({ root })
+
+    const indexContent = readFileSync(join(bookDir, 'index.md'), 'utf8')
+    const itemLines = indexContent.split('\n').filter(l => l.startsWith('- ['))
+    // index.md 应是 25 个扁平链接，不含分组标题
+    assert.equal(itemLines.length, 25)
+    assert.ok(itemLines.every(l => /\]\(\.\/\d{2}-ch\d+\.md\)$/.test(l)))
+    // 不应出现分组标题作为链接
+    assert.doesNotMatch(indexContent, /- \[第 \d+-\d+ 章\]/)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('verify accepts a long book with grouped sidebar', () => {
+  const root = makeProject()
+  try {
+    writeJson(join(root, 'books.json'), [{ slug: 'alpha', title: 'Alpha', category: 'ebook' }])
+    writeJson(join(root, 'sidebar-generated.json'), {})
+    writeFileSync(join(root, 'README.md'), '[Alpha](./docs/books/alpha/)\n')
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'),
+      '# Alpha\n\n## 目录\n\n' + Array.from({ length: 25 }, (_, i) =>
+        `- [ch${i + 1}](./${String(i + 1).padStart(2, '0')}-ch${i + 1}.md)`
+      ).join('\n') + '\n')
+    for (let i = 1; i <= 25; i += 1) {
+      writeFileSync(join(bookDir, `${String(i).padStart(2, '0')}-ch${i}.md`), `# Ch${i}\n`)
+    }
+
+    // 先生成带分组的 sidebar
+    generateSidebar({ root })
+    // verify 应能递归遍历分组结构，所有链接都解析成功
+    const results = verify('alpha', { root, runBuild: false })
+    const sidebarCheck = results.find(r => r.check === 'sidebar links resolve')
+    assert.equal(sidebarCheck.status, 'pass')
+    const indexCheck = results.find(r => r.check === 'index.md links to all chapters')
+    assert.equal(indexCheck.status, 'pass')
   } finally {
     rmSync(root, { recursive: true, force: true })
   }

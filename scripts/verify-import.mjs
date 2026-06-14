@@ -13,6 +13,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, resolve, dirname, relative } from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { collectLeafItems } from './generate-sidebar.mjs';
 
 const ROOT = resolve(import.meta.dirname, '..');
 
@@ -199,8 +200,8 @@ function verify(slug, options = {}) {
     results.push(fail('sidebar contains slug', `${sidebarKey} not found`));
   } else {
     results.push(pass('sidebar contains slug'));
-    // 6b. All sidebar links resolve to real files
-    const sidebarItems = sidebarEntry.flatMap(section => section.items || []);
+    // 6b. All sidebar links resolve to real files (递归遍历，兼容 collapsible 分组)
+    const sidebarItems = collectLeafItems(sidebarEntry);
     const brokenLinks = [];
     for (const item of sidebarItems) {
       const link = item.link;
