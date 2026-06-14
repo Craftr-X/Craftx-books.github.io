@@ -99,12 +99,114 @@ function toLink(docsBooksDir, slug, file) {
   return `/books/${slug}/${withoutExt}`
 }
 
+/**
+ * 递归收集一个 sidebar 节点树下的所有叶子 item（带 link 的项）。
+ * 用于兼容扁平结构与 collapsible 分组结构。
+ */
+function collectLeafItems(nodes) {
+  const out = []
+  for (const node of nodes || []) {
+    if (node.link) {
+      out.push(node)
+    } else if (node.items) {
+      out.push(...collectLeafItems(node.items))
+    }
+  }
+  return out
+}
+
+/**
+ * 折叠分组阈值与每组大小。
+ * 章节数超过 GROUP_THRESHOLD 才分组；每组 GROUP_SIZE 章。
+ */
+const GROUP_THRESHOLD = 20
+const GROUP_SIZE = 10
+
+/**
+ * 从章节 link 中提取数字前缀（如 /books/x/02-标题 → 2）；无前缀返回 -1。
+ */
+function numericPrefixFromLink(link) {
+  const segment = (link || '').split('/').pop() || ''
+  const m = segment.match(/^(\d+)/)
+  return m ? Number(m[1]) : -1
+}
+
+/**
+ * 把扁平的章节 items 按数字前缀每 GROUP_SIZE 章分一组，生成 collapsible 分组结构。
+ * 仅当 items 数 > GROUP_THRESHOLD 时分组，否则原样返回（保持短书扁平）。
+ *
+ * 分组策略：
+ *  - 有数字前缀的章节按前缀分组：前缀 1-10 一组、11-20 一组……
+ *  - 无数字前缀的章节（如「开篇词」「书名页」）归入最前的「其他」组
+ *  - 每组最多 GROUP_SIZE 个章节；不足 GROUP_SIZE 的尾组按实际数量命名
+ */
+function groupByDecade(items) {
+  if (items.length <= GROUP_THRESHOLD) return items
+
+  const buckets = []
+  const others = []
+  for (const item of items) {
+    const prefix = numericPrefixFromLink(item.link)
+    if (prefix < 0) {
+      others.push(item)
+    } else {
+      const idx = Math.floor((prefix - 1) / GROUP_SIZE)
+      if (!buckets[idx]) buckets[idx] = []
+      buckets[idx].push(item)
+    }
+  }
+
+  const groups = []
+  if (others.length > 0) {
+    groups.push({
+      text: '其他',
+      collapsible: true,
+      collapsed: false,
+      items: others,
+    })
+  }
+  for (let i = 0; i < buckets.length; i += 1) {
+    if (!buckets[i] || buckets[i].length === 0) continue
+    const start = i * GROUP_SIZE + 1
+    const end = start + GROUP_SIZE - 1
+    groups.push({
+      text: `第 ${String(start).padStart(2, '0')}-${String(end).padStart(2, '0')} 章`,
+      collapsible: true,
+      collapsed: true,
+      items: buckets[i],
+    })
+  }
+  return groups
+}
+
+/**
+ * 构建单本书的扁平章节 items（未分组）。
+ * 抽取自 generateSidebar / updateSidebarForBook，避免分组逻辑修改时两处不同步。
+ *
+ * @param docsBooksDir docs/books 绝对路径
+ * @param book 书籍元数据（含 slug/title）
+ * @param existingTexts 可选：旧 sidebar 的 link→text 映射，用于保留已存在的显示文本
+ * @returns 扁平的 [{text, link}]（未分组；分组由调用方按需用 groupByDecade 处理）
+ */
+function buildBookItems(docsBooksDir, book, existingTexts) {
+  const bookDir = join(docsBooksDir, book.slug)
+  return walkMarkdown(bookDir)
+    .sort(sortMarkdown)
+    .filter(sidebarVisible)
+    .map(file => {
+      const link = toLink(docsBooksDir, book.slug, file)
+      const fallback = (existingTexts && existingTexts.get(link)) || titleFromMarkdown(file)
+      return {
+        text: displayTextForLink(book, link, fallback),
+        link,
+      }
+    })
+}
+
 function existingTextByLink(sidebarEntry) {
   const map = new Map()
-  for (const section of sidebarEntry || []) {
-    for (const item of section.items || []) {
-      if (item.link && item.text) map.set(item.link, item.text)
-    }
+  for (const node of collectLeafItems(sidebarEntry || [])) {
+    if (node.link && node.text) map.set(node.link, node.text)
   }
   return map
 }
@@ -231,21 +333,13 @@ function generateSidebar(options = {}) {
     activeBookKeys.add(key)
 
     const existingTexts = existingTextByLink(sidebar[key])
-    const items = walkMarkdown(bookDir)
-      .sort(sortMarkdown)
-      .filter(sidebarVisible)
-      .map(file => {
-        const link = toLink(docsBooksDir, book.slug, file)
-        return {
-          text: displayTextForLink(book, link, existingTexts.get(link) || titleFromMarkdown(file)),
-          link,
-        }
-      })
+    const items = buildBookItems(docsBooksDir, book, existingTexts)
 
     sidebar[key] = [
       {
         text: book.title,
-        items,
+        collapsible: true,
+        items: groupByDecade(items),
       },
     ]
   }
@@ -258,11 +352,13 @@ function generateSidebar(options = {}) {
 
   writeFileSync(sidebarPath, `${JSON.stringify(sidebar, null, 2)}\n`, 'utf8')
 
-  // 幂等刷新各书 index.md 的目录区块，与 sidebar 保持一致
+  // 幂等刷新各书 index.md 的目录区块。
+  // 注意：index.md 用扁平的完整章节列表（书首页是阅读入口，不折叠），
+  // 即便 sidebar 已分了 collapsible 组，这里也要拍平传给 index.md。
   for (const book of books) {
     const entry = sidebar[`/books/${book.slug}/`]
-    const items = entry?.[0]?.items || []
-    regenerateBookIndex(root, book.slug, items)
+    const flatItems = collectLeafItems(entry?.[0] ? [entry[0]] : [])
+    regenerateBookIndex(root, book.slug, flatItems)
   }
 
   return sidebar
@@ -275,21 +371,13 @@ export function updateSidebarForBook(book, options = {}) {
   if (!existsSync(bookDir)) throw new Error(`书籍目录不存在：${bookDir}`)
 
   const sidebar = readJson(sidebarPath, {})
-  const items = walkMarkdown(bookDir)
-    .sort(sortMarkdown)
-    .filter(sidebarVisible)
-    .map(file => ({
-      link: toLink(docsBooksDir, book.slug, file),
-    }))
-    .map(item => ({
-      text: displayTextForLink(book, item.link, titleFromMarkdown(`${item.link}.md`)),
-      link: item.link,
-    }))
+  const items = buildBookItems(docsBooksDir, book)
 
   sidebar[`/books/${book.slug}/`] = [
     {
       text: book.title,
-      items,
+      collapsible: true,
+      items: groupByDecade(items),
     },
   ]
 
@@ -300,4 +388,4 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   generateSidebar()
 }
 
-export { generateSidebar, regenerateBookIndex }
+export { generateSidebar, regenerateBookIndex, collectLeafItems }
