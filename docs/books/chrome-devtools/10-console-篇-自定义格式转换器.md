@@ -1,6 +1,7 @@
 # console篇 - 自定义格式转换器
 
 ## 前言
+
 大多数的情况下，我们习惯使用 `DevTools` 的 `console` 默认对 `object` 的转换，但有时候我们想用与众不同的方式来处理。
 那我们就可以自定义输出对象的函数，它通常被称为 `Custom Formatter` 。
 
@@ -34,7 +35,7 @@
 
 ## 1. 自定义格式化转换器的应用实践
 
-现有好几种 `custom formatter` 可供选择，例如：你可以在这个 [immutable-devtools ](https://github.com/andrewdavey/immutable-devtools) 仓库中找到对于 [Immutable.js](https://facebook.github.io/immutable-js/)  结构的完美展示。但你同样可以自己造一个。
+现有好几种 `custom formatter` 可供选择，例如：你可以在这个 [immutable-devtools](https://github.com/andrewdavey/immutable-devtools) 仓库中找到对于 [Immutable.js](https://facebook.github.io/immutable-js/)  结构的完美展示。但你同样可以自己造一个。
 
 一般来说，每当你遇到结构不寻常的对象时，或大量的日志(最好避免这样的情况，但是有时候很有用)而你想从中做区分时，你可以采用 `custom formatter` 来处理。
 
@@ -42,7 +43,7 @@
 
 撇开实用性，我们还可以找点乐子：
 
-这是一个关于 `console` 的蠢萌例子：它叫做 `console.clown()` :将打印对象进行转换，而且在对象前面加上一个 `emoji` 表情 ... 
+这是一个关于 `console` 的蠢萌例子：它叫做 `console.clown()` :将打印对象进行转换，而且在对象前面加上一个 `emoji` 表情 ...
 
 > [源码在这里](https://gist.github.com/sulco/e635a7511d5ff17d44fe9bb2ab8b3cc6)为了方便大家尝试，源码贴在下面：
 

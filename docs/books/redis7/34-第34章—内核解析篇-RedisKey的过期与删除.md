@@ -2,10 +2,10 @@
 
 那 Redis 是如何将过期 Key 清理掉的呢？常见的过期 Key 清理方式（也被称为“过期策略”）有三种：`定时过期`、`惰性过期`以及`定期过期`，我们简单介绍一下三者的核心区别以及 Redis 采用的策略。
 
--   **定时过期策略**：该策略需要为每个 Key 关联一个定时器（或是一个全局定时器）记录 Key 的过期时间，当 Key 到期时由定时器触发过期事件，触发执行 Key 的清理逻辑。定时过期策略可以立刻清理过期 Key，释放内存，但是需要额外维护定时器这种复杂的结构。
+- **定时过期策略**：该策略需要为每个 Key 关联一个定时器（或是一个全局定时器）记录 Key 的过期时间，当 Key 到期时由定时器触发过期事件，触发执行 Key 的清理逻辑。定时过期策略可以立刻清理过期 Key，释放内存，但是需要额外维护定时器这种复杂的结构。
 
--   **惰性过期策略**：该策略是在客户端访问一个 Key 的时候，判断目标 Key 是否已经到期，如果到期了，就会将其删除，并且返回给客户端 Key 不存在。除此之外的其他时间不会主动去清理 Key。惰性过期策略实现比较简单，不会占用单独的 CPU 时间去执行 Key 过期的操作，而是平摊到了每次 Key 的访问中，但是，如果客户端长时间不访问已经过期的 Key，这些 Key 就会一直存在于内存中，无法被删除，浪费内存空间。
--   **定期过期策略**：该策略是前面两种策略的`折中方案`，定期过期策略会周期性地执行过期 Key 扫描逻辑，并将扫描到的过期 Key 清理掉。使用该策略时，我们可以调整每次扫码的耗时上限、每次扫描 Key 的总量以及两次扫描的时间间隔，保证扫描逻辑不会影响正常的业务逻辑，也可以保证内存不被过期 Key 填满。
+- **惰性过期策略**：该策略是在客户端访问一个 Key 的时候，判断目标 Key 是否已经到期，如果到期了，就会将其删除，并且返回给客户端 Key 不存在。除此之外的其他时间不会主动去清理 Key。惰性过期策略实现比较简单，不会占用单独的 CPU 时间去执行 Key 过期的操作，而是平摊到了每次 Key 的访问中，但是，如果客户端长时间不访问已经过期的 Key，这些 Key 就会一直存在于内存中，无法被删除，浪费内存空间。
+- **定期过期策略**：该策略是前面两种策略的`折中方案`，定期过期策略会周期性地执行过期 Key 扫描逻辑，并将扫描到的过期 Key 清理掉。使用该策略时，我们可以调整每次扫码的耗时上限、每次扫描 Key 的总量以及两次扫描的时间间隔，保证扫描逻辑不会影响正常的业务逻辑，也可以保证内存不被过期 Key 填满。
 
 在 Redis 中并没有采用定时过期策略，而是**选择了**`惰性过期策略`**和**`定期过期策略`**的组合**，本节我们就来介绍 Redis 中这两种策略的实现。
 
@@ -145,13 +145,13 @@ void expireGenericCommand(client *c, long long basetime, int unit) {
 }
 ```
 
-1.  首先，它会从解析好的命令参数中获取指定的 Key 的过期时长，并以当前时间戳为基准，计算出目标 Key 过期的秒级时间戳 when。
+1. 首先，它会从解析好的命令参数中获取指定的 Key 的过期时长，并以当前时间戳为基准，计算出目标 Key 过期的秒级时间戳 when。
 
-3.  接下来，它会检查目标 Key 是否存在，其实就是去 redisDb->dict 中查找目标 Key。如果目标 Key 不存在，直接通过 addReply() 向客户端返回 0。
-4.  检查 EXPIRE 命令后续带的参数，比如 NX、XX、GT、LT 等参数，如果此次操作不满足这些参数指定的条件，expireGenericCommand() 函数会返回 0。
-5.  检查步骤 1 得到的 when 时间戳是否已经到期了，如果到期了，就说明 Key 值也过期了，直接删除 redisDb->dict 集合中的目标 Key 即可。
-6.  如果 when 还有一段时间才会到期，它就会调用 setExpire() 函数，其中会先查询 redisDb->dict 得到目标 Key 对应的 dictEntry，然后使用 when 时间戳更新目标 Key 在 redisDb->expires 集合中的 Value 值，再具体点，就是更新对应 dictEntry->v.s64 字段。
-7.  最后返回给客户端相应的响应信息，并触发一些关联的事件通知。
+3. 接下来，它会检查目标 Key 是否存在，其实就是去 redisDb->dict 中查找目标 Key。如果目标 Key 不存在，直接通过 addReply() 向客户端返回 0。
+4. 检查 EXPIRE 命令后续带的参数，比如 NX、XX、GT、LT 等参数，如果此次操作不满足这些参数指定的条件，expireGenericCommand() 函数会返回 0。
+5. 检查步骤 1 得到的 when 时间戳是否已经到期了，如果到期了，就说明 Key 值也过期了，直接删除 redisDb->dict 集合中的目标 Key 即可。
+6. 如果 when 还有一段时间才会到期，它就会调用 setExpire() 函数，其中会先查询 redisDb->dict 得到目标 Key 对应的 dictEntry，然后使用 when 时间戳更新目标 Key 在 redisDb->expires 集合中的 Value 值，再具体点，就是更新对应 dictEntry->v.s64 字段。
+7. 最后返回给客户端相应的响应信息，并触发一些关联的事件通知。
 
 这里可能会有小伙伴觉得 setExpire() 函数里面再次查询 redisDb->dict 是一个没用的操作，前面不是已经检查过 Key 是不是存在了吗？直接设置 expires 这个 dict 不就可以了吗？
 
@@ -172,7 +172,6 @@ void expireGenericCommand(client *c, long long basetime, int unit) {
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2ec993c360c749e9b80b5cbfa99566c6~tplv-k3u1fbpfcp-zoom-1.image)
 
 回到 setExpire() 函数，它之所以还需要再执行一次 redisDb->dict 的查询，就是为了拿到 redisDb->dict 中的 Key 字符串，然后在 redisDb->expires 中进行复用，让两个不同 dictEntry 的 key 指针，指向同一个 Key 字符串实例，如下图所示：
-
 
 ![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0ec9742772174d88bb4208c10e184878~tplv-k3u1fbpfcp-watermark.image?)
 
@@ -252,17 +251,17 @@ int expireIfNeeded(redisDb *db, robj *key, int flags) {
 }
 ```
 
-1.  首先从 redisDb->expires 这个集合里面，获取目标 Key 的过期时间，并与当前时间戳进行比较，从而判断目标 Key 是否过期了。如果没有过期，就不需要执行后续过期操作。这部分检查过期时间的逻辑封装在 keyIsExpired() 函数中，感兴趣的小伙伴可以去看一下具体的代码实现，这里不再展示代码了。
+1. 首先从 redisDb->expires 这个集合里面，获取目标 Key 的过期时间，并与当前时间戳进行比较，从而判断目标 Key 是否过期了。如果没有过期，就不需要执行后续过期操作。这部分检查过期时间的逻辑封装在 keyIsExpired() 函数中，感兴趣的小伙伴可以去看一下具体的代码实现，这里不再展示代码了。
 
-3.  如果当前的 Redis Server 是运行在主从模式下的一个从库，也不会执行后续过期操作，因为主从模式里面，过期 Key 是由主库控制的，从库只能被动接受。Redis 主从复制的内容，我们后续会有单独一章来介绍，这里就不再细说了。
-4.  我们继续 expireIfNeeded() 函数的后续逻辑，它接下来进入 deleteExpiredKeyAndPropagate() 函数。这个函数首先会根据 redis.conf 中的 lazyfree-lazy-expire 配置项（对应 redisServer.lazyfree_lazy_expire 字段），决定延时删除过期 Key 还是立刻删除 Key。如果是延迟删除，就会走 dbAsyncDelete() 函数，把过期 Key 交给后台线程异步删除；如果是立刻删除，就会走 dbSyncDelete() 函数，由主线程同步进行删除。在 deleteExpiredKeyAndPropagate() 函数的最后，它将过期 Key 被删除的事件传播给从节点，还会将删除操作记录到 AOF 文件。
+3. 如果当前的 Redis Server 是运行在主从模式下的一个从库，也不会执行后续过期操作，因为主从模式里面，过期 Key 是由主库控制的，从库只能被动接受。Redis 主从复制的内容，我们后续会有单独一章来介绍，这里就不再细说了。
+4. 我们继续 expireIfNeeded() 函数的后续逻辑，它接下来进入 deleteExpiredKeyAndPropagate() 函数。这个函数首先会根据 redis.conf 中的 lazyfree-lazy-expire 配置项（对应 redisServer.lazyfree_lazy_expire 字段），决定延时删除过期 Key 还是立刻删除 Key。如果是延迟删除，就会走 dbAsyncDelete() 函数，把过期 Key 交给后台线程异步删除；如果是立刻删除，就会走 dbSyncDelete() 函数，由主线程同步进行删除。在 deleteExpiredKeyAndPropagate() 函数的最后，它将过期 Key 被删除的事件传播给从节点，还会将删除操作记录到 AOF 文件。
 
 另外，过期 Key 还触发一些额外的操作，比如，`触发 KeySpace notifications`、`触发 Watched Key 通知`、`发送 Invalidate Key 消息`。这里我们简单说一下这三个通知的功能，如下。
 
--   Redis 6.0 中引入了客户端缓存的功能，Redis Server 会通过 Invalidate Key 消息通知客户端，指定的 Key 已经失效了。Redis 客户端在收到 Invalidate Key 消息之后，就会从本地缓存里面，删掉指定 Key，实现与 Redis Server 的同步。
+- Redis 6.0 中引入了客户端缓存的功能，Redis Server 会通过 Invalidate Key 消息通知客户端，指定的 Key 已经失效了。Redis 客户端在收到 Invalidate Key 消息之后，就会从本地缓存里面，删掉指定 Key，实现与 Redis Server 的同步。
 
--   KeySpace notifications 是 Redis 提供的一种监听 Key 变更的方式，客户端可以通过订阅 Redis 中的 `__keyevent@<db>__`、`__keyspace@<db>__`两个 Channel，监听到 Redis Server 发生的变更事件和发生变更的 Key。如果有小伙伴不了解 Redis 中 Pub/Sub 的功能，也不用着急，后面我们还会有单独的章节来介绍 Pub/Sub；如果有小伙伴对 KeySpace notifications 的使用感兴趣，可以[参考这篇文档](https://redis.io/docs/manual/keyspace-notifications/)。
--   在 Redis 里面有一个 Watch 命令，当我们的客户端 Watch 了一个 Key 之后，如果其他客户端修改了这个 Key，我们的客户端就会收到相应的通知。如果我们的客户端在一个事务里面，在执行EXEC 命令的时候，就会失败。这里触发的 Watched Key 通知，就是通知我们的客户端，我们 Watch 的 Key 被修改了。Watch 命令以及 Redis 事务的相关原理，在后面也会有专门一节来进行分析，小伙伴们这里只需要知道有这个通知即可。
+- KeySpace notifications 是 Redis 提供的一种监听 Key 变更的方式，客户端可以通过订阅 Redis 中的 `__keyevent@<db>__`、`__keyspace@<db>__`两个 Channel，监听到 Redis Server 发生的变更事件和发生变更的 Key。如果有小伙伴不了解 Redis 中 Pub/Sub 的功能，也不用着急，后面我们还会有单独的章节来介绍 Pub/Sub；如果有小伙伴对 KeySpace notifications 的使用感兴趣，可以[参考这篇文档](https://redis.io/docs/manual/keyspace-notifications/)。
+- 在 Redis 里面有一个 Watch 命令，当我们的客户端 Watch 了一个 Key 之后，如果其他客户端修改了这个 Key，我们的客户端就会收到相应的通知。如果我们的客户端在一个事务里面，在执行EXEC 命令的时候，就会失败。这里触发的 Watched Key 通知，就是通知我们的客户端，我们 Watch 的 Key 被修改了。Watch 命令以及 Redis 事务的相关原理，在后面也会有专门一节来进行分析，小伙伴们这里只需要知道有这个通知即可。
 
 这三个事件的触发逻辑都位于 deleteExpiredKeyAndPropagate() 函数中，感兴趣的小伙伴可以去参考其具体实现。
 
@@ -540,9 +539,9 @@ void freeObjAsync(robj *key, robj *obj, int dbid) {
 }
 ```
 
--   freeObjAsync() 函数首先会通过 lazyfreeGetFreeEffort() 函数计算回收目标键值对的成本。lazyfreeGetFreeEffort() 核心逻辑就是根据不同的 Value 类型计算近似的回收成本，计算的大概方式如下：如果是连续的内存空间，可以通过一次 zfree() 函数回收的，成本就是 1。例如，Value 是 OBJ_LIST 类型，回收成本就是 quicklist 列表中 quicklistNode 节点的个数；Value 是 OBJ_HASH 类型且是 OBJ_ENCODING_HT 编码方式，回收成本就是 dict 中元素的个数，也就是两个 ht_table 中的元素之和，如果是 OBJ_ENCODING_LISTPACK 编码的哈希表，回收的就是一个连续的 listpack 空间，回收成本为 1。
+- freeObjAsync() 函数首先会通过 lazyfreeGetFreeEffort() 函数计算回收目标键值对的成本。lazyfreeGetFreeEffort() 核心逻辑就是根据不同的 Value 类型计算近似的回收成本，计算的大概方式如下：如果是连续的内存空间，可以通过一次 zfree() 函数回收的，成本就是 1。例如，Value 是 OBJ_LIST 类型，回收成本就是 quicklist 列表中 quicklistNode 节点的个数；Value 是 OBJ_HASH 类型且是 OBJ_ENCODING_HT 编码方式，回收成本就是 dict 中元素的个数，也就是两个 ht_table 中的元素之和，如果是 OBJ_ENCODING_LISTPACK 编码的哈希表，回收的就是一个连续的 listpack 空间，回收成本为 1。
 
--   接下来评估回收成本是否达到了触发 lazy free 的阈值（默认为 64）。如果未达到该阈值，则freeObjAsync() 就不会提交异步任务，而是留给之后的同步逻辑处理。如果达到阈值，则会调用 bioCreateLazyFreeJob() 函数提交一个异步删除的任务，由后台线程完成对 Value 的回收；而 Key 确定是一个连续空间且不会很大的字符串，回收成本可控，依旧通过同步方式回收。
+- 接下来评估回收成本是否达到了触发 lazy free 的阈值（默认为 64）。如果未达到该阈值，则freeObjAsync() 就不会提交异步任务，而是留给之后的同步逻辑处理。如果达到阈值，则会调用 bioCreateLazyFreeJob() 函数提交一个异步删除的任务，由后台线程完成对 Value 的回收；而 Key 确定是一个连续空间且不会很大的字符串，回收成本可控，依旧通过同步方式回收。
 
 接下来要看的就是 `bioCreateLazyFreeJob() 函数如何与后台线程交互，以及后台线程如何处理异步任务了`。
 
@@ -602,14 +601,13 @@ struct bio_job {
 
 在 bioInit() 函数中会启动三个后台线程，分别处理 BIO_CLOSE_FILE、BIO_AOF_FSYNC、BIO_LAZY_FREE 三种类型的任务。三个 bio 线程执行的都是 bioProcessBackgroundJobs() 函数，同时还会创建下面 4 个数组（长度都是 3）。
 
--   bio_mutex 数组：存储每个 bio 后台线程关联的 pthread_mutex_t 锁，可以让主线程暂停对应的 bio 后台线程。
+- bio_mutex 数组：存储每个 bio 后台线程关联的 pthread_mutex_t 锁，可以让主线程暂停对应的 bio 后台线程。
 
--   bio_jobs 数组：存储每个 bio 后台线程关联的 bio_job 任务队列，主线程向其中提交任务，对应的 bio 后台线程从其中获取任务处理。
--   bio_pending 数组：存储了每个 bio 后台线程待处理的任务个数，也就是对应 bio_job 任务队列的长度。
--   bio_newjob_cond 数组：存储了每个 bio 后台线程关联的 pthread_cond_t 条件变量，用于通知对应 bio 后台线程有新任务要处理。熟悉 Java 的小伙伴，可以把它理解成 wait/notify 机制。
+- bio_jobs 数组：存储每个 bio 后台线程关联的 bio_job 任务队列，主线程向其中提交任务，对应的 bio 后台线程从其中获取任务处理。
+- bio_pending 数组：存储了每个 bio 后台线程待处理的任务个数，也就是对应 bio_job 任务队列的长度。
+- bio_newjob_cond 数组：存储了每个 bio 后台线程关联的 pthread_cond_t 条件变量，用于通知对应 bio 后台线程有新任务要处理。熟悉 Java 的小伙伴，可以把它理解成 wait/notify 机制。
 
 bio 后台线程与 IO 线程的设计基本类似，如下图所示，唯一的区别是，IO 线程用自旋的方式来等待新的读写任务，而 bio 后台线程使用 condition 阻塞的方式来等待新的后台任务，这其实也和任务提交频率有关系，IO 任务显然是要比后台任务更加频繁，用自旋等待，可以减少线程切换的成本。
-
 
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f577a8ab281f44ce86cccf1a195d1014~tplv-k3u1fbpfcp-watermark.image?)
 
@@ -699,30 +697,29 @@ void *bioProcessBackgroundJobs(void *arg) {
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cee150078e57438d8fd0ff2a5aa96bee~tplv-k3u1fbpfcp-zoom-1.image)
 
--   慢速模式的特点是：执行频率低，每次执行的时间长，能够扫描到的 Key 也多。在慢速模式中，activeExpireCycle() 函数会控制自身的执行时长，保证每次执行时长不超过 25ms，默认 serverCron() 执行频率为 10 的时候，也就是默认情况下，每秒 activeExpireCycle() 函数占用主线程的时长不超过 250 ms。
+- 慢速模式的特点是：执行频率低，每次执行的时间长，能够扫描到的 Key 也多。在慢速模式中，activeExpireCycle() 函数会控制自身的执行时长，保证每次执行时长不超过 25ms，默认 serverCron() 执行频率为 10 的时候，也就是默认情况下，每秒 activeExpireCycle() 函数占用主线程的时长不超过 250 ms。
 
--   快速模式的特点是：执行频率高，每次执行的时间短，能够扫描到的 Key 也就少。在快速模式中，activeExpireCycle() 函数的调用时长默认是 1000 微秒，由于是在 beforeSleep() 函数中触发，所以频率无法保证。一般情况下 beforeSleep() 函数的执行频率远高于 serverCron() 函数，所以这里也对 快速模式进行了频率限制，默认两次快速模式之间的时间间隔，至少有 2000 微秒。
+- 快速模式的特点是：执行频率高，每次执行的时间短，能够扫描到的 Key 也就少。在快速模式中，activeExpireCycle() 函数的调用时长默认是 1000 微秒，由于是在 beforeSleep() 函数中触发，所以频率无法保证。一般情况下 beforeSleep() 函数的执行频率远高于 serverCron() 函数，所以这里也对 快速模式进行了频率限制，默认两次快速模式之间的时间间隔，至少有 2000 微秒。
 
 下面来看 activeExpireCycle() 函数的核心逻辑，如下图所示：
-
 
 ![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f88a892a543e492f8a02bd161bb780c9~tplv-k3u1fbpfcp-watermark.image?)
 
 这里我们展开一步步介绍，首先来看初始化变量的部分，这里会初始化很多控制 activeExpireCycle() 函数执行流程的变量。
 
--   config_keys_per_loop：默认值为 20，在后续扫描中，如果一次扫描的 Key 总数超过了该值，就应该结束此次扫描了。这里我们可以通过 active-expire-effort 配置项（默认值为 1，可选值 1~10）调整 config_keys_per_loop 的取值，该配置项增加 1，则相应的 config_keys_per_loop 增加 25%，也就是增加 5，值变为 25。
+- config_keys_per_loop：默认值为 20，在后续扫描中，如果一次扫描的 Key 总数超过了该值，就应该结束此次扫描了。这里我们可以通过 active-expire-effort 配置项（默认值为 1，可选值 1~10）调整 config_keys_per_loop 的取值，该配置项增加 1，则相应的 config_keys_per_loop 增加 25%，也就是增加 5，值变为 25。
 
--   config_cycle_fast_duration：用于计算一次快速模式 activeExpireCycle() 调用的耗时上限，快速模式的耗时上限默认值为 1000 微秒。active-expire-effort 配置项每增加 1，则相应的 config_cycle_fast_duration 增加 25%，也就是增加 250 微秒。
--   config_cycle_slow_time_perc：用于计算一次慢速模式 activeExpireCycle() 调用的耗时上限，慢速模式的耗时上限与 serverCron() 的调用周期相关，默认值为 25 毫秒。active-expire-effort 配置项每增加 1，相应的 config_cycle_slow_time_perc 增加 2 毫秒。
--   config_cycle_acceptable_stale：根据 Redis 统计值发现其中含有大量的已过期 Key 时（占比超过 config_cycle_acceptable_stale，默认值 10%），Redis 会持续扫描该 DB 回收其中已过期 Key。active-expire-effort 配置项每增加 1，相应的 config_cycle_acceptable_stale 减少 1%。
--   timelimit：此次 activeExpireCycle() 调用的耗时上限值，快速和慢速模式下，这个取值也不同。
+- config_cycle_fast_duration：用于计算一次快速模式 activeExpireCycle() 调用的耗时上限，快速模式的耗时上限默认值为 1000 微秒。active-expire-effort 配置项每增加 1，则相应的 config_cycle_fast_duration 增加 25%，也就是增加 250 微秒。
+- config_cycle_slow_time_perc：用于计算一次慢速模式 activeExpireCycle() 调用的耗时上限，慢速模式的耗时上限与 serverCron() 的调用周期相关，默认值为 25 毫秒。active-expire-effort 配置项每增加 1，相应的 config_cycle_slow_time_perc 增加 2 毫秒。
+- config_cycle_acceptable_stale：根据 Redis 统计值发现其中含有大量的已过期 Key 时（占比超过 config_cycle_acceptable_stale，默认值 10%），Redis 会持续扫描该 DB 回收其中已过期 Key。active-expire-effort 配置项每增加 1，相应的 config_cycle_acceptable_stale 减少 1%。
+- timelimit：此次 activeExpireCycle() 调用的耗时上限值，快速和慢速模式下，这个取值也不同。
 
 接下来看三个 static 局部变量。
 
--   一个是 current_db ，它用于记录上次 activeExpireCycle() 调用最后一次扫描的 DB 编号。一般情况下，我们只会使用一个 DB，也就是编号为 0 的 Redis DB。
+- 一个是 current_db ，它用于记录上次 activeExpireCycle() 调用最后一次扫描的 DB 编号。一般情况下，我们只会使用一个 DB，也就是编号为 0 的 Redis DB。
 
--   第二个是 timelimit_exit，它用于记录上次调用 activeExpireCycle() 函数的时候，是不是因为运行时间达到上限而退出的。
--   第三个是 last_fast_cycle，它用于记录上次快速模式执行的时间点。
+- 第二个是 timelimit_exit，它用于记录上次调用 activeExpireCycle() 函数的时候，是不是因为运行时间达到上限而退出的。
+- 第三个是 last_fast_cycle，它用于记录上次快速模式执行的时间点。
 
 这里针对快速模式的调用，有两个前置判断，只有通过了这两个前置判断，快速模式才能继续后续的逻辑：一个是当前 Redis 里面有超过 10% （config_cycle_acceptable_stale）的过期 Key，另一个是距离上次快速模式的调用时间超过 2000 微秒（config_cycle_fast_duration *2）。
 
@@ -738,9 +735,9 @@ void *bioProcessBackgroundJobs(void *arg) {
 
 在扫描的过程中，Redis 还会`定期检查下面两个条件`。
 
--   一个是检查超时时间，每隔 16 次抽样扫描检查一次，这里检查超时时间是获取系统时间戳，而不是缓存的时间，毕竟缓存的时间在整个 activeExpireCycle() 函数中是不变的。如果发生超时，此次 activeExpireCycle() 调用会马上结束，并将 timelimit_exit 这个 static 局部变量设置为 1，表示此次扫描是因为超时结束的，Redis 中还有未扫描的过期 Key，为下次快速模式的触发做准备。
+- 一个是检查超时时间，每隔 16 次抽样扫描检查一次，这里检查超时时间是获取系统时间戳，而不是缓存的时间，毕竟缓存的时间在整个 activeExpireCycle() 函数中是不变的。如果发生超时，此次 activeExpireCycle() 调用会马上结束，并将 timelimit_exit 这个 static 局部变量设置为 1，表示此次扫描是因为超时结束的，Redis 中还有未扫描的过期 Key，为下次快速模式的触发做准备。
 
--   二是检查当前 redisDb 扫码的效果，其实是检查`扫到过期 Key / 扫到 Key 的总数`这个值是否大于 config_cycle_acceptable_stale（默认值 10%），如果大于，Redis 会认为当前这个 redisDb 里面有大量的过期 Key，会继续扫描这个 redisDb 的其他槽位。
+- 二是检查当前 redisDb 扫码的效果，其实是检查`扫到过期 Key / 扫到 Key 的总数`这个值是否大于 config_cycle_acceptable_stale（默认值 10%），如果大于，Redis 会认为当前这个 redisDb 里面有大量的过期 Key，会继续扫描这个 redisDb 的其他槽位。
 
 这里提到了 timelimit_exit 这个静态局部变量，它有两个作用：一个是扫描开始之前，表示上次 activeExpireCycle() 调用是否超时；二是扫描开始之后，表示此次 activeExpireCycle() 调用是否已经超时。
 
@@ -760,8 +757,8 @@ server.stat_expired_stale_perc = (current_perc*0.05)
 
 这一节，我们重点分析了 Redis 中 Key 的过期与删除核心实现。
 
--   首先，我们一起分析了 Redis 中，EXPIRE、PEXPIRE 两个设置过期时间命令的核心实现。
--   然后，还说明了 Redis 惰性删除策略原理；为了防止删除大 Key 的时候，造成性能下降，Redis 引入了 lazy free 的特性，可以异步释放内存，我们这里也深入分析了 lazy free 涉及到的多种场景。
--   最后，定期过期策略作为惰性过期策略的补充，可以尽可能保证过期 Key 被及时删除。
+- 首先，我们一起分析了 Redis 中，EXPIRE、PEXPIRE 两个设置过期时间命令的核心实现。
+- 然后，还说明了 Redis 惰性删除策略原理；为了防止删除大 Key 的时候，造成性能下降，Redis 引入了 lazy free 的特性，可以异步释放内存，我们这里也深入分析了 lazy free 涉及到的多种场景。
+- 最后，定期过期策略作为惰性过期策略的补充，可以尽可能保证过期 Key 被及时删除。
 
 下一节，我们将会介绍 Redis 在内存被打满的这种特殊场景下，该如何进行 Key 的淘汰。

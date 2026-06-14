@@ -26,7 +26,7 @@
 
 基本了解了需求的背景和实现的设计思路后，接下来就来完成**lowCode**平台的基础流程搭建吧。
 
-###  useSchema
+### useSchema
 
 我们整个页面都是通过**schema驱动**的，所以**schema**的存储必然需要一个存储和解析的过程。在之前我们是通过**localStorage**的方式进行存储，在这一截就会通过远程接口的交互，从而来实现整个协议存储和返回的操作。
 
@@ -130,6 +130,7 @@ const { jsMoudleCode, onChange, locales } = useSchema();
         <I18nextProvider i18n={i18n}>{props.children}</I18nextProvider>
       </RootEditor>
 ```
+
 **useEditorKeyPress**是一个**键盘事件的hook**，在内部主要实现了**ctrl+s保存代码**的逻辑，他首先会将当前**schema**数据进行lz的算法压缩，这个在之前做历史记录的时候提到过，压缩结束后就会通过**onChangeSchema**进行状态的设置，将其存储到**useSchema**当中，后面需要用到。
 
 ```tsx
@@ -157,6 +158,7 @@ export const useEditorKeyPress = () => {
 
 }
 ```
+
 如下图所示
 
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/514b891c4ab845598d5c6db91d1f8e35~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=4286&h=1022&s=308038&e=png&b=fcfcfc)
@@ -207,7 +209,9 @@ curl -X 'POST' \
   "webSiteId": "6384be941de07d5f72a57758"
 }'
 ```
+
 此时响应的数据中会返回对应的页面id，后续通过页面的id可以修改与查询当前的页面信息。
+
 ```json
 {
   "statusCode": "200",
@@ -219,7 +223,6 @@ curl -X 'POST' \
 
 ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2911640d83254c66a1df5402544aa15b~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1332&h=1338&s=113429&e=png&b=f2f9f5)
 
-
 如下图所示就是相关的修改的查询接口。
 
 > 通过id查询页面信息
@@ -227,7 +230,6 @@ curl -X 'POST' \
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bca9469f705c4672a1a6d1e3deffd1b5~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1466&h=752&s=177701&e=png&b=ffffff)
 
 > 通过id修改相关的信息
-
 
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a8130dac1d59410ba463eff2e433a5ed~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1552&h=498&s=148381&e=png&b=fefefe)
 
@@ -425,7 +427,6 @@ export default route;
 
 ![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/371498af18914d269fb9562e3dd839ea~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1934&h=444&s=83633&e=png&b=ffffff)
 
-
 ```tsx
 import { useSchema } from "@/framework/stores/useSchema";
 import { stringifyLzUtfData } from "@/framework/utils/json";
@@ -483,7 +484,6 @@ export const Publish = () => {
 
 > 到此，页面发布流程完成，后续就是根据当前页面的pageId来查询相关的状态信息并且将其重新恢复至useSchema当中。
 
-
 ## 总结
 
 到此整个编辑器的前端部分就完成了初步的最小化的闭环，通过编辑器操作搭建组件、编排属性样式、定义事件面板和撰写js模式的方式可以初步的驱动当前页面组件的更新和JS表达式的执行。
@@ -492,7 +492,6 @@ export const Publish = () => {
 
 整体项目如下所示：
 ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ceb3c949c79047d582e85c61b8bf305b~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=3354&h=1656&s=258979&e=png&b=fefefe)
-
 
 ## 资源
 

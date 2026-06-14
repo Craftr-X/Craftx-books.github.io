@@ -48,7 +48,6 @@
 
 当然 **Gitlab** 本身提供了更多的能力，但我们目前只需要这些，需要接入多少功能可以按照自己的实际需求来取舍。
 
-
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/027a15c9b8bd4f2d9e1c018e1db88b4e~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=2391&h=1099&s=258900&e=png&b=1d1d1d)
 
 如图所示，当我们需要调用 **Gitlab Api** 的时候，需要使用 **ADMIN_PRIVATE_TOKEN** 来操作，一般来说这个是管理员账号，拥有最高的权限，但带来的限制是如果自己不做 **RBAC** 控制的话，权限会非常难以控制，所以最新的 **Gitlab Api** 可以使用管理员 **token** 授权每个用户独立 **token**，然后再使用授权的独立 **token** 去操作 **Gitlab Api**，这样很多危险操作会被限制住。
@@ -73,6 +72,7 @@ const createBranch = async (
   return data;
 };
 ```
+
 ``` ts
 /**
  * @description: 带 version 的通用 api 请求
@@ -133,7 +133,7 @@ const methodV = async ({
 
 此外 **Branch** 中并没有 **Controller** ，因为在 **Devops** 中，**创建任务 && 流程是需要创建对应的代码分支**，所以也就没有必要单独提供 **Branch** 的 **Controller**。
 
-#### Project 
+#### Project
 
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/23bf310f99e94593b5e960456f1a465a~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=648&h=645&s=49325&e=png&b=1a1a1a)
 
@@ -322,7 +322,7 @@ export class ProjectType {
 
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/946811eaa2e14036a0f6b6c93ce9e1e0~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1299&h=591&s=60028&e=png&b=1c1c1c)
 
-**Deploy** 的模块在业务开发中比较简单，主要是生成每一次的构建任务同时对接各个 **CICD** 的系统以及流程，此外需要保存对应的产物，也就是 **History** 模块，方便线上发布有问题的时候进行回滚。 
+**Deploy** 的模块在业务开发中比较简单，主要是生成每一次的构建任务同时对接各个 **CICD** 的系统以及流程，此外需要保存对应的产物，也就是 **History** 模块，方便线上发布有问题的时候进行回滚。
 
 **一个简单的流程**：在前端发布的时候，根据对应的 **Project** 查询对应的发布配置也就是 **ProjectConfig**，同时根据 **Iteration** 查询对应的 **Process** 信息，当发布配置与流程都完成校验之后，调用 **Jenkins** 模块，完成 **CICD** 的流程，同时将生产环境的内容存储到 **History**，方便下次线上回滚数据。
 
@@ -331,7 +331,6 @@ export class ProjectType {
 ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3bf1864b4b2d4d29bd773bf7cefdc2e4~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1738&h=1071&s=214513&e=png&b=1c1c1c)
 
 **System** 模块是所有模块中最为简单的模块，主要是配置全局可用的基础服务，另外一个是操作日志，如果你自己接入日志系统的话，**operation** 也可以省去。
-
 
 ## 写在最后
 

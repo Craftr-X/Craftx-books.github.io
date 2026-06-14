@@ -1,4 +1,5 @@
 # 04｜大脑接入：抽象 Provider 接口，适配 Claude 与 OpenAI 兼容大模型
+
 你好，我是Tony Bai。欢迎来到《从0开始构建 Agent Harness》专栏的第四讲。
 
 在前面的课程中，我们犹如打造精密钟表一般，用 Go 语言构建了 `go-tiny-claw` 的核心部件。特别是上一讲，我们在 ReAct 循环中巧妙地剥离出了独立的慢思考（Thinking）阶段，从架构机制上压制了大模型的行动冲动。
@@ -577,7 +578,6 @@ eng := engine.NewAgentEngine(llmProvider, registry, workDir, false)
 
 - 面对“分析这 10 个文件的依赖关系并重构缓存层”等复杂任务时，我们需要打开 Thinking 阶段，用算力和时间换取代码修改的准确性。
 
-
 这种动态分配算力的思想，正是目前 Agent 开发领域前沿的 Adaptive Reasoning（自适应推理）策略的缩影。
 
 ## 本讲小结
@@ -589,7 +589,6 @@ eng := engine.NewAgentEngine(llmProvider, registry, workDir, false)
 2. **兼容国内算力底座**：得益于抽象层，我们在不修改任何核心逻辑的前提下，利用官方原生 SDK 无缝对接了国内的智谱大模型（GLM-4.5），在解决了网络与成本痛点的同时，保证了工业级调用的稳定性。
 
 3. **洞见“自适应推理”的必要性**：通过对比开启和关闭慢思考（Thinking Phase）两份真实的执行日志，我们深刻体会到了“算力浪费”与“精准行动”之间的博弈。我们验证了在 Harness 架构中预留 `EnableThinking` 开关的前瞻性，并引出了业界前沿的 Adaptive Reasoning（自适应推理）概念。
-
 
 现在，引擎的心跳强健，大脑清醒。但是，它的手脚依然是个 Mock 的“假肢”。
 

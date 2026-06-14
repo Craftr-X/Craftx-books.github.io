@@ -1,4 +1,5 @@
 # 19｜洞察黑盒：为 Agent 引入 Tracing 机制复盘失败决策路径
+
 你好，我是 Tony Bai。欢迎来到《从0开始构建 Agent Harness》专栏的第十九讲。
 
 在上一讲中，我们为 `go-tiny-claw` 打造了成本追踪的“仪表盘（Cost Tracker）”，我们清楚地知道了 Agent 每次运行消耗了多少 Token 和人民币。这是企业级落地必不可少的第一步算账。 **但是，仅仅知道“花了多少钱”和“跑了多久”，并不能帮我们排查深层次的逻辑 Bug。**
@@ -12,7 +13,6 @@
 - 在第 8 个 Turn 时，它发给大模型的 System Prompt 和 Working Memory 到底长什么样？大模型返回的原始 JSON 是不是因为截断而导致了幻觉？
 
 - 它并发调用的 3 个工具，究竟是哪一个导致了耗时飙升？
-
 
 大模型本身是一个不可控的 **“黑盒（Black Box）”**。如果在驾驭工程（Harness Engineering）中，我们不能提供透视这个黑盒的“X 光机”，一旦 Agent 发生智障行为，我们将陷入无法调试的境地。
 
@@ -29,7 +29,6 @@
 2. **Child Spans（子跨度）**：代表 ReAct 循环中的每一个 `Turn`。
 
 3. **Leaf Spans（叶子节点）**：代表每一个 Turn 内部的细分操作，例如 `Generate（LLM 调用）`、 `Execute（工具执行）`、 `Compaction（内存压缩）`。
-
 
 我们还是用一张示意图来直观地感受一下这棵追踪树的结构：
 
@@ -562,7 +561,6 @@ $go run cmd/claw/main.go
 
 4. 幻觉审查利器：通过 `arguments` 属性，你能清楚地看到大模型传递给底层 Bash 工具的原始 JSON 长什么样。并且 `context_message_count` 字段清晰地记录了每一次发往模型的历史上下文长度（从 Turn-1 的 `2` 激增到了 Turn-3 的 `7`）。如果哪天执行失败了，你一看 Trace 就能发现：哦，原来是模型在 Turn-2 时上下文爆了导致参数生成错误。
 
-
 ## 延伸：工程界的 Agent Trace 思路与方法
 
 除上述的极简的结构化链路追踪外，工程界还发展出了若干更具针对性的思路，这里也提及一下，感兴趣的小伙伴儿可以在课后进一步深入研究。
@@ -572,7 +570,6 @@ $go run cmd/claw/main.go
 - 多 Agent 协作追踪：在 Multi-Agent 系统（如 AutoGen、CrewAI）中，单棵 Trace Tree 已不足以描述跨 Agent 的消息传递。工程界的做法是引入 **Distributed Trace**，为每条跨 Agent 消息注入 `trace_id` \+ `parent_span_id`，将多个 Agent 的独立树拼接为一张有向无环图（DAG）。
 
 - 异步与并行 Span：当 Agent 并发调用多个工具时，子 Span 的时间区间会出现重叠。现代框架会在可视化层将这类并行 Span 渲染为甘特图（Gantt-style），而非串行树，以便直观定位延迟瓶颈。
-
 
 上述方法与基于 Span Tree 的运行时追踪并不互斥，在成熟的 Agent 治理体系中，往往需要将 **运行时链路追踪**（Who called what, when）与 **因果/认知层追踪**（Why this decision was made）结合起来，才能实现真正意义上的全链路可观测性。
 
@@ -585,7 +582,6 @@ $go run cmd/claw/main.go
 2. **极简上下文级联实现**：依托于 Go 语言强大的 `context.Context` 特性，我们在不到 100 行的代码中，实现了一套支持并发安全的父子 Span 挂载树机制。
 
 3. **无侵入的埋点哲学**：通过巧妙地在 `engine` 和 `registry` 的边界进行埋点，我们完整还原了 ReAct 循环的时间线。这使得未来的运维人员可以像复盘微服务异常一样，去 Debug 一个 AI 智能体的行为轨迹。
-
 
 至此， `go-tiny-claw` 在 **“内部机理”** 上的所有建设（包括算账 Tracker 和复盘 Tracing）已全部就位。
 

@@ -7,7 +7,6 @@
 
 但是，那仅仅是它的一部分而已！有一组平行的选项卡，被隐藏在主窗口之下。这个组合被称为 **`Drawer`**
 
-
 ## 1. 如何打开 `Drawer` ?
 
 当你在 `DevTools`（任何选项卡）中时，按 `[esc]` 来显示它，再次按 `[esc]` 隐藏它：
@@ -39,7 +38,7 @@ Okay，让我们再看一遍所有的选项：
 - `Rendering`
 - `Request blocking`
 - `Search`
-- `Sensors` 
+- `Sensors`
 - `What’s new`
 
 ## 3. 控制传感器
@@ -91,7 +90,7 @@ Okay，让我们再看一遍所有的选项：
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/29/167f829dad411a58~tplv-t2oaga2asx-image.image)
 
-它不仅会使用差异形式的变化（像 `Git` 这样的源控制工具一样）向你展示，同时还可以撤销它们。 
+它不仅会使用差异形式的变化（像 `Git` 这样的源控制工具一样）向你展示，同时还可以撤销它们。
 
 举个例子：
 

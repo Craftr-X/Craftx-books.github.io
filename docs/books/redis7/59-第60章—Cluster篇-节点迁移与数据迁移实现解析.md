@@ -9,7 +9,6 @@
 
 如下图左侧所示，Master1 节点处于单点状态，通过将 Slave2 节点漂移成 Master1 节点的 Slave，解除了其单点状态。
 
-
 ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/80bba45a89564c9f8eb0a7da6f52215d~tplv-k3u1fbpfcp-watermark.image?)
 
 每个 Slave 节点在定期执行 clusterCron() 函数的时候，都会对每个 Master 节点的 clusterNode->slaves 列表进行检查，计算其可用的 Slave 节点数量。如果发现 Master 节点下没有可用的 Slave 节点，且当前 Master 负责管理多个 slot，则会将其判定为单点 Master。在计算单点 Master 的同时，还会计算 max_slaves、this_slaves 两个辅助变量，max_slaves 记录了当前可用 Slave 节点数的最大值，this_slaves 记录了当前这个主从复制组中的可用 Slave 节点数。
@@ -18,9 +17,9 @@
 
 下面简单描述一下 Slave 漂移的核心流程。
 
-1.  首先，确定要进行漂移的候选者。这里会迭代 clusterState->nodes 列表来查找有单点问题的 Master，然后从有最多 Slave 节点的主从复制组中，查找 name 最小的 Slave 节点作为漂移的候选者。
+1. 首先，确定要进行漂移的候选者。这里会迭代 clusterState->nodes 列表来查找有单点问题的 Master，然后从有最多 Slave 节点的主从复制组中，查找 name 最小的 Slave 节点作为漂移的候选者。
 
-2.  假设当前 Slave 节点就是 Slave 漂移的候选节点，此时，如果存在单点 Master 节点，并且其单点状态持续了 5 秒以上，就可以调用 clusterSetMaster() 函数，将当前 Slave 节点切换成单点 Master 的 Slave 节点，从而解除该 Master 的单点问题。clusterSetMaster() 函数会将当前 Slave 节点从原 Master 节点的 slaves 列表迁移到新 Master 的 slaves 列表中，然后执行 replicationSetMaster() 函数与新 Master 节点建立连接，开始一次全量的主从复制。
+2. 假设当前 Slave 节点就是 Slave 漂移的候选节点，此时，如果存在单点 Master 节点，并且其单点状态持续了 5 秒以上，就可以调用 clusterSetMaster() 函数，将当前 Slave 节点切换成单点 Master 的 Slave 节点，从而解除该 Master 的单点问题。clusterSetMaster() 函数会将当前 Slave 节点从原 Master 节点的 slaves 列表迁移到新 Master 的 slaves 列表中，然后执行 replicationSetMaster() 函数与新 Master 节点建立连接，开始一次全量的主从复制。
 
 ## slot 迁移
 
@@ -30,11 +29,10 @@
 
 无论是上述哪种场景，都会涉及到 slot 以及其中数据的迁移，此时就需要使用到 `CLUSTER SETSLOT` 命令。这里我们举个例子，假设需要将编号为 100 的 slot 从节点 A 迁移到节点 B，需要依次执行下面的步骤：
 
-1.  在节点 B 中执行 `CLUSTER SETSLOT 100 IMPORTING A-name` 命令。
-1.  在节点 A 中执行 `CLUSTER SETSLOT 100 MIGRATING B-name` 命令。
-1.  之后，在节点 A 上执行 `CLUSTER GETKEYSINSLOT 100 {count}` 命令，从 slot 100 中获取 count 个 Key，并执行 ` MIGRATE B-host B-port "" 0 1000 KEYS key [key ...]  `将上述获取到的 Key 从节点 A 迁移到节点 B（DB 的编号由参数 0 指定，1000 则是超时时长，单位为毫秒），循环该过程，直至 slot 100 中的全部 Key 都迁移到节点 A 中。
-1.  slot 100 中全部的 Key 都迁移完成之后，需要依次在节点 B 和节点 A 上都执行 `CLUSTER SETSLOT 100 NODE B-name` 命令，明确 slot 100 已经不再由 A 节点负责管理，而是由 B 节点负责管理。之后，slot 100 的变更将会随着 PING 等消息传播到整个 Redis Cluster。
-
+1. 在节点 B 中执行 `CLUSTER SETSLOT 100 IMPORTING A-name` 命令。
+1. 在节点 A 中执行 `CLUSTER SETSLOT 100 MIGRATING B-name` 命令。
+1. 之后，在节点 A 上执行 `CLUSTER GETKEYSINSLOT 100 {count}` 命令，从 slot 100 中获取 count 个 Key，并执行 `MIGRATE B-host B-port "" 0 1000 KEYS key [key ...]`将上述获取到的 Key 从节点 A 迁移到节点 B（DB 的编号由参数 0 指定，1000 则是超时时长，单位为毫秒），循环该过程，直至 slot 100 中的全部 Key 都迁移到节点 A 中。
+1. slot 100 中全部的 Key 都迁移完成之后，需要依次在节点 B 和节点 A 上都执行 `CLUSTER SETSLOT 100 NODE B-name` 命令，明确 slot 100 已经不再由 A 节点负责管理，而是由 B 节点负责管理。之后，slot 100 的变更将会随着 PING 等消息传播到整个 Redis Cluster。
 
 ### IMPORTING、MIGRATING 状态
 
@@ -138,12 +136,11 @@ clusterNode *getNodeByQuery(...) {
 }
 ```
 
-
 很明显，**如果客户端不提前发送一条 ASKING 命令来设置 ASKING 状态，那么无论 Key 1 是否已经迁移到了节点 B，节点 B 都将返回给客户端一个 MOVED 错误**。
 
 这里简单区分一下 MOVED 和 ASKING 两个错误。
 
--   MOVED 表示的是 slot 已经从一个节点转移到了另一个节点。在 Jedis、redis-cli 等客户端中，都会缓存一份 slot 与 Redis Cluster 节点的映射关系，当收到 MOVED 错误时，会修改该缓存，之后访问该 slot 的请求会直接发送到 MOVED 错误所指定的目标节点。
+- MOVED 表示的是 slot 已经从一个节点转移到了另一个节点。在 Jedis、redis-cli 等客户端中，都会缓存一份 slot 与 Redis Cluster 节点的映射关系，当收到 MOVED 错误时，会修改该缓存，之后访问该 slot 的请求会直接发送到 MOVED 错误所指定的目标节点。
 
     以 redis-cli 为例，如果我们要让它实现自动处理 ASK 和 MOVED 的功能，需要在启动 redis-cli 客户端的时候，添加 -c 参数如下所示：
 
@@ -159,7 +156,7 @@ clusterNode *getNodeByQuery(...) {
 "value"
 ```
 
--   ASKING 表示的是 slot 迁移过程中产生的中间态。在客户端收到 ASKING 错误时，不会修改缓存，所以只是影响 ASKING 响应的这条请求，不会后续影响其他的请求。如果客户端之后还需要访问该 slot，则仍然会按照缓存将请求发送到目前负责该 slot 的节点，可能还会触发 ASKING 错误。
+- ASKING 表示的是 slot 迁移过程中产生的中间态。在客户端收到 ASKING 错误时，不会修改缓存，所以只是影响 ASKING 响应的这条请求，不会后续影响其他的请求。如果客户端之后还需要访问该 slot，则仍然会按照缓存将请求发送到目前负责该 slot 的节点，可能还会触发 ASKING 错误。
 
     这从另一个角度说明，client 的 ASKING 状态是一个一次性标状态，当节点执行完一条非 ASKING 命令之后，ASKING 状态就会被清除，我们可以在 resetClient() 函数中看到下面这段清理 ASKING 状态的逻辑：
 
@@ -173,10 +170,9 @@ if (!(c->flags & CLIENT_MULTI) && prevcmd != askingCommand)
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bf693d32c17349deb9a846aba0c029f3~tplv-k3u1fbpfcp-zoom-1.image)
 
-
 ### 迁移 Key
 
-分析完 `CLUSTER SETSLOT 100 IMPORTING A-name`、 ` CLUSTER SETSLOT 100 MIGRATING B-name  `两条命令的底层原理以及对数据访问带来的影响之后，我们再来分析 `CLUSTER GETKEYSINSLOT 100 {count}` 命令和 `MIGRATE B-host B-port "" 0 1000 KEYS key [key ...]` 迁移 Key 的实现逻辑。
+分析完 `CLUSTER SETSLOT 100 IMPORTING A-name`、 `CLUSTER SETSLOT 100 MIGRATING B-name`两条命令的底层原理以及对数据访问带来的影响之后，我们再来分析 `CLUSTER GETKEYSINSLOT 100 {count}` 命令和 `MIGRATE B-host B-port "" 0 1000 KEYS key [key ...]` 迁移 Key 的实现逻辑。
 
 首先，当节点接收到 `CLUSTER GETKEYSINSLOT` 命令时，会先去 redisDb->slots_to_keys 中查找指定 slot 中 Key 的个数，然后从相应的 by_slot 列表中获取指定数量的 Key，最后将这些 Key 返回给客户端。[《Cluster 篇：Redis Cluster 节点启动内幕》](https://juejin.cn/book/7144917657089736743/section/7147530637849657384)在介绍 Redis Cluster 关键结构体的时候，已经详细介绍过 clusterSlotToKeyMapping 以及 slotToKeys 的结构，这里不再重复了。
 
@@ -184,10 +180,10 @@ if (!(c->flags & CLIENT_MULTI) && prevcmd != askingCommand)
 
 建连完成之后，节点 A 就可以开始组装迁移 Key 的相关命令。
 
-1.  首先创建一个基于 Buffer 的 rio 实例，后续需要发送到节点 B 的命令会先组装到该 Buffer 中。
+1. 首先创建一个基于 Buffer 的 rio 实例，后续需要发送到节点 B 的命令会先组装到该 Buffer 中。
 
-2.  向 Buffer 中写入 SELECT 命令，将迁移 Key 写入到节点 B 的指定 DB 中。
-3.  接下来循环待迁移的 Key，为每个 Key 生成一条 RESTORE-ASKING 命令（集群模式下使用 RESTORE-ASKING 命令，单机模式下使用 RESTORE 命令）。这里先会检查 Key 的过期时间，如果已经过期，直接跳过该 Key。然后才会真正向 Buffer 中写入的是 RESTORE-ASKING 命令，该命令的具体格式是 RESTORE-ASKING key ttl serialized-value，其中的序列化的 Value 值是通过 createDumpPayload() 函数按照 RDB 文件的格式，将 Value 值写入到 Buffer 中的。
+2. 向 Buffer 中写入 SELECT 命令，将迁移 Key 写入到节点 B 的指定 DB 中。
+3. 接下来循环待迁移的 Key，为每个 Key 生成一条 RESTORE-ASKING 命令（集群模式下使用 RESTORE-ASKING 命令，单机模式下使用 RESTORE 命令）。这里先会检查 Key 的过期时间，如果已经过期，直接跳过该 Key。然后才会真正向 Buffer 中写入的是 RESTORE-ASKING 命令，该命令的具体格式是 RESTORE-ASKING key ttl serialized-value，其中的序列化的 Value 值是通过 createDumpPayload() 函数按照 RDB 文件的格式，将 Value 值写入到 Buffer 中的。
 
 迁移相关的命令全部写入到 Buffer 之后，节点 A 就可以调用 connSyncWrite() 函数将 Buffer 中的命令发送到节点 B ，注意，这里使用的同步方式进行发送，超时时间是 MIGRATE 命令中指定的，默认是 1000 毫秒。
 
@@ -195,25 +191,24 @@ if (!(c->flags & CLIENT_MULTI) && prevcmd != askingCommand)
 
 回到节点 A 这边，在发送完 Buffer 中的命令之后，它就会调用 connSyncReadLine() 函数阻塞等待节点 B 对每条 RESTORE-ASKING 命令的响应，对于迁移成功的 Key，节点 A 会将该 Key 从自身的 DB 中删除；对于迁移失败的 Key，节点 A 会将节点 B 返回的错误信息透传给客户端。
 
-
 ### 更新 slot 归属
 
-完成 Key 迁移之后，我们就可以依次在节点 B 和节点 A 上执行 ` CLUSTER SETSLOT 100 NODE B-name  `命令，变更 slot 100 的归属权了。
+完成 Key 迁移之后，我们就可以依次在节点 B 和节点 A 上执行 `CLUSTER SETSLOT 100 NODE B-name`命令，变更 slot 100 的归属权了。
 
 节点 B 接到 `CLUSTER SETSLOT 100 NODE B-name`命令的时候，会执行下面的 slot 迁移逻辑。
 
-1.  修改自身维护的 slot 视图，将 slot 100 与节点 A 解绑，并将 slot 100 修改为节点 B 负责管理。
-1.  将 slot 100 的 IMPORTING 状态清理掉，也就是将 clusterState->importing_slots_from[100] 设置为 NULL。
-1.  因为有 slot 的变更，所以 currentEpoch 和 configEpoch 值都需要增加。这里会将 currentEpoch 的值增加 1，并将其作为自身的最新 configEpoch 值。
-1.  然后向其他节点广播 PONG 消息，其他节点也就可以更新到最新的 currentEpoch 和 configEpoch 值，同时也会变更 slot 100 的归属关系。
+1. 修改自身维护的 slot 视图，将 slot 100 与节点 A 解绑，并将 slot 100 修改为节点 B 负责管理。
+1. 将 slot 100 的 IMPORTING 状态清理掉，也就是将 clusterState->importing_slots_from[100] 设置为 NULL。
+1. 因为有 slot 的变更，所以 currentEpoch 和 configEpoch 值都需要增加。这里会将 currentEpoch 的值增加 1，并将其作为自身的最新 configEpoch 值。
+1. 然后向其他节点广播 PONG 消息，其他节点也就可以更新到最新的 currentEpoch 和 configEpoch 值，同时也会变更 slot 100 的归属关系。
 
 之后节点 B 收到访问 slot 100 的请求时，就可以直接进行响应了。
 
 在节点 A 接到 `CLUSTER SETSLOT 100 NODE B-name` 命令的时候，会执行下面的操作。
 
-1.  如果节点 A 还没有收到来自 PONG 消息时，会发现当前 slot 100 是由节点 A 自己负责管理的，而命令指定的却是节点 B，此时就需要检查在节点 A 中是否还持有 slot 100 中的 Key，如果没有，才能正常执行下面的 slot 迁移操作。
-1.  将 slot 100 的 MIGRATING 状态清除掉，也就是将 clusterState->migrating_slots_to[100] 设置为 NULL。
-1.  修改节点 A 中维护的 slot 视图，将 slot 100 与节点 A 解绑，将 slot 100 修改为由节点 B 负责管理。
+1. 如果节点 A 还没有收到来自 PONG 消息时，会发现当前 slot 100 是由节点 A 自己负责管理的，而命令指定的却是节点 B，此时就需要检查在节点 A 中是否还持有 slot 100 中的 Key，如果没有，才能正常执行下面的 slot 迁移操作。
+1. 将 slot 100 的 MIGRATING 状态清除掉，也就是将 clusterState->migrating_slots_to[100] 设置为 NULL。
+1. 修改节点 A 中维护的 slot 视图，将 slot 100 与节点 A 解绑，将 slot 100 修改为由节点 B 负责管理。
 
 节点 A 之后收到访问 slot 100 的请求时，就会立刻返回 MOVED 响应，让客户端去访问节点 B，这也是在节点 A 上执行 CLUSTER SETSLOT 命令的主要作用。
 
@@ -226,7 +221,6 @@ if (!(c->flags & CLIENT_MULTI) && prevcmd != askingCommand)
 我们可以通过 redis-cli 命令行工具的 --bigkeys 参数来查询 Redis 中的大 Key，但是要根本解决大 Key 的问题，还是需要在进行 Key 设计的时候对可能的数据模型和数据量进行评估，对可能遇到的大 Key 进行拆分。
 
 另一个导致数据量倾斜的问题就是 **Key 或是 HashTag 的设计不当造成的**，这里我们先来展开介绍一下计算一个 Key 所属 slot 的 keyHashSlot() 函数，其中使用的核心算法是 crc16 算法，默认整个 Key 都会参与到 slot 的计算中，如下图所示第一组 Key 值所示，它们会散落在不同的 slot 中。
-
 
 ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/456d8a60a5264bf7b4c6ff8ae5ff2f51~tplv-k3u1fbpfcp-watermark.image?)
 

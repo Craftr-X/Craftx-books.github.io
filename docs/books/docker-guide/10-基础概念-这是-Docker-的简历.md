@@ -14,9 +14,9 @@
 
 关于 Moby 和 Docker 更多的内容，这里给大家提供一下参考资料，有兴趣的朋友们可以前往阅读：
 
-*   [Docker改名啦？什么是 Moby Project](https://yq.aliyun.com/articles/74437)
-*   [对于 Docker 改名 Moby ，大家怎么看？](https://www.zhihu.com/question/58805021)
-*   [Introducing Moby Project](https://blog.docker.com/2017/04/introducing-the-moby-project/)
+* [Docker改名啦？什么是 Moby Project](https://yq.aliyun.com/articles/74437)
+* [对于 Docker 改名 Moby ，大家怎么看？](https://www.zhihu.com/question/58805021)
+* [Introducing Moby Project](https://blog.docker.com/2017/04/introducing-the-moby-project/)
 
 ## Docker 所带来的改变
 
@@ -168,10 +168,10 @@ GB 级
 
 举个具体的例子：
 
-*   开发者能够使用 Docker 在本地编写代码并通过容器与其他同事共享他们的工作。
-*   他们能够使用 Docker 将编写好的程序推送至测试环境进行自动化测试或是人工测试。
-*   当出现 Bugs 时，开发者可以在开发环境中修复它们，并很快的重新部署到测试环境中。
-*   在测试完成后，部署装有应用程序的镜像就能完成生产环境的发布。
+* 开发者能够使用 Docker 在本地编写代码并通过容器与其他同事共享他们的工作。
+* 他们能够使用 Docker 将编写好的程序推送至测试环境进行自动化测试或是人工测试。
+* 当出现 Bugs 时，开发者可以在开发环境中修复它们，并很快的重新部署到测试环境中。
+* 在测试完成后，部署装有应用程序的镜像就能完成生产环境的发布。
 
 ### 跨平台部署和动态伸缩
 

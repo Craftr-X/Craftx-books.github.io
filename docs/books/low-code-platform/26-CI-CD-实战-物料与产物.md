@@ -7,6 +7,7 @@
 [前端全栈之路 - 玩转 Docker (Dockerfile)](https://juejin.cn/post/7160972042757079077)
 
 整体的内容将分为三块讲述：
+
 1. **基础组件**
 2. **基础模板**
 3. **搭建产物**
@@ -82,6 +83,7 @@ export default {
   }
 }
 ```
+
 > 上述是 **demo** 性质的脚本，**publish** 在实际生产中可以替换为证实上传 **oss** 或者静态服务器的脚本，如果是 **npm** 包的话，可以替换为 **npm publish**，这是由各个项目自身的性质决定。
 
 构建打包镜像的 **dockerfile** 如下所示，其中引用的镜像为上一步骤构建的 **ig-base-cli:0.0.1** 基础镜像：
@@ -114,7 +116,7 @@ docker build -f ./Dockerfile -t ig-build-space:0.0.1 .
 
 ![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/604c416982ee429ba320cab5751e6a00~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1140&h=742&s=454636&e=png&b=fdfdfd)
 
-然后我们直接运行 **ig-build-space** 镜像： 
+然后我们直接运行 **ig-build-space** 镜像：
 
 ```sh
 docker run ig-build-apace:0.0.1
@@ -219,7 +221,6 @@ docker run -it -v /Users/botycookie/test/hello-world:/home/work ig-base-cli:0.0.
   </body>
 </html>
 ```
-
 
 ![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/decaa29ba41c4d9bb2c9f62d75bfda63~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1306&h=585&s=39280&e=png&b=ffffff)
 

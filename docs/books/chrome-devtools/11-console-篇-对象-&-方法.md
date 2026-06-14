@@ -4,7 +4,6 @@
 
 在我们调试 `Javascript` 的代码时，`对象` 和 `方法` 作为经常被我们调试的对象，所以这里介绍关于 `对象` 和 `方法` 的调试技巧。
 
-
 ## 1. `queryObjects` （对象查询）方法
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/18/167c07a88c45b6bd~tplv-t2oaga2asx-image.image)
@@ -42,6 +41,7 @@ class Person {
   }
 }
 ```
+
 如你所见，`greet` 方法通过一个特殊的参数来执行 `getMessage` 方法，让我们看看对 `getMessage` 方法进行追踪会产生什么结果：
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/18/167c07a88ddad8cb~tplv-t2oaga2asx-image.image)
@@ -53,6 +53,3 @@ class Person {
 在上文中，我们讨论了用 `monitor` 方法来监听函数，其实还可以使用名为 `monitorEvents` 的方法，对 `events` 做一样的事情：
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/20/167c99eb0734d2f9~tplv-t2oaga2asx-image.image)
-
-
-

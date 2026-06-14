@@ -612,7 +612,7 @@ interface Foo extends Bar {}
 const foo: string = "linbudu";
 
 class Foo {
-	prop1: string = "linbudu";
+ prop1: string = "linbudu";
 }
 
 function foo(a: number = 5, b: boolean = true) {

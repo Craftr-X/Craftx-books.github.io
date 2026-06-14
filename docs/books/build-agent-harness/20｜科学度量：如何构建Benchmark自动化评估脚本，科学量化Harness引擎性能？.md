@@ -1,4 +1,5 @@
 # 20｜科学度量：如何构建 Benchmark 自动化评估脚本，科学量化 Harness 引擎性能？
+
 你好，我是 Tony Bai。欢迎来到《从0开始构建 Agent Harness》专栏的第二十讲。
 
 在过去的 19 讲中，我们为 `go-tiny-claw` 打造了完善的基础设施。它能慢思考、能防内存溢出、能挂起审批，甚至在上一讲，我们还为它装上了“X 光机”，让你能看到它每一步运转的 Token 与耗时。
@@ -30,7 +31,6 @@ Agent 提交的不是一段描述，而是一个可以被直接应用的 **git p
 3. **客观断言（Assertion）**：Agent 说自己改好了不算数。我们通过执行一段验证脚本（比如 `go test`），来判断 Agent 是否真的让原本失败的测试变为通过，且没有破坏其他测试——这正是 SWE-bench Fail-to-Pass 范式的精髓。
 
 4. **计算综合得分**：结合我们在第 18、19 讲收集到的成本（Cost）、耗时（Duration）和轮数（Turns），给这次任务打一个综合分数。
-
 
 我们可以用一张流程图来看看我们即将手写的自动化评估流水线（Evaluation Pipeline）：
 
@@ -269,7 +269,6 @@ func (b *BenchmarkRunner) runSingleTest(ctx context.Context, tc TestCase) TestRe
 
 2. **代码分析与生成题**：考察 Agent 是否能读懂代码并按要求创建新文件。
 
-
 ```go
 // cmd/bench/main.go
 package main
@@ -400,7 +399,6 @@ $go run cmd/bench/main.go
 2. **Test-Driven Evaluation（测试驱动评估）**：在编写 `TestCase` 时，我们通过注入 `SetupScript` 初始化靶机状态，通过 `ValidateScript` (如 `go test`) 执行硬核验收。这排除了大模型擅长“花言巧语伪装”的幻觉干扰，只看最终物理世界是否被正确改变。
 
 3. **驱动底层架构进化**：有了这个跑分框架后。以后你再想修改 [第 12 讲](https://time.geekbang.org/column/article/977397) 里的 `Compactor` 阈值，或者修改 [第 7 讲](https://time.geekbang.org/column/article/970299) 的 `Fuzzy Edit` 正则算法。你只需要跑一次 Benchmark。如果成功率从 100% 掉到了 50%，那就说明你的代码改烂了，立刻回滚！数据驱动，这才是顶级架构师底气十足的原因。
-
 
 至此，《从零开始构建 Agent Harness》所有关于内核机制、内存管理、稳定性拦截以及性能评估的“内功心法”，已经全部讲解完毕。
 

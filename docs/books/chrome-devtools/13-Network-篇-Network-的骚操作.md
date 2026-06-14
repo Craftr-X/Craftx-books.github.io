@@ -19,12 +19,11 @@
 
 > `initiator` 可以翻译为 启动器，但是太过生硬，大家理解意思就好。
 
-`Network` 面板中的 `initiator` 这一列显明了是哪个脚本的哪一行触发了请求。它显示了在调用堆栈中触发请求的最后一步。但如果你用的是，例如：一个本地化的 `fetch` API， 那它将会指向一些低层级的类库的代码 - 例如 当我们在 `Angular` 配合使用 `Axios` 或者 `zone.js` 的时候，这时指向的是 `xhr.js` 
+`Network` 面板中的 `initiator` 这一列显明了是哪个脚本的哪一行触发了请求。它显示了在调用堆栈中触发请求的最后一步。但如果你用的是，例如：一个本地化的 `fetch` API， 那它将会指向一些低层级的类库的代码 - 例如 当我们在 `Angular` 配合使用 `Axios` 或者 `zone.js` 的时候，这时指向的是 `xhr.js`
 
 除了这些外部库之外，如果你希望查看代码的哪一部分触发了请求。 将鼠标悬停在显示的 `initiator`（例如 外部库）上，你将看到完整的调用堆栈，包括你的文件：
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/29/167f8282477941b8~tplv-t2oaga2asx-image.image)
-
 
 ## 3. 请求过滤
 
@@ -35,7 +34,6 @@
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/29/167f8282534dfe59~tplv-t2oaga2asx-image.image)
 
 如果想要显示所有可能的关键字，在空白的输入框按下 `[ctrl] + [space]`
-
 
 ## 4. 自定义请求表
 
@@ -56,7 +54,6 @@
 如何重新发送 `XHR` 的请求？刷新页面？太老套了，试试这么做：
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/20/167c99ea1c267c2b~tplv-t2oaga2asx-image.image)
-
 
 ## 6. XHR/fetch 断点
 

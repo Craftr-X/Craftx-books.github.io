@@ -32,7 +32,7 @@
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/28/167f3538987666fb~tplv-t2oaga2asx-image.image)
 
-## 4. `Workspace` 允许 `CSS` 注入！
+## 4. `Workspace` 允许 `CSS` 注入
 
 设置工作区后，浏览器中所做的更改不仅会持久的保存到文件系统中，而且，`CSS`  的更改保存在文件系统后，立即就被浏览器选中并显示在你的页面上。**并不需要手动刷新。**
 

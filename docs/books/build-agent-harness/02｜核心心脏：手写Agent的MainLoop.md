@@ -1,4 +1,5 @@
 # 02｜核心心脏：手写 Agent 的 Main Loop
+
 你好，我是Tony Bai。欢迎来到《从0开始构建 Agent Harness》专栏的第二讲。
 
 在上一讲中，我们完成了一次底层的认知重塑：我们不再把开发 Agent 当作是调用大模型 API 的填空题，而是把它当作是为大模型（CPU）编写一个微型操作系统（Harness / 驾驭工程）。我们确立了 `go-tiny-claw` 的四层架构，并搭建了基础的目录骨架和启动占位符。
@@ -29,7 +30,6 @@
 
 - **纯行动模式（Acting Only）**：直接给模型一堆工具（Tools），让它直接预测下一个要执行的动作。这种模式下，模型缺乏深度的状态跟踪和自我反思，往往就像一个横冲直撞的莽夫，很容易因为上一步的报错而陷入迷茫。
 
-
 ### 2\. ReAct：智能体的觉醒时刻
 
 直到 2022 年 10 月，普林斯顿大学博士生 Shunyu Yao（在 Google 实习期间）与 Google 研究人员联合发表了预印本论文《 [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/pdf/2210.03629)》，并于 2023 年正式发表在 ICLR 2023 上。
@@ -43,7 +43,6 @@
 3. **观察（Observe / Observation）**：外部环境（比如我们的 Harness 引擎）将工具执行的结果返回给模型。例如返回了 `calc.go` 的具体代码。
 
 4. 然后再回到第 1 步，结合新获得的 Observation 再次思考，形成闭环。
-
 
 在驾驭工程（Harness Engineering）中，我们将这套理论抽象为一个底层的 `for` 循环。我们可以用下面这张状态机图来精确描述它在 `go-tiny-claw` 中的流转过程：
 
@@ -60,7 +59,6 @@
 2. **不设硬性的最大步骤限制**：传统的玩具框架喜欢设置 `max_turns=10`，但真实的工业任务可能需要 50 步。顶级引擎不在此处做生硬的截断，而是依赖后续我们将会讲到的 Context Compaction（内存压缩） 和 System Reminders（系统级防死循环干预）来维持稳定。
 
 3. **上下文（Context）是唯一的记忆载体**：在这个循环中，数据会像滚雪球一样不断累加，记录下每一次的思考、动作和观察结果。
-
 
 理论铺垫完毕。接下来，我们就将这些理论转化为纯粹的代码。
 
@@ -314,7 +312,6 @@ func (e *AgentEngine) Run(ctx context.Context, userPrompt string) error {
 
 - 它只负责维护这根脆弱但重要的“上下文时间线”（ `contextHistory`）。它像一个忠实的书记员，严格执行了 ReAct 范式：把模型的意图（ToolCall）交给执行层，再把物理世界的反馈（Observation）原封不动地追加回内存中。
 
-
 ## 运行与验证：连接 Mock 桩代码
 
 为了让你能在本地把这个空心引擎跑起来，验证我们的 Main Loop 是否健壮，我们在 `main.go` 中快速写两个“假肢（Mock）”实现。
@@ -436,7 +433,6 @@ go run cmd/claw/main.go
 2. **统一定义架构“血液”**：我们在 `schema` 模块定义了 `Message`、 `ToolCall` 和 `ToolResult`。这些纯粹的数据结构，彻底隔绝了外部大模型 SDK 和底层工具代码之间的依赖，是 Harness 驾驭工程中解耦的基石。
 
 3. **确立物理边界（WorkDir）**：在 `AgentEngine` 中，我们显式地绑定了 `WorkDir`。这是极其重要的安全与设计理念——Agent 不是全局幽灵，它必须像一个普通开发者一样，受限于某个具体的项目工作区。
-
 
 现在，引擎的心跳已经稳健。但在真实的复杂项目中，大模型在拿到可用工具后，往往会产生一种“冲动”：遇到问题还没想清楚，就立刻凭直觉生成一个 `ToolCall` 去盲目尝试。这种缺乏全局规划的试错，不仅浪费 Token，更会导致项目结构被改得一团糟。
 

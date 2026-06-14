@@ -87,7 +87,7 @@ python:3.6-jessie
 例如，我们可以通过下面的命令来直接建立 MySQL 中的用户和数据库。
 
 ```
-$ sudo docker run --name mysql -e MYSQL_DATABASE=webapp -e MYSQL_USER=www -e MYSQL_PASSWORD=my-secret-pw -d mysql:5.7
+sudo docker run --name mysql -e MYSQL_DATABASE=webapp -e MYSQL_USER=www -e MYSQL_PASSWORD=my-secret-pw -d mysql:5.7
 
 ```
 

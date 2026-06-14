@@ -16,15 +16,14 @@
 
 **`OBJECT 命令`是 Redis 中用来查看一个 Key 元信息的命令**，它有几个子命令。
 
--   最常用的就是 OBJECT ENCODING 命令，它会返回指定 Key 的编码方式，获取的是对应 redisObject 对象的 encoding 字段值。
+- 最常用的就是 OBJECT ENCODING 命令，它会返回指定 Key 的编码方式，获取的是对应 redisObject 对象的 encoding 字段值。
 
--   OBJECT REFCOUNT 命令会返回指定 Key 被引用的次数，其实就是对应 redisObject 对象的 refcount 字段值。
--   OBJECT IDLETIME 命令和 OBJECT FREQ 命令分别对应上一讲介绍的 `*-lru 淘汰策略`和 `*-lfu 淘汰策略`，它们都是获取对应 redisObject 对象中的 lru 字段，然后解析得到 Key 的空闲时间或者最近访问频次。
+- OBJECT REFCOUNT 命令会返回指定 Key 被引用的次数，其实就是对应 redisObject 对象的 refcount 字段值。
+- OBJECT IDLETIME 命令和 OBJECT FREQ 命令分别对应上一讲介绍的 `*-lru 淘汰策略`和 `*-lfu 淘汰策略`，它们都是获取对应 redisObject 对象中的 lru 字段，然后解析得到 Key 的空闲时间或者最近访问频次。
 
 通过前面[第 26 讲《内核解析篇：Redis 核心结构体精讲》](https://juejin.cn/book/7144917657089736743/section/7147529654142763023)对 redisCommand 的介绍，我们可以轻松定位到 OBJECT 命令对应的处理函数是 objectCommand() 函数。
 
 在 objectCommand() 函数中，首先根据 c->argv[1] 参数，确定 OBJECT 子命令，然后进入 lookupKeyReadWithFlags() 函数查找目标 Key，其中使用的 flags 值 LOOKUP_NOTOUCH|LOOKUP_NONOTIFY，也就是不会更新 lru 字段，也不会触发 KeySpace 通知，毕竟这只是查询元数据，并不是查询里面键值对的具体值。查找结束之后，根据 OBJECT 子命令读取 Value 值的不同字段，返回即可。整个流程用下面一张图即可完整囊括：
-
 
 ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7547a977587f4596b548374e8842f833~tplv-k3u1fbpfcp-watermark.image?)
 
@@ -32,8 +31,8 @@
 
 接下来，看 `TTL、PTTL 两条命令`，它们的**返回值表示目标 Key 还有多长时间过期**，TTL 命令返回值的单位是秒，PTTL 返回值的单位是毫秒级，两者实现逻辑相同，都是先查找 redisDb->dict 确认目标 Key 存在，然后查找 redisDb->expires 获取过期时间。这里需要特别说明这两个命令的返回值：
 
--   -1 表示 Key 没有设置过期时间；
--   -2 表示 Key 已经失效了，可能是到期了，也可能是 Key 本身就不存在。
+- -1 表示 Key 没有设置过期时间；
+- -2 表示 Key 已经失效了，可能是到期了，也可能是 Key 本身就不存在。
 
 最后，来看 `EXISTS 命令`，它用于检查一个或多个 Key 是否存在。它底层也是通过 lookupKeyReadWithFlags() 函数去 redisDb->dict 中查找目标 Key，其中 flags 参数为 LOOKUP_NOTOUCH，也就是不会更新 lru 字段。
 
@@ -425,14 +424,13 @@ cleanup:
 }
 ```
 
-1.  scanGenericCommand() 函数的第一步就是解析命令参数，主要是解析 count、match、type 三个参数。其中，count 参数指定了每次命令调用返回 Key 的数量上限，有点 SQL 语句中 limit 的感觉，但是这个 count 参数只是提示 Redis 应该返回多少条数据，不是严格控制；match 参数指定了 Key 的筛选条件，类似于 SQL 语句中的 where 条件；type 参数是在 Redis 6.0 引入的新参数，只能在 SCAN 命令中使用，用来过滤 Value 的类型，只有 Value 为指定 type 类型的 Key 才能返回，比如说`SCAN 0 TYPE zset` 这条命令，就只会返回 zset 类型键值对。
+1. scanGenericCommand() 函数的第一步就是解析命令参数，主要是解析 count、match、type 三个参数。其中，count 参数指定了每次命令调用返回 Key 的数量上限，有点 SQL 语句中 limit 的感觉，但是这个 count 参数只是提示 Redis 应该返回多少条数据，不是严格控制；match 参数指定了 Key 的筛选条件，类似于 SQL 语句中的 where 条件；type 参数是在 Redis 6.0 引入的新参数，只能在 SCAN 命令中使用，用来过滤 Value 的类型，只有 Value 为指定 type 类型的 Key 才能返回，比如说`SCAN 0 TYPE zset` 这条命令，就只会返回 zset 类型键值对。
 
-2.  初始化完参数之后，开始进入集合迭代的逻辑，scanGenericCommand() 会根据迭代目标 redisObject 的 type 和 encoding 值，确定其底层使用的数据结构，然后针对不同的数据结构进行扫描。主要分为两种情况：
+2. 初始化完参数之后，开始进入集合迭代的逻辑，scanGenericCommand() 会根据迭代目标 redisObject 的 type 和 encoding 值，确定其底层使用的数据结构，然后针对不同的数据结构进行扫描。主要分为两种情况：
 
-    -   `扫描的目标集合底层数据结构为 listpack 或者 intset`，则一次性将整个集合的元素添加到一个变量名为 keys 列表中，等待第 3 步的过滤处理。正常情况下，Redis 只会在集合元素较少的情况下使用 listpack 或者 intset 这些数据结构，所以这里的一次性读取操作不会造成主线程长时间阻塞。
+    - `扫描的目标集合底层数据结构为 listpack 或者 intset`，则一次性将整个集合的元素添加到一个变量名为 keys 列表中，等待第 3 步的过滤处理。正常情况下，Redis 只会在集合元素较少的情况下使用 listpack 或者 intset 这些数据结构，所以这里的一次性读取操作不会造成主线程长时间阻塞。
 
-    -   `扫描的目标集合底层使用 dict 数据结构时`，我们会调用 dictScan() 函数扫描底层的 dict 集合。例如，我们使用 SSCAN 命令扫描一个 SET 集合中的元素，该 SET 编码方式为 OBJ_ENCODING_HT 时，底层存储数据的结构为 dict，就会通过 dictScan() 函数进行扫描，HSCAN 扫描哈希表、ZSCAN 扫描 ZSET 以及 SCAN 命令扫描整个 redisScan 也是类似的逻辑。
-
+    - `扫描的目标集合底层使用 dict 数据结构时`，我们会调用 dictScan() 函数扫描底层的 dict 集合。例如，我们使用 SSCAN 命令扫描一个 SET 集合中的元素，该 SET 编码方式为 OBJ_ENCODING_HT 时，底层存储数据的结构为 dict，就会通过 dictScan() 函数进行扫描，HSCAN 扫描哈希表、ZSCAN 扫描 ZSET 以及 SCAN 命令扫描整个 redisScan 也是类似的逻辑。
 
 ```c
 do {
@@ -450,13 +448,13 @@ do {
 
 另外，这里还能看出 `count 为什么无法做到严格控制返回条数的原因`：因为 dictScan() 函数本身是按哈希桶进行扫描的，每个哈希桶中的键值对数据不确定，很难做到扫描几个桶恰好得到 count 个键值对，而且后续还有过滤条件进行过滤，进一步影响返回数量的偏差。
 
-3.  把一定量的 Key 放到 keys 列表中之后，scanGenericCommand() 函数就要开始执执行下面的过滤逻辑，**过滤出符合条件的 Key，这些 Key 才是真正的返回值**。
+3. 把一定量的 Key 放到 keys 列表中之后，scanGenericCommand() 函数就要开始执执行下面的过滤逻辑，**过滤出符合条件的 Key，这些 Key 才是真正的返回值**。
 
-    -   一个是根据 match 指定的规则过滤 Key 的值，不符合条件的 Key 会从 keys 列表中删除。
-    -   如果是 SCAN 命令的话，会根据指定的 type 类型，对每个 Key 关联的 Value 进行过滤，这里会专门通过 lookupKeyReadWithFlags() 函数查询 Key 对应的 Value 值。只有 Value 是指定的 type，Key 才能通过过滤，继续保留在 keys 列表中，否则就会被删除。
-    -   通过 expireIfNeeded() 检查 Key 是否已过期，如果已过期，也会从 keys 集合中删除。
+    - 一个是根据 match 指定的规则过滤 Key 的值，不符合条件的 Key 会从 keys 列表中删除。
+    - 如果是 SCAN 命令的话，会根据指定的 type 类型，对每个 Key 关联的 Value 进行过滤，这里会专门通过 lookupKeyReadWithFlags() 函数查询 Key 对应的 Value 值。只有 Value 是指定的 type，Key 才能通过过滤，继续保留在 keys 列表中，否则就会被删除。
+    - 通过 expireIfNeeded() 检查 Key 是否已过期，如果已过期，也会从 keys 集合中删除。
 
-4.  scanGenericCommand() 函数的最后一步，就是构造返回值，这里除了 keys 列表中的 Key 值返回，还会将 dictScan() 返回的 cursor 游标值返回给客户端，为下次扫描做准备。
+4. scanGenericCommand() 函数的最后一步，就是构造返回值，这里除了 keys 列表中的 Key 值返回，还会将 dictScan() 返回的 cursor 游标值返回给客户端，为下次扫描做准备。
 
 除了上述介绍的常用命令之外，Key 相关的命令还有 COPY、DUMP、RANDOMKEY、SORT、WAIT 等等命令，这些命令在实践过程中并不是很常用，这里就不再展开一一分析了，感兴趣的同学可以[参考官方文档学习这些命令的具体使用方式](https://redis.io/commands/?group=generic)。
 
@@ -532,22 +530,21 @@ void setGenericCommand(client *c, int flags, robj *key, robj *val, robj *expire,
 }
 ```
 
-1.  首先是针对带了过期时间 SET 命令的处理，因为 EX、PX、EXAT、PXAT 这些参数指定的过期时间单位各不相同，这里会将它们归一化为毫秒时间戳。
+1. 首先是针对带了过期时间 SET 命令的处理，因为 EX、PX、EXAT、PXAT 这些参数指定的过期时间单位各不相同，这里会将它们归一化为毫秒时间戳。
 
+2. 如果设置了 OBJ_SET_GET 标记位，也就是执行 SET_GET 命令，这里还会调用 getGenericCommand() 查找 Key 并将 value 返回给客户端。
 
-2.  如果设置了 OBJ_SET_GET 标记位，也就是执行 SET_GET 命令，这里还会调用 getGenericCommand() 查找 Key 并将 value 返回给客户端。
+3. 然后就是针对带有 NX 和 XX 的 SET 命令的处理，这里会调用 lookupKeyWrite() 来确定目标 Key 是否存在，再根据 NX 还是 XX 进行相应的处理。
 
-3.  然后就是针对带有 NX 和 XX 的 SET 命令的处理，这里会调用 lookupKeyWrite() 来确定目标 Key 是否存在，再根据 NX 还是 XX 进行相应的处理。
+4. 处理完前面的这些标记之后，开始执行 setKey() 函数，完成键值对的写入。
 
-4.  处理完前面的这些标记之后，开始执行 setKey() 函数，完成键值对的写入。
-
-    -   如果 Key 不存在，调用 dbAdd() 函数将键值对写入到 db->dict 中。
-    -   如果 Key 已存在，调用 dbOverwrite() 函数。其中在覆盖原 Value 值的同时，还会将原 Value 的 lru 值拷贝到新 Value 中。这个被覆盖的原 Value 值所占的内存，也需要被释放掉，具体使用异步方式还是同步方式进行回收，就要看 lazyfree-lazy-server-del 配置了。
+    - 如果 Key 不存在，调用 dbAdd() 函数将键值对写入到 db->dict 中。
+    - 如果 Key 已存在，调用 dbOverwrite() 函数。其中在覆盖原 Value 值的同时，还会将原 Value 的 lru 值拷贝到新 Value 中。这个被覆盖的原 Value 值所占的内存，也需要被释放掉，具体使用异步方式还是同步方式进行回收，就要看 lazyfree-lazy-server-del 配置了。
 
      setKey() 函数完成键值对的写入之后，还会检查 flags 中是否设置了 OBJ_KEEPTTL 标志位，从而决定是否删除 Key 原来的过期时间。
 
-5.  接下来就是写入 Key 的过期时间，这里会调用 setExpire() 函数，将步骤 1 中计算得到的过期时间写入到 redisDb->expires 中。
-6.  在完成命令执行之后，这里会执行一次命令改写：一个是将 SETEX、PSETEX 命令改写成 SET...EX|PX 格式，另一个是将 SET 命令的 GET 参数删除掉。这主要是为了后续 AOF 日志和从库使用，后面还会详细介绍 AOF 日志的写入，小伙伴现在先知道有这个东西即可。
+5. 接下来就是写入 Key 的过期时间，这里会调用 setExpire() 函数，将步骤 1 中计算得到的过期时间写入到 redisDb->expires 中。
+6. 在完成命令执行之后，这里会执行一次命令改写：一个是将 SETEX、PSETEX 命令改写成 SET...EX|PX 格式，另一个是将 SET 命令的 GET 参数删除掉。这主要是为了后续 AOF 日志和从库使用，后面还会详细介绍 AOF 日志的写入，小伙伴现在先知道有这个东西即可。
 
 使用 SET 命令我们可以写入单个键值对，如果想一次写入多个键值对的话，我们可以使用 MSET 命令或 MSETNX 命令（有任意一个 Key 存在即失败），它们的实现位于 msetGenericCommand() 函数中，底层也是依赖 setKey() 完成键值对的写入，这里就不再重复了。
 
@@ -697,11 +694,11 @@ void incrDecrCommand(client *c, long long incr) {
 }
 ```
 
-1.  先通过 lookupKeyWrite() 函数查找目标键值对，这里需要检查 Value 值是否为整数类型，只有整数类型才能执行 DECR、DECRBY、INCR、INCRBY 这些计算命令。
+1. 先通过 lookupKeyWrite() 函数查找目标键值对，这里需要检查 Value 值是否为整数类型，只有整数类型才能执行 DECR、DECRBY、INCR、INCRBY 这些计算命令。
 
-2.  然后，对此次增减的值进行边界检查，防止出现溢出的情况。检查完成之后，就可以计算增减后的新值了。
-3.  最后，检查表示 Value 的 redisObject 对象的编码类型，以及是不是共享对象。如果是非共享的，而且新值也还能用一个指针的空间进行表示，那我们直接修改 robj 的 ptr 字段，来存储这个新值就可以了。
-4.  如果是共享状态，就需要创建新的 redisObject 对象来封装上面计算得到的新值，然后调用 dbOverwrite() 函数覆盖原 Value 值。这样的话，就不会影响其他共享原 Value 的 Key。
+2. 然后，对此次增减的值进行边界检查，防止出现溢出的情况。检查完成之后，就可以计算增减后的新值了。
+3. 最后，检查表示 Value 的 redisObject 对象的编码类型，以及是不是共享对象。如果是非共享的，而且新值也还能用一个指针的空间进行表示，那我们直接修改 robj 的 ptr 字段，来存储这个新值就可以了。
+4. 如果是共享状态，就需要创建新的 redisObject 对象来封装上面计算得到的新值，然后调用 dbOverwrite() 函数覆盖原 Value 值。这样的话，就不会影响其他共享原 Value 的 Key。
 
 这里需要说一下`整数缓存的一个优化点`。Redis 对 0 到 9999 的整数进行了缓存，小伙伴们可以在 server.h 文件里面，找到一个 sharedObjectsStruct 结构体，在它里面有一个叫 integers 的字段，是一个长度为 10000 的 redisObject 数组，用来缓存 0 到 9999 的数字，整个 Redis 里面，只要 Value 里面存了 0 ~ 9999 这个范围的整数，就会共享这里面的 redisObject 对象。这是不是和 Java 里面 Integer 里面的缓存有点类似呢？
 
@@ -711,7 +708,7 @@ void incrDecrCommand(client *c, long long incr) {
 
 在这一节中，我们重点介绍了 Redis 中通用命令和字符串命令这两大类命令的具体实现。
 
--   在通用命令中，我们介绍了查看 Key 信息、操作 Key 的一些通用命令实现，比如 EXPIRE 命令过期一个 Key、DEL 命令和 UNLINK 命令删除一个 Key 等等，还介绍了 SCAN 命令的实现。
--   在字符串命令中，我们介绍了 SET 命令、GET 命令以及 APPEND、INCR 这些命令的核心实现。
+- 在通用命令中，我们介绍了查看 Key 信息、操作 Key 的一些通用命令实现，比如 EXPIRE 命令过期一个 Key、DEL 命令和 UNLINK 命令删除一个 Key 等等，还介绍了 SCAN 命令的实现。
+- 在字符串命令中，我们介绍了 SET 命令、GET 命令以及 APPEND、INCR 这些命令的核心实现。
 
 下一节，我们将介绍 Hash 和 Set 两个结构的关键命令实现。

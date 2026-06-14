@@ -70,7 +70,7 @@ Playground 最强大的能力其实在于，支持非常简单的配置切换，
 对于 ts-node，你可以将其安装到项目本地或直接全局安装，我个人更推荐安装到全局然后配置 alias 快速启动，像 `tsn index.ts` 这样。执行以下命令将 ts-node 与 typescript 安装到全局：
 
 ```bash
-$ npm i ts-node typescript -g
+npm i ts-node typescript -g
 ```
 
 然后，在项目中执行以下命令创建 TypeScript 的项目配置文件： tsconfig.json。

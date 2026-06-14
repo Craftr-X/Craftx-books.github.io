@@ -1,4 +1,5 @@
 # 01｜架构演进：从 Framework 到 Harness，Agent 到底需要怎样的底层支撑？
+
 你好，我是Tony Bai。欢迎来到《从0开始构建 Agent Harness》的第一讲。
 
 在开篇词中，我们用“操作系统（OS）”作了一个高维度的类比，指出了当前 AI Agent 开发面临的严重摩擦力，并抛出了一个核心洞见： **框架层正在坍塌，驾驭工程（Harness Engineering）正在崛起。**
@@ -20,7 +21,6 @@
 2. 定义一个 `WebSearchNode`。
 
 3. 通过代码配置一条边（Edge），规定当分析器输出特定关键词时，数据流向搜索节点。
-
 
 我们用一张图来直观感受传统框架的执行流：
 
@@ -50,7 +50,6 @@
 
 3. **状态透明**：循环只依赖一个单一的数据结构——也就是不断累加的 `Context` 消息列表。没有任何隐式的树节点或图节点变量。
 
-
 ## 绘制 `go-tiny-claw` 的工程蓝图
 
 理解了 Harness 的本质，我们现在就可以开始为 `go-tiny-claw` 设计 Go 语言的工程架构了。
@@ -78,7 +77,6 @@
 4. **基于文件系统的状态与记忆** 则是极简哲学的核心——抛弃内部变量，直接把进度写在本地 `TODO.md` 里。
 
 5. **工具与执行层（四肢与手脚）**：挂载了让模型改变物理世界的组件。动态的 `ToolRegistry` 配合极简工具集（ `read/write/edit/bash`），让模型组合出无限可能。强大的 `Middleware` 机制则死死把守大门，拦截危险命令并对接审批。
-
 
 ## 建立项目： `go-tiny-claw` 的代码骨架
 
@@ -199,7 +197,6 @@ go run cmd/claw/main.go
 2. **Harness 驾驭工程的本质**：Agent 的尽头是操作系统（OS）。我们将大模型视为 CPU，将 Context 视为内存。我们要做的 Harness 工程，就是为大模型编写一个微型 OS，核心职责包括：调度 Main Loop、精细化回收 Context 内存、安全管控极简的原生工具，以及处理中断与异常。
 
 3. **确立架构蓝图**：我们推导出了 `go-tiny-claw` 的多层架构（入口交互层、核心引擎层、上下文工程层、工具与执行层），并用 Go 语言搭建了清晰的高内聚工程骨架，写下了串联各大模块的启动伪代码，为后续实战做好了准备。
-
 
 > 注：本讲的示例代码，可以在 [这里](https://github.com/bigwhite/publication/tree/master/column/timegeek/build-agent-harness-from-scratch/ch01) 下载。
 

@@ -5,12 +5,15 @@
 经过前两章节的实战，我们手上已经有了一个基础的工程，接下来我们先创建一个 **user** 微服务来熟悉数据库的相关操作：
 
 1. 输入生成微服务的指令
-```shell 
+
+```shell
 nest generate app user
 ```
+
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8d988337b5e349cbb7da34590b6a97fb~tplv-k3u1fbpfcp-watermark.image?)
 
 2. 为了兼容给 **MnnoRepo**，`app/user` 目录下新增虚拟 `package.json` 文件：
+
 ```JSON
 {
   "name": "user",
@@ -55,7 +58,7 @@ nest g resource user --project user
 
 可以看到借助于 **CLI** 工具，不仅仅生成了整个 **User** 的 **CURD** 模块，同时也帮我们在 `app.module.ts` 中注册了对应的 **Module**。
 
-另外，如果你们使用此命令的时候，同时生成了 `spec` 文件，可以选择在 `nest-cli.json` 添加如下配置来禁用测试文件的生成。 
+另外，如果你们使用此命令的时候，同时生成了 `spec` 文件，可以选择在 `nest-cli.json` 添加如下配置来禁用测试文件的生成。
 
 ```json
 "generateOptions": {
@@ -157,7 +160,6 @@ export class UserModule { }
 
 ```
 
-
 完成上述步骤就可以使用 `pnpm start:user` 正常启动项目了:
 
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a442eb84520c4a73b5958a860c3f56c6~tplv-k3u1fbpfcp-watermark.image?)
@@ -165,6 +167,7 @@ export class UserModule { }
 正如之前所说的一样，我们在测试环境开启了同步的配置。
 
 **文件**：`.config/.dev.yaml`
+
 ```
 MYSQL_CONFIG:
     synchronize: true
@@ -295,6 +298,7 @@ export class UserService {
 #### 删
 
 1. 修改 `user.service.ts`，新增删除方法:
+
 ```
   remove(id: number) {
     return this.userRepository.delete(id)
@@ -304,7 +308,6 @@ export class UserService {
 删除 `id=1` 的用户，返回数据如下所示则代表成功：
 
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d715416a88044879bd6307212142894b~tplv-k3u1fbpfcp-watermark.image?)
-
 
 直接查询数据库可以看到 **id** 为 **1** 的数据已经确实被删除了。
 
@@ -336,6 +339,7 @@ update(id: number, updateUserDto: UpdateUserDto) {
 return this.userRepository.update({ id }, updateUserDto)
 }
 ```
+
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6a633134f68b450ab47e2487fdabb1a6~tplv-k3u1fbpfcp-watermark.image?)
 
 > 注意，这里的 demo 使用的是 patch 方法，所以我并没有加 id 属性。

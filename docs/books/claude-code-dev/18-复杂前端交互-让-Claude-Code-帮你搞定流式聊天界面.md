@@ -82,7 +82,7 @@ Agent配置页同理，参考15讲的字段定义。
 
 > 发送消息的完整时间线：  
 >  
-> 
+>
 > 1. 用户在输入框输入内容，点发送（或按Enter）
 > 2. 输入框立刻清空，发送按钮变为不可点击
 > 3. 消息区域底部出现用户消息气泡（靠右，深色背景）
@@ -148,7 +148,7 @@ curl -N -X POST http://localhost:8080/api/v1/chat/sessions/{sessionId}/messages 
 > 1. 打开Hify，进入“对话”，新建对话，选“退货客服” Agent  
 > 2. 发送“我的订单状态怎么查？”看到用户气泡靠右，AI气泡靠左，内容逐字追加  
 > 3. 追问“那退款流程呢？”智能客服记住上下文，直接回答，不需要重复背景（17讲的上下文管理在这里可视化了）  
->    
+>
 > 再问几轮，确认多轮对话连贯
 
 ![](https://static001.geekbang.org/resource/image/5b/7f/5bd960e4031a8cyycbfa85196ccfa37f.png?wh=3296x1906)![](https://static001.geekbang.org/resource/image/cd/b9/cdcd5a12460feaff34e1dc4c816ef9b9.png?wh=3306x1170)

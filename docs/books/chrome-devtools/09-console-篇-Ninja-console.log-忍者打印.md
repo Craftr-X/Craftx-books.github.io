@@ -1,4 +1,4 @@
-# console篇 - Ninja console.log （忍者打印） 
+# console篇 - Ninja console.log （忍者打印）
 
 有时你设置的断点是不是被执行了太多次？假设有一个包含 `200` 个元素的循环，但是你只对第 `110`  次循环的结果感兴趣，又或者你只对一些满足某些条件的结果感兴趣，怎么办呢？这就是我们要说的条件断点：
 
@@ -28,6 +28,5 @@
 这样的话，它们会一直执行，并且当你不再需要它们的时候，在 `Breakpoints section` 会清晰的列出它们。点两下鼠标你就可以把所有的都移除，就像一堆忍者一样突然消失！
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/17/167b955a1f0311fc~tplv-t2oaga2asx-image.image)
-
 
 > 这个技术在调试生产环境的问题时同样很有用，因为你通过这样的方式轻松将 `console logs` 插入到 `source` 里。

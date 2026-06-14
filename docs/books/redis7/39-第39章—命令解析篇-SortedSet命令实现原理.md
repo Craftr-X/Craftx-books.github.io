@@ -54,7 +54,6 @@ zsetAdd() 函数根据 Sorted Set 的编码方式进入不同的处理分支。
 
 `如果底层存储是 listpack 的话`，zsetAdd() 函数的关键逻辑如下图所示，其中免不了对 listpack 的迭代、查找、元素比较、插入和删除等操作，这些功能都封装在了 zzlFind()、zzlDelete() 、zzlInsert() 这些函数中，这些函数底层都是通过组合 listpack API 函数实现的。
 
-
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7c6a24f9faf640439a4b0a39ecf9d98d~tplv-k3u1fbpfcp-watermark.image?)
 
 例如，zzlFind() 函数就是在迭代 listpack 的时候，不断比较元素值的方式查找元素位置以及关联 score 的位置；zzlInsert() 函数也是在迭代 listpack 的过程中，比较 score 值来确认插入位置的，找到插入位置之后，通过 zzlInsertAt() 函数完成新元素和 score 的插入。这些 listpack 的函数，小伙伴们可以回顾[前面的 listpack 小节](https://juejin.cn/book/7144917657089736743/section/7147529450140205056)，这里不再重复介绍了。
@@ -193,9 +192,9 @@ if (zobj->encoding == OBJ_ENCODING_SKIPLIST) {
 
 接下来看删除元素的 `ZREM 命令`，其核心实现是 **zsetDel() 函数**，它会根据 Sorted Set 底层存储结构调用不同的方法进行删除，在 Sorted Set 被删成空集合时，会同时将其中 redisDb 中删除。
 
--   在 SortedSet 底层是 listpack 结构的时候，会走 lpDeleteRangeWithEntry() 函数删除两个 listpack 元素：一个是要删除的 Sorted Set 元素本身，另一个是其关联的 score 值。
+- 在 SortedSet 底层是 listpack 结构的时候，会走 lpDeleteRangeWithEntry() 函数删除两个 listpack 元素：一个是要删除的 Sorted Set 元素本身，另一个是其关联的 score 值。
 
--   在 Sorted Set 底层是 zset 结构的时候，zsetDel() 会使用 zsetRemoveFromSkiplist() 函数进行删除，这个函数会先将元素从 zset->dict 中删除，然后从 zset->zsl 跳表中删除元素，在从 skiplist 中删除的时候，才是真正释放元素空间的时候。
+- 在 Sorted Set 底层是 zset 结构的时候，zsetDel() 会使用 zsetRemoveFromSkiplist() 函数进行删除，这个函数会先将元素从 zset->dict 中删除，然后从 zset->zsl 跳表中删除元素，在从 skiplist 中删除的时候，才是真正释放元素空间的时候。
 
 ### 其他命令实现
 
@@ -217,9 +216,9 @@ typedef struct {
 
 然后，根据底层数据结构进入不同处理分支。
 
--   如果 Sorted Set 底层为 listpack，那么元素在 listpack 中是按照其关联 score 进行排序的，这里会从头开始遍历 listpack 找到第一个位于 zrangespec 范围内的元素，然后从该元素继续迭代，迭代结束的条件是碰到第一个超出 zrangespec 范围的元素，这样我们就可以统计出 zrangespec 范围内的元素个数了。
+- 如果 Sorted Set 底层为 listpack，那么元素在 listpack 中是按照其关联 score 进行排序的，这里会从头开始遍历 listpack 找到第一个位于 zrangespec 范围内的元素，然后从该元素继续迭代，迭代结束的条件是碰到第一个超出 zrangespec 范围的元素，这样我们就可以统计出 zrangespec 范围内的元素个数了。
 
--   如果 Sorted Set 底层为 zset，则是依靠 zset->zsl 跳表进行查找。ZCOUNT 命令首先调用 zslFirstInRange() 函数查找跳表中第一个符合 zrangespec 范围的元素，然后通过 zslLastInRange() 函数查找跳表中最后一个符合 zrangespec 范围的元素，最后将两个元素在跳表中的位置（也就是 rank 字段）相减，就得到了两者之间的元素个数。
+- 如果 Sorted Set 底层为 zset，则是依靠 zset->zsl 跳表进行查找。ZCOUNT 命令首先调用 zslFirstInRange() 函数查找跳表中第一个符合 zrangespec 范围的元素，然后通过 zslLastInRange() 函数查找跳表中最后一个符合 zrangespec 范围的元素，最后将两个元素在跳表中的位置（也就是 rank 字段）相减，就得到了两者之间的元素个数。
 
 最后，我们再来看 ZRANK、ZSCORE 这两条命令。
 
@@ -297,7 +296,7 @@ struct zrange_result_handler {
 
 首先是要解析 ZRANGE 命令中的各个参数。
 
--   通过 BYSCORE、BYLEX 参数确定后续 MIN 和 MAX 参数的具体含义，BYSCORE 表示的是查询 score 在 min ~ max 之间的元素；BYLEX 表示的是查询元素值在 min ~ max 之间的元素，使用 BYLEX 需要所有元素的 score 值相同；如果没有指定 BYSCORE、BYLEX 子命令，则默认查询 RANK 排名在 min ~ max 之间的元素。下面是一个具体示例：
+- 通过 BYSCORE、BYLEX 参数确定后续 MIN 和 MAX 参数的具体含义，BYSCORE 表示的是查询 score 在 min ~ max 之间的元素；BYLEX 表示的是查询元素值在 min ~ max 之间的元素，使用 BYLEX 需要所有元素的 score 值相同；如果没有指定 BYSCORE、BYLEX 子命令，则默认查询 RANK 排名在 min ~ max 之间的元素。下面是一个具体示例：
 
 ```c
 ZRANGE key 98 100 BYSCORE  // 查询score在98到100之间的元素
@@ -309,10 +308,10 @@ ZRANGE key 1 10  // 查询排名（rank）在1到10之间的元素
 
 这部分参数的解析结果会记录到 rangetype 临时变量中，可选值有 ZRANGE_SCORE、ZRANGE_LEX、ZRANGE_RANK，分别对应上述三种不同的范围确定方式。
 
--   REV 参数逆序查询，其解析结果记录到 direction 临时变量中，可选值有 ZRANGE_DIRECTION_FORWARD、ZRANGE_DIRECTION_REVERSE 两种，分别表示正序和逆序。
+- REV 参数逆序查询，其解析结果记录到 direction 临时变量中，可选值有 ZRANGE_DIRECTION_FORWARD、ZRANGE_DIRECTION_REVERSE 两种，分别表示正序和逆序。
 
--   LIMIT 参数指定了偏移量和查询结果集中元素个数的上限，解析结果记录到 opt_limit 和 opt_offset 临时变量中。
--   WITHSCORES 参数表示除了返回元素本身，还会同时返回对应的 score 值。解析结果记录到 opt_withscores 临时变量中。
+- LIMIT 参数指定了偏移量和查询结果集中元素个数的上限，解析结果记录到 opt_limit 和 opt_offset 临时变量中。
+- WITHSCORES 参数表示除了返回元素本身，还会同时返回对应的 score 值。解析结果记录到 opt_withscores 临时变量中。
 
 这些参数可以相互组合，但是也会有一些冲突，例如，LIMIT 参数只能和 BYSCORE 或 BYLEX 子命令一起使用，WITHSCORES 参数不能和 BYLEX 一起使用，这些冲突检查也会在这个解析过程中一并检查。
 
@@ -419,7 +418,6 @@ void genericZrangebyscoreCommand(zrange_result_handler *handler,
 在完成范围查询之后，最后需要调用 zrange_result_handler ->finalizeResultEmission() 函数进行善后处理，ZRANGESTORE 命令对应的是 zrangeResultFinalizeStore() 函数，其中会将 dstobj 字段记录的 结果集写入到 redisDb 中，其中的 Key 值由 dstkey 字段指定。如果执行的是 ZRANGE 等不需要存储查询结果集的命令，则走 zrangeResultFinalizeClient() 函数，把前面返回的元素个数（以及 score 元素个数）返回给客户端。
 
 下面用一张流程图简单总结一下 genericZrangebyscoreCommand() 函数执行的核心流程，genericZrangebyscoreCommand() 函数规定了范围查询的流程框架，zrange_result_handler 通过函数指针的方式填充了具体命令的差异，有种`模板方法模式`的感觉。
-
 
 ![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/03702ad20662466388c73b4f4840c4db~tplv-k3u1fbpfcp-watermark.image?)
 

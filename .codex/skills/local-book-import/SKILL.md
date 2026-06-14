@@ -60,17 +60,21 @@ The imported book must provide:
 
 4. Import.
    - Run:
+
      ```bash
      npm run import:book -- "<input-path>" --slug <slug> --title "<title>" --desc "<desc>"
      ```
+
    - Add `--force` only for an intentional replacement.
    - Confirm importer updated `docs/books/<slug>/`, `books.json`, and `sidebar-generated.json`.
 
 5. Validate and repair generated content.
    - Search for missing-resource placeholders and EPUB source links:
+
      ```bash
      rg -n "\\[图片：|\\[缺失资源：|缺失资源|图片未找到|text[0-9]+\\.html|filepos" docs/books/<slug>
      ```
+
    - Validate all local Markdown links and image links resolve from each Markdown file.
    - Fix unresolved internal links to point at generated `.md` files.
    - Fix missing images by copying assets from the source or restoring Markdown image syntax.
@@ -81,18 +85,24 @@ The imported book must provide:
 
 7. Test and validate.
    - If import scripts changed, add focused `node:test` coverage and run:
+
      ```bash
      node --test scripts/import-book.test.mjs
      ```
+
    - Run the automated verification script:
+
      ```bash
      node scripts/verify-import.mjs <slug>
      ```
+
    - Fix any failed checks before proceeding.
    - Always run:
+
      ```bash
      npm run build
      ```
+
    - Existing syntax-highlight warnings such as unloaded `vbnet` are non-blocking only if the build succeeds.
 
 8. Runtime verification when feasible.
@@ -103,10 +113,12 @@ The imported book must provide:
 
 9. Final checks.
    - Run:
+
      ```bash
      git status --short --branch
      git diff --stat
      ```
+
    - Ensure changes stay inside the intended import boundary.
 
 ## EPUB Quality Rules

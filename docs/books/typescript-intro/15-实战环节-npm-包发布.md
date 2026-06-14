@@ -23,10 +23,10 @@
 你可以全局安装 esno，或者使用 npx 来执行它：
 
 ```bash
-$ npm i esno -g
-$ esno ./src/index.ts
+npm i esno -g
+esno ./src/index.ts
 
-$ npx esno ./src/index.ts
+npx esno ./src/index.ts
 ```
 
 而在日常开发时，我们往往会需要频繁地修改然后执行，不断查看代码的输出和表现。在日常的网页开发中，Webpack Dev Server 已经帮我们很好地处理了这个需要，使用 JavaScript 开发 NodeJs 应用时你可能也习惯了 nodemon，那么 TypeScript 下我们应该怎么做？

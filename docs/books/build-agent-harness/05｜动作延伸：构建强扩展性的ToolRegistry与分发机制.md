@@ -1,4 +1,5 @@
 # 05｜动作延伸：构建强扩展性的 Tool Registry 与分发机制
+
 你好，我是Tony Bai。欢迎来到《从0开始构建 Agent Harness》专栏的第五讲。
 
 在上一讲中，我们通过设计优雅的 `Provider` 适配层，成功为 `go-tiny-claw` 接入了真实的“大脑”（兼容 OpenAI/Claude 协议的智谱 GLM 模型）。并且，我们前瞻性地探讨了自适应推理（Adaptive Reasoning），通过一个开关控制大模型是否进行“慢思考”。
@@ -22,7 +23,6 @@
 2. **描述暴露（Expose Schema）**：在每次向大模型发起推理前，Registry 负责把当前所有已挂载工具的名称、描述以及 JSON Schema 打包成列表，交给 `Provider` 翻译给大模型听。
 
 3. **路由分发与执行（Dispatch & Execute）**：当大模型决定调用某个工具，并吐出一串 JSON 参数（ `ToolCall`）时，Registry 负责找到对应的 Go 函数，把 JSON 丢给它执行，最后将结果封装成统一的 `ToolResult` 返回给 Main Loop。
-
 
 我们可以用一张示意图来清晰地展示这个解耦过程：
 
@@ -379,7 +379,6 @@ go run cmd/claw/main.go
 
 6. 模型在 Turn 2 中阅读了文件内容，给出了完美的总结！
 
-
 至此，我们的 `go-tiny-claw` 真正地 **睁开了眼睛，看到了现实世界**。
 
 ## 反思：关于文件读取截断的思考
@@ -401,7 +400,6 @@ go run cmd/claw/main.go
 2. **严格的契约精神**：通过实现 `BaseTool` 接口，我们强制每个工具必须清晰地描述自己的能力和 `InputSchema`。这是大模型能够准确调用工具的基础前提。
 
 3. **底线防御思维**：在实现 `read_file` 时，我们主动加入了基于长度的物理截断。记住：大模型是冲动且无知的，一切可能导致系统 OOM（内存溢出）或超支的风险，必须在执行层被死死按住。
-
 
 有了注册表，我们是不是应该趁热打铁，给 Agent 挂载几十个、上百个工具，甚至引入极其复杂的 MCP（Model Context Protocol）协议，把它打造成一个“万能兵器”呢？
 

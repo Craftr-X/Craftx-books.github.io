@@ -1,4 +1,5 @@
 # 09｜飞书集成：打通真实世界，将 go-tiny-claw 接入飞书机器人的事件流
+
 你好，我是Tony Bai。欢迎来到《从0开始构建 Agent Harness》专栏的第九讲。
 
 在前面的 8 讲中，我们潜心于 `go-tiny-claw` 的底层基础设施建设。我们用纯 Go 代码手写了带“慢思考”的两阶段 ReAct 循环，设计了优雅的 Provider 接口对接智谱与 Claude，打造了支持极简 4 大原语的 Tool Registry，甚至在上一讲中，利用 Goroutine 将工具的执行效率推向了并发的极限。
@@ -10,7 +11,6 @@
 - CI/CD 流水线构建失败了，测试同学在群里吼了一句：“@机器人 帮我看看昨天的提交是不是破坏了什么配置？”
 
 - 当你允许 Agent 执行高危的 `bash` 命令时，你希望它在执行前能通过一张交互卡片弹到你的手机上，等你点击“Approve（同意）”后它才真正动手。
-
 
 这一切，都要求我们的驾驭工程（Harness Engineering）必须拥有一个极其灵活的 **“入口交互层”**。
 
@@ -219,7 +219,6 @@ func (e *AgentEngine) Run(ctx context.Context, userPrompt string, reporter Repor
 1. 监听飞书的 Webhook 回调（解析用户发的指令消息）。
 
 2. 实现 `FeishuReporter`，通过飞书 OpenAPI 将大模型的状态发回给那个发消息的用户。
-
 
 ```go
 // internal/feishu/bot.go
@@ -503,7 +502,6 @@ go run cmd/claw/main.go
 2. **拥抱 Go 的高并发哲学**：每当飞书收到一条新消息，我们就 `go b.handleAgentRun(...)`。这意味着 `go-tiny-claw` 天生就是一个支持海量并发的高并发后台系统。
 
 3. **ChatOps 范式成型**：结合我们在前两讲实现的 `read` / `bash` 极简工具，Agent 正式具备了从群聊指令直接转化为系统行为的能力，为自动化工作（比如运维）奠定了入口。
-
 
 然而，在这个看似极客且炫酷的 ChatOps 系统背后，隐藏着两个极其致命的问题。
 

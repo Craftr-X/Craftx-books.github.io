@@ -20,22 +20,16 @@
 
 推荐开启的配置项主要是这几个：
 
--   Function Like Return Types，显示推导得到的函数返回值类型；
--   Parameter Names，显示函数入参的名称；
--   Parameter Types，显示函数入参的类型；
--   Variable Types，显示变量的类型。
-
-  
-
+- Function Like Return Types，显示推导得到的函数返回值类型；
+- Parameter Names，显示函数入参的名称；
+- Parameter Types，显示函数入参的类型；
+- Variable Types，显示变量的类型。
 
 而启用后的效果则是这样的：
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d9a4a48e1a084658a3cb71ca5f3322a2~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=1214&h=470&s=168001&e=png&b=242830)
 
 这些配置的主要能力就是把参数名，参数类型，以及推导得到的类型等等信息直接展示在屏幕上，否则你就需要悬浮鼠标在代码上来查看这些信息了。对于入门阶段的开发者来说，可以开启这些配置项来获得更清晰的类型信息。
-
-  
-
 
 本地的代码开发环境是最重要的。但有时候，如果我们在敲代码的时候遇到了问题，需要求助他人，如何让好心人看到我们的代码呢？截图？还是整个文件甚至整个项目发过去？认真地说，这是一种对双方都不利的行为，对于被求助的人来说，很难有愉悦的心情配置环境，安装依赖，再在一个项目里找寻那一两处问题，而对于求助者来说，可能就丧失了正确进行提问的能力。更推荐的方式是使用 Web IDE，比如 CodeSandbox：
 
@@ -63,13 +57,7 @@
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/82204b9dadd04b59b534b02025b9083a~tplv-k3u1fbpfcp-jj-mark:0:0:0:0:q75.image#?w=2666&h=728&s=101337&e=png&b=202123)
 
-  
-
-
 TypeScript Playground 是非常好用的 TS 代码在线编辑工具与分享工具。请谨记，如果你遇到了什么 TS 报错，在已经尝试过自己解决但效果不佳的情况下，如果想要对外求助答疑，不论这个问题可能有多简单，都请尽可能同时提供代码截图和 Playground 两种渠道的信息，这么做一定能够能让你的问题更快得到解决。
-
-  
-
 
 现在，我们就可以在配置完毕的环境里写下我们的第一行 Hello World 了！就像你初学 JavaScript 时写下的那行代码一样，这句 Hello World 会为你打开新世界的大门：
 
