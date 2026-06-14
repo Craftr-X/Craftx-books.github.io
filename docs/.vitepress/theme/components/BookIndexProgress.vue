@@ -2,6 +2,8 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from 'vue'
 import { useRoute } from 'vitepress'
 import { getProgress, statusOf, type ChapterStatus } from '../readingProgress'
+// @ts-expect-error content-stats.json 是构建时生成的 JSON，无类型声明
+import contentStats from '../../../../content-stats.json'
 
 const route = useRoute()
 const mounted = ref(false)
@@ -10,6 +12,20 @@ const readCount = ref(0)
 const readingCount = ref(0)
 
 const isBookIndex = computed(() => /^\/books\/[^/]+\/?$/.test(route.path))
+
+// 本书总阅读时长（分钟），从 content-stats 查表
+const bookReadingMinutes = computed<number | null>(() => {
+  const match = route.path.match(/^\/books\/([^/]+)/)
+  if (!match) return null
+  return contentStats.books?.[match[1]]?.readingMinutes ?? null
+})
+
+function formatDuration(min: number): string {
+  if (min < 60) return `约 ${min} 分钟`
+  const hours = Math.floor(min / 60)
+  const rest = min % 60
+  return rest === 0 ? `约 ${hours} 小时` : `约 ${hours} 小时 ${rest} 分`
+}
 
 const overallRatio = computed(() => {
   if (totalChapters.value === 0) return 0
@@ -124,6 +140,7 @@ onBeforeUnmount(() => {
       <span class="progress-label">
         阅读进度：<strong>{{ readCount }}</strong> / {{ totalChapters }} 章
         <span v-if="readingCount > 0" class="progress-reading">（{{ readingCount }} 章在读）</span>
+        <span v-if="bookReadingMinutes !== null" class="progress-duration">· {{ formatDuration(bookReadingMinutes) }}</span>
       </span>
       <span class="progress-percent">{{ Math.round(overallRatio * 100) }}%</span>
     </div>
@@ -163,6 +180,12 @@ onBeforeUnmount(() => {
 .progress-reading {
   color: var(--vp-c-text-3);
   font-size: 13px;
+}
+
+.progress-duration {
+  color: var(--vp-c-brand-1);
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .progress-percent {

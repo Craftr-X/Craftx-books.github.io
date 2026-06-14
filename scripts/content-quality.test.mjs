@@ -41,6 +41,24 @@ test('generateContentStats counts registered books and chapters', () => {
       ebookCount: 1,
       bookCount: 3,
       chapterCount: 4,
+      totalReadingMinutes: 4,
+      books: {
+        alpha: {
+          chapterCount: 2,
+          readingMinutes: 2,
+          chapters: { '01-a': 1, '02-b': 1 },
+        },
+        beta: {
+          chapterCount: 1,
+          readingMinutes: 1,
+          chapters: { '01-c': 1 },
+        },
+        gamma: {
+          chapterCount: 1,
+          readingMinutes: 1,
+          chapters: { '01-d': 1 },
+        },
+      },
       generatedAt: '2026-06-13T00:00:00.000Z',
     })
     assert.deepEqual(JSON.parse(readFileSync(join(root, 'content-stats.json'), 'utf8')), stats)
