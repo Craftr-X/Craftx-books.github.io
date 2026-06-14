@@ -14,11 +14,10 @@
 
 当 Redis 收到 CLUSTER MEET 命令之后，会调用 clusterStartHandshake() 函数创建目标节点对应的 clusterNode 实例并添加到 clusterState->nodes 字典中。这里注意新建 clusterNode 的两个字段。
 
--   一个是 name 字段，因为此时还不知道对端节点的真实名称，所以这里会随机生成一个长度为 40 的字符串暂时作为其 name，也是其在 clusterState->nodes 字典中的 Key。
--   另一个是 flags 字段，初始值为 HANDSHAKE|MEET（省略 CLUSTER_NODE_ 前缀），HANDSHAKE 表示当前节点后续会向目标节点发送 PING 请求完成握手，MEET 表示后续会向目标节点发送 MEET 请求加入集群。另外，加入 cluster->nodes 之前还会先遍历该字典，保证没有节点出现地址重复。
+- 一个是 name 字段，因为此时还不知道对端节点的真实名称，所以这里会随机生成一个长度为 40 的字符串暂时作为其 name，也是其在 clusterState->nodes 字典中的 Key。
+- 另一个是 flags 字段，初始值为 HANDSHAKE|MEET（省略 CLUSTER_NODE_ 前缀），HANDSHAKE 表示当前节点后续会向目标节点发送 PING 请求完成握手，MEET 表示后续会向目标节点发送 MEET 请求加入集群。另外，加入 cluster->nodes 之前还会先遍历该字典，保证没有节点出现地址重复。
 
 下面我们来看 A、B 两个 Redis Cluster 节点握手的示例，下图展示了节点 A 处理完 CLUSTER MEET 命令之后的状态：
-
 
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5b7ee272f6d2433a9e0900fbe97cdf63~tplv-k3u1fbpfcp-watermark.image?)
 
@@ -46,9 +45,9 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
 
 在 clusterCron() 函数中会遍历 redisServer.cluster->nodes 这个字典，检查当前节点与其他 Cluster 节点的连接状态。针对单个 clusterNode 的处理逻辑，位于 clusterNodeCronHandleReconnect() 函数之中，其中先会根据各个 clusterNode 实例的 flags 标记信息，过滤掉下面的几类不需要建连的节点。
 
--   **当前节点自身**，也就是 flags 包含 MYSELF 标记。
--   **未知地址的节点**，也就是 flags 包含 NOADDR 标记。
--   **握手超时的节点**，也就是 flags 包含 HANDSHAKE 标记，但长时间未握手成功的节点，这里判定“长时间未握手成功”的标准是 clusterNode 实例创建时间（也就是它的 ctime 字段值）距当前时间已超过 1 秒。
+- **当前节点自身**，也就是 flags 包含 MYSELF 标记。
+- **未知地址的节点**，也就是 flags 包含 NOADDR 标记。
+- **握手超时的节点**，也就是 flags 包含 HANDSHAKE 标记，但长时间未握手成功的节点，这里判定“长时间未握手成功”的标准是 clusterNode 实例创建时间（也就是它的 ctime 字段值）距当前时间已超过 1 秒。
 
 针对通过上述过滤的 clusterNode 实例，clusterNodeCronHandleReconnect() 会为其初始化 link 字段，也就是创建一个 clusterLink 实例以及底层的 connection 实例，然后调用 connConnect() 函数建立与目标 Cluster 节点的网络连接（连接的是对端节点的 cport 端口）。
 
@@ -58,22 +57,21 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
 
 下图展示了节点 A 向节点 B 发起建连成功之后的状态：
 
-
 ![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b66dab0b24e74d9bb36fbeeb764cdd75~tplv-k3u1fbpfcp-watermark.image?)
 
 ## 发送 MEET 消息
 
 建连成功的回调是 clusterLinkConnectHandler() 函数，在这个回调函数中，会完成下面几件事情。
 
--   首先是给新建的连接注册可读事件的监听，相应的回调函数是 clusterReadHandler() 函数。
--   然后，调用 clusterSendPing() 函数，向对端 Cluster 节点发送 MEET 消息。
--   最后，将 MEET 标记位从对端 Cluster 节点相应的 clusterNode->flags 字段中清理掉。
+- 首先是给新建的连接注册可读事件的监听，相应的回调函数是 clusterReadHandler() 函数。
+- 然后，调用 clusterSendPing() 函数，向对端 Cluster 节点发送 MEET 消息。
+- 最后，将 MEET 标记位从对端 Cluster 节点相应的 clusterNode->flags 字段中清理掉。
 
 这里我们需要展开介绍一下 clusterSendPing() 函数，该函数也是向指定的对端节点发送 MEET、PING 或者 PONG 三种消息的核心逻辑所在，下面简单介绍一下这三种消息的含义。
 
--   **MEET 消息**：当 Cluster 节点接收到客户端发送的 CLUSTER MEET 命令时，会在下一个 serverCron() 周期中向目标节点发送 MEET 消息，邀请目标节点加入集群。
--   **PING 消息**：用来检测对端节点是否在线的探活消息。
--   **PONG 消息**：当 Cluster 节点收到对端节点发来的 MEET 消息或者 PING 消息时，会返回一条 PONG 消息作为响应。
+- **MEET 消息**：当 Cluster 节点接收到客户端发送的 CLUSTER MEET 命令时，会在下一个 serverCron() 周期中向目标节点发送 MEET 消息，邀请目标节点加入集群。
+- **PING 消息**：用来检测对端节点是否在线的探活消息。
+- **PONG 消息**：当 Cluster 节点收到对端节点发来的 MEET 消息或者 PING 消息时，会返回一条 PONG 消息作为响应。
 
 在发送这三种消息的时候，Redis Cluster 节点都会在其中携带当前节点能感知到的节点信息，这也是 Cluster 实现 Gossip 协议的关键所在，后面也会将这些消息统称为 **`Cluster Message`**。
 
@@ -81,23 +79,22 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
 
 **第一部分**是当前节点能感知到的 1/10 个节点的信息（至少 3 个节点）。也就是从当前节点的 clusterState->nodes 集合中，随机选择 1/10 的节点信息，打包到 Cluster Message 中。在随机选择的过程中，会过滤掉下列 clusterNode 实例。
 
--   当前节点对应的 clusterNode 实例。在消息的头部已经携带了当前节点的信息，无需重复添加。
--   flags 字段中包含 PFAIL 标记的 clusterNode 实例。在当前节点长时间没有收到一个节点的任何消息时，就会认为其可能出现了故障（只是可能发生故障，并不是一定发生了故障），会在其对应的 clusterNode->flags 字段中设置 PFAIL 标记位。后面我们会单独处理包含 PFAIL 标记的节点。
--   flags 字段包含 HANDSHAKE、NOADDR 或是没有与当前节点建连的 clusterNode，因为当前节点并无法正常感知它们的状态，所以也要过滤掉。
--   numslots 为 0 的 clusterNode 实例，这种 clusterNode 实例对应的 Cluster 节点不负责管理任何 slot，它们的信息没有任何传播的价值。
+- 当前节点对应的 clusterNode 实例。在消息的头部已经携带了当前节点的信息，无需重复添加。
+- flags 字段中包含 PFAIL 标记的 clusterNode 实例。在当前节点长时间没有收到一个节点的任何消息时，就会认为其可能出现了故障（只是可能发生故障，并不是一定发生了故障），会在其对应的 clusterNode->flags 字段中设置 PFAIL 标记位。后面我们会单独处理包含 PFAIL 标记的节点。
+- flags 字段包含 HANDSHAKE、NOADDR 或是没有与当前节点建连的 clusterNode，因为当前节点并无法正常感知它们的状态，所以也要过滤掉。
+- numslots 为 0 的 clusterNode 实例，这种 clusterNode 实例对应的 Cluster 节点不负责管理任何 slot，它们的信息没有任何传播的价值。
 
 **第二部分**是 clusterState->nodes 集合中处于 PFAIL 状态的节点。这里会将所有处于 PFAIL 状态的、疑似故障的节点信息，全部添加到此次要发送的 Cluster Message 中。
 
 所以，在 clusterSendPing() 函数中，会看到有两次对 clusterState->nodes 集合的迭代，一次是为了随机选择 1/10 的节点，一次是为了过滤出 PFAIL 状态的节点。
 
-Cluster Message 之所以要携带 1/10 的已知节点信息，是为了能够在节点下线检查时间内（cluster_node_timeout * 2，cluster_node_timeout 对应 cluster-node-timeout 配置，默认 15 秒），收到大部分 Cluster 节点发来的信息。在 Redis Cluster 中，一个节点在 cluster_node_timeout / 2 的时间内，需要向其他 N-1 个节点发送一次 PING 请求，所以在 cluster_node_timeout * 2 时间内，该节点最少会和剩余的每个节点交互了 8 次（收到对端发来的 4 个 PING 请求以及对端返回的 4 个 PONG 响应），每次交互的数据包中，包含下线节点信息的概率为 1/10 的话，那么在 cluster_node_timeout * 2 时间段内感知到某个节点下线的期望值就是 80%，可以大概率收到节点下线的信息。
+Cluster Message 之所以要携带 1/10 的已知节点信息，是为了能够在节点下线检查时间内（cluster_node_timeout *2，cluster_node_timeout 对应 cluster-node-timeout 配置，默认 15 秒），收到大部分 Cluster 节点发来的信息。在 Redis Cluster 中，一个节点在 cluster_node_timeout / 2 的时间内，需要向其他 N-1 个节点发送一次 PING 请求，所以在 cluster_node_timeout* 2 时间内，该节点最少会和剩余的每个节点交互了 8 次（收到对端发来的 4 个 PING 请求以及对端返回的 4 个 PONG 响应），每次交互的数据包中，包含下线节点信息的概率为 1/10 的话，那么在 cluster_node_timeout * 2 时间段内感知到某个节点下线的期望值就是 80%，可以大概率收到节点下线的信息。
 
 Cluster Message 之所以要携带 PFAIL 状态的节点信息，是为了将疑似故障的节点快速通知给其他节点，从而进行更快的发起 failover 操作，减少不可用的时间。
 
 一条 Cluster Message 消息分为：**消息基本信息、发送节点信息、集群信息、具体消息以及扩展内容**五部分。在 clusterSendPing() 函数中，先会调用 clusterBuildMessageHdr() 函数创建 clusterMsg 实例并填充其中的消息基本信息、发送节点信息以及集群信息三部分。接下来，clusterSendPing() 函数在两次迭代 clusterState->nodes 字典的时候，会调用 clusterSetGossipEntry() 函数，将筛选出来的节点信息填充成具体消息内容。最后是 Redis 7.0 新增的扩展部分，clusterSendPing() 将当前 Cluster 节点的 hostname 作为扩展内容填充到 clusterMsg 实例中，[这是对应的 PR 链接](https://github.com/redis/redis/pull/9530)。
 
 填充好一个完整的 Cluster Message 消息之后，clusterSendPing() 会根据其实际长度，修正消息基本信息中的消息总长度、节点个数以及扩展内容的条数等信息。Cluster Message 消息的具体格式我们在下一小节展开分析，现在只需要了解 Cluster Message 中有下图展示的五个逻辑部分即可：
-
 
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6ae5ed857132447a926c6680300c0b0a~tplv-k3u1fbpfcp-watermark.image?)
 
@@ -107,7 +104,6 @@ clusterWriteHandler() 函数的实现比较简单，其中就是调用 clusterLi
 
 下图展示了节点 A 向节点 B 发送完 MEET 消息之后的状态：
 
-
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1cb9a6b16e6441ea523f427e771bf93~tplv-k3u1fbpfcp-watermark.image?)
 
 ## Cluster Message 消息
@@ -116,11 +112,11 @@ clusterWriteHandler() 函数的实现比较简单，其中就是调用 clusterLi
 
 首先是 clusterMsg 结构体，其中包含了我们前面说的五个逻辑部分：消息基本信息、发送节点信息、集群信息、具体消息以及扩展部分，我们一个个来介绍。
 
--   首先来看消息自身的一些基本信息，包括：**消息签名**（sig 字段）、**消息版本**（ver 字段）**、消息长度**（totlen 字段）、**消息类型**（type 字段）、**携带的节点信息条数**（count 字段）。
+- 首先来看消息自身的一些基本信息，包括：**消息签名**（sig 字段）、**消息版本**（ver 字段）**、消息长度**（totlen 字段）、**消息类型**（type 字段）、**携带的节点信息条数**（count 字段）。
 
--   然后来看消息发送节点的相关信息，包括：**发送节点的名称**（sender 字段）、**当前节点的 configEpoch 信息**（configEpoch 字段）、**主从复制的 Replication Offset**（offset 字段）、**节点的 ip、port 以及 cport**、**当前节点的 flags 状态信息**、**当前节点负责的 slot 集合**（myslots 字段）、**当前节点的主节点名称**（slaveof 字段）。
--   接下来看集群相关的信息：**当前的 currentEpoch 值**（currentEpoch 字段）。
--   之后来看具体消息内容：data 字段是一个 clusterMsgData 实例，注意 clusterMsgData 是一个 union，其中可以嵌套 ping、fail、publish、update 等结构体中的一个。这里我们先重点来看 ping 结构体，其中包含了一个 clusterMsgDataGossip 数组，具体定义如下：
+- 然后来看消息发送节点的相关信息，包括：**发送节点的名称**（sender 字段）、**当前节点的 configEpoch 信息**（configEpoch 字段）、**主从复制的 Replication Offset**（offset 字段）、**节点的 ip、port 以及 cport**、**当前节点的 flags 状态信息**、**当前节点负责的 slot 集合**（myslots 字段）、**当前节点的主节点名称**（slaveof 字段）。
+- 接下来看集群相关的信息：**当前的 currentEpoch 值**（currentEpoch 字段）。
+- 之后来看具体消息内容：data 字段是一个 clusterMsgData 实例，注意 clusterMsgData 是一个 union，其中可以嵌套 ping、fail、publish、update 等结构体中的一个。这里我们先重点来看 ping 结构体，其中包含了一个 clusterMsgDataGossip 数组，具体定义如下：
 
 ```c
 union clusterMsgData {
@@ -142,7 +138,7 @@ union clusterMsgData {
 
 在 ping.gossip 数组中的每个 clusterMsgDataGossip 元素，都对应了一个节点信息，其中包含了节点的名称、当前节点最后一次向其发送 PING 消息以及收到 PONG 响应的时间戳、节点的 IP、port、cport 信息以及节点的 flags 标识。
 
--   在 Redis 7.0 的实现中，最后的 hostname 扩展部分实际上是一个 clusterMsgPingExt 实例，但是它也会被写入到 ping.gossip 数组末尾，占一个数组元素的位置。
+- 在 Redis 7.0 的实现中，最后的 hostname 扩展部分实际上是一个 clusterMsgPingExt 实例，但是它也会被写入到 ping.gossip 数组末尾，占一个数组元素的位置。
 
 ## 处理 MEET 消息
 
@@ -280,15 +276,14 @@ int clusterProcessPacket(clusterLink *link) {
 }
 ```
 
-1.  首先，根据消息类型（type 字段）检查消息的长度是否合法。该步骤也是后续所有消息处理的第一步，后续将不再重复该步骤。
+1. 首先，根据消息类型（type 字段）检查消息的长度是否合法。该步骤也是后续所有消息处理的第一步，后续将不再重复该步骤。
 
-2.  更新当前 Cluster 节点自身的 IP 地址。在当前 Cluster 节点自己的地址发生变更的时候，我们可以通过新建连接获取本机的最近地址，这个地址就是当前 Cluster 变更后的 IP 地址。
-3.  接下来，根据请求中携带的对端节点名称，从 clusterState->nodes 字典中查找对应的 clusterNode 实例（即代码中的 sender 变量）。在两个节点第一次握手的时候，当前 Cluster 节点肯定是查找不到对端 Cluster 节点对应的 clusterNode 实例的。此时，当前节点会为发送 MEET 消息的对端节点创建一个 clusterNode 实例（其 name 字段值是随机生成的，flags 字段中设置了 HANDSHAKE 标志位），并记录到 clusterState->nodes 字典中，如下图所示。
-4.  接下来，当前节点会调用 clusterProcessGossipSection() 函数解析消息中携带的 clusterMsgDataGossip 数组。但是，在第一次接收到未知节点（也就是不在 clusterState->nodes 字典中节点）发来的 MEET 消息时，并不会直接信任它的 Gossip 信息，所以此次调用没有进行什么有效操作，clusterProcessGossipSection() 函数的其他逻辑先按下不表。
-5.  最后，调用 clusterSendPing() 函数返回一个 PONG 消息给对端节点。PONG 消息的组装和发送逻辑与前文分析 MEET 消息的完全一致，这里不再重复。
+2. 更新当前 Cluster 节点自身的 IP 地址。在当前 Cluster 节点自己的地址发生变更的时候，我们可以通过新建连接获取本机的最近地址，这个地址就是当前 Cluster 变更后的 IP 地址。
+3. 接下来，根据请求中携带的对端节点名称，从 clusterState->nodes 字典中查找对应的 clusterNode 实例（即代码中的 sender 变量）。在两个节点第一次握手的时候，当前 Cluster 节点肯定是查找不到对端 Cluster 节点对应的 clusterNode 实例的。此时，当前节点会为发送 MEET 消息的对端节点创建一个 clusterNode 实例（其 name 字段值是随机生成的，flags 字段中设置了 HANDSHAKE 标志位），并记录到 clusterState->nodes 字典中，如下图所示。
+4. 接下来，当前节点会调用 clusterProcessGossipSection() 函数解析消息中携带的 clusterMsgDataGossip 数组。但是，在第一次接收到未知节点（也就是不在 clusterState->nodes 字典中节点）发来的 MEET 消息时，并不会直接信任它的 Gossip 信息，所以此次调用没有进行什么有效操作，clusterProcessGossipSection() 函数的其他逻辑先按下不表。
+5. 最后，调用 clusterSendPing() 函数返回一个 PONG 消息给对端节点。PONG 消息的组装和发送逻辑与前文分析 MEET 消息的完全一致，这里不再重复。
 
 下图展示了 B 节点处理完 MEET 消息之后两个节点的状态：
-
 
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1e736b8317324faba1875d5b1ac37ba7~tplv-k3u1fbpfcp-watermark.image?)
 
@@ -348,18 +343,16 @@ if (type == CLUSTERMSG_TYPE_PING || type == CLUSTERMSG_TYPE_PONG ||
 
 下图展示了节点 A 处理完节点 B 返回的 PONG 消息之后的状态：
 
-
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/362a31b6e5664ecda2ef0085ac716223~tplv-k3u1fbpfcp-watermark.image?)
 
 ## 发送 PING 消息
 
 继续上面的示例，在节点 A 处理完节点 B 返回的 PONG 消息之后，就已经可以正确感知到节点 B 了，并且明确知晓自己与节点 B 之间网络连接。接下来，A 节点就可以通过该连接定时向节点 B 发送 PING 命令进行探活了。但是，此时的节点 B 缺失了节点 A 的很多信息，例如：
 
--   不知道节点 A 的 name 值是什么。因为处理 MEET 消息时创建的 clusterNode 实例中，name 是随机生成的，并不是节点 A 真正的 name。
--   不知道自身与节点 A 的连接是哪个。因为被动创建的 clusterLink 实例中的 node 为 NULL。
+- 不知道节点 A 的 name 值是什么。因为处理 MEET 消息时创建的 clusterNode 实例中，name 是随机生成的，并不是节点 A 真正的 name。
+- 不知道自身与节点 A 的连接是哪个。因为被动创建的 clusterLink 实例中的 node 为 NULL。
 
 节点 A、B 之间的连接状态如下图所示，只存在 A 到 B 的主动连接，不存在 B 到 A 的主动连接：
-
 
 <p align=center><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5182d7aa05854809adaa54e85c418bcf~tplv-k3u1fbpfcp-watermark.image?" alt="image.png"  /></p>
 
@@ -368,7 +361,6 @@ if (type == CLUSTERMSG_TYPE_PING || type == CLUSTERMSG_TYPE_PONG ||
 通过前文的分析可知，节点 A 的 flags 中只设置了 HANDSHAKE 标志位，未设置 MEET 标记位，所以这里建连完成之后，只会调用 clusterSendPing() 函数发送的一条 PING 消息。节点 A 收到 PING 消息之后会返回一条 PONG 消息，节点 B 在收到 PONG 消息之后，会更新节点 A 的 name，清除 HANDSHAKE 标志位，并更新 ping_sent 和 pong_received 时间戳。
 
 下图展示了节点 B 主动与节点 A 建连的全流程：
-
 
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c7a957fde6994a2ca55d38e1b89f7770~tplv-k3u1fbpfcp-watermark.image?)
 

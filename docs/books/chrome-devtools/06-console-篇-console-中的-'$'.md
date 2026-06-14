@@ -24,7 +24,7 @@
 
 ## 2. `$_`
 
-调试的过程中，你经常会通过打印查看一些变量的值，但如果你想看一下上次执行的结果呢？再输一遍表达式吗？ 
+调试的过程中，你经常会通过打印查看一些变量的值，但如果你想看一下上次执行的结果呢？再输一遍表达式吗？
 
 这时候 `$_` 就派上了用场，`$_` 是对上次执行的结果的 **引用** ：
 
@@ -36,6 +36,6 @@
 
 有时你只是想玩玩新出的 `npm` 包，现在不用再大费周章去建一个项目测试了，只需要在 [Chrome插件:Console Importer](https://chrome.google.com/webstore/detail/console-importer/hgajpakhafplebkdljleajgbpdmplhie/related) 的帮助之下，快速的在 `console` 中引入和测试一些 `npm` 库。
 
-运行 `$i('lodash')` 或者 `$i('moment') ` 几秒钟后，你就可以获取到 `lodash / momentjs` 了:
+运行 `$i('lodash')` 或者 `$i('moment')` 几秒钟后，你就可以获取到 `lodash / momentjs` 了:
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/7/16785da0dea963fb~tplv-t2oaga2asx-image.image)

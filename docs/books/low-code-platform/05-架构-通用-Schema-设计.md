@@ -104,9 +104,9 @@ const config: FormRenderProps['config'] = [
 
 代表着当前协议的版本，用于后续协议 **break change** 带来的兼容问题，可以通过版本来区分渲染器和解析器。而版本的升降级也是有规范可循的，如社区中比较常见的像[semver](https://semver.org/)，大体上的规则如下：
 
-*   **major**: 如果包含 **Break Change**(破坏更新)的内容;
-*   **minor**: 当你产出了一个新的功能的时候（无破坏更新）;
-*   **patch**: 当你修复了一个 **BUG** 问题的时候（无破坏更新）。
+* **major**: 如果包含 **Break Change**(破坏更新)的内容;
+* **minor**: 当你产出了一个新的功能的时候（无破坏更新）;
+* **patch**: 当你修复了一个 **BUG** 问题的时候（无破坏更新）。
 
 ### 依赖管理(library)
 
@@ -195,9 +195,9 @@ lowcodeSandBox?.loadDataSource('getUserList', ...其他参数): Promise<any>
 React.createElement(type, props, children);
 ```
 
-*   **type**: 可以是**原生标签**，也可以是 **函数组件** 和 **Class 组件** 等;
-*   **props**：组件元素需要的属性;
-*   **chidren**：组件内容;
+* **type**: 可以是**原生标签**，也可以是 **函数组件** 和 **Class 组件** 等;
+* **props**：组件元素需要的属性;
+* **chidren**：组件内容;
 
 熟悉 **React** 的同学都知道，在编译时我们所写的 **JSX|TSX** 会被编辑成 `React.createElement` 执行函数，而我们抽象出来的 **Schema** 结构也是做类似的事情。
 
@@ -300,8 +300,8 @@ const schema = JSON.stringify({
 
 这里需要注意的是，你的协议一定要遵守 **JSON** 数据格式的约束，否则会导致解析时出现问题，为了避免开发中出现解析 **Schema** 产生不可预期的错误，可以使用第三方推荐的 **JSON Schema** 库来检验 **Schema** 是否符合规范：
 
-*   [json-schema-validator](https://github.com/networknt/json-schema-validator "networknt/json-schema-validator")
-*   [json-schema](https://github.com/everit-org/json-schema "everit-org/json-schema")
+* [json-schema-validator](https://github.com/networknt/json-schema-validator "networknt/json-schema-validator")
+* [json-schema](https://github.com/everit-org/json-schema "everit-org/json-schema")
 
 ## 总结
 

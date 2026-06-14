@@ -390,8 +390,6 @@ PROJECT
   /<root>/<project>/src/foo
   ```
 
-   
-
   是否是一个文件夹？
 
   - 此文件夹内部是否包含 `package.json`，且其中使用 `main` 属性描述了这个文件夹的入口文件？

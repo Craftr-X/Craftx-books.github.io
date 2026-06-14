@@ -9,9 +9,10 @@
 如果是从第一张开始到现在，目前手上应该是有 **3** 个工程，其中 **User** 工程使用的 **MySQL** 作为 **Demo**，低代码 **low-code-test** 则使用 **MongoDB** 作为底层数据库。
 
 之所以低代码的项目会选择 **MongoDB**，基于下述一些个人的见解：
-1.  **灵活性**：**MongoDB** 是一种文档数据库，与传统的关系型数据库不同。文档数据库的数据模型更加灵活，可以轻松地存储各种类型的数据，而不需要预定义模式或表结构。**而我们的服务端要对所有搭建产品做通用性的支持，需要要面对各种未知的数据结构，所以采取此方案是比较合适的选择**；
-2.  **可扩展性**：**MongoDB** 是一种分布式数据库，可以轻松地扩展到多个节点，以支持高度并发的应用程序。
-3.  **性能**：**MongoDB** 使用内存映射文件来提高读取和写入性能。这使得它在处理大量数据时表现出色，因为它可以利用系统的 **RAM** 来提高查询速度。
+
+1. **灵活性**：**MongoDB** 是一种文档数据库，与传统的关系型数据库不同。文档数据库的数据模型更加灵活，可以轻松地存储各种类型的数据，而不需要预定义模式或表结构。**而我们的服务端要对所有搭建产品做通用性的支持，需要要面对各种未知的数据结构，所以采取此方案是比较合适的选择**；
+2. **可扩展性**：**MongoDB** 是一种分布式数据库，可以轻松地扩展到多个节点，以支持高度并发的应用程序。
+3. **性能**：**MongoDB** 使用内存映射文件来提高读取和写入性能。这使得它在处理大量数据时表现出色，因为它可以利用系统的 **RAM** 来提高查询速度。
 
 > 但这并非是一定正确的选择，具体的技术选型还是要依据团队的实际情况来指定，比如团队运维并没有实际维护 **MongoDB** 的情况下，使用 **MySQL** 也是没问题，如果能在模型结构确定好的情况下来设计表结构就更棒了。
 
@@ -22,10 +23,10 @@ nest g resource site --project low-code-test
 nest g resource page --project low-code-test
 nest g resource pageConfig --project low-code-test
 ```
+
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b66fb5feac424a448968b3060b1f9e64~tplv-k3u1fbpfcp-watermark.image?)
 
 再将之前测试的 **user** 模块删除（注意是 **low-code-test** 下的 **user** 模块，之前我们做测试使用到的。），然后再次调整一下模块，使得结构更加清晰。
-
 
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/730a8b28285c477e8ec0c93808a5a60c~tplv-k3u1fbpfcp-watermark.image?)
 
@@ -34,6 +35,7 @@ nest g resource pageConfig --project low-code-test
 在上一章中，我们使用了新建 **Provide** 文件来注册用户数据库连接，这次我们可以选择直接在 **module.ts** 中引入的方式：
 
 `site.module.ts`：
+
 ``` ts
 import { Module } from '@nestjs/common';
 import { SiteService } from './site.service';
@@ -55,6 +57,7 @@ export class SiteModule { }
 ```
 
 `page.module.ts`：
+
 ```ts
 import { Module } from '@nestjs/common';
 import { PageService } from './page.service';
@@ -145,6 +148,7 @@ export class AppModule { }
 接下来，创建对应的实体类:
 
 `site.mongo.entity.ts`:
+
 ```
 import {
   Entity,
@@ -213,6 +217,7 @@ export class Site {
 可以看到绝大大部分的数据类型其实都已经兼容了，只有主键的装饰器被 `ObjectIdColumn` 替换，类型也变成了 **MongoDB** 专有的 `ObjectId`。
 
 `src/site/dto/create-site.dto.ts`:
+
 ```ts
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';

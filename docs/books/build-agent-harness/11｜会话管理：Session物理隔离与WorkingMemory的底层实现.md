@@ -1,4 +1,5 @@
 # 11｜会话管理：Session 物理隔离与 Working Memory 的底层实现
+
 你好，我是Tony Bai。欢迎来到《从0开始构建 Agent Harness》专栏的第十一讲。
 
 在上一讲中，我们通过 `PromptComposer`（动态提示词组装器）让 Agent 拥有了阅读项目专属规范（ `AGENTS.md`）和外挂技能（Skills）的能力。Agent 不再是一个“没有背景故事”的孤儿，而是能够瞬间化身为遵守团队纪律、拥有团队技能的高级工程师。
@@ -10,7 +11,6 @@
 - **Console 场景**：在终端启动时，Harness 通常会以当前目录（WorkDir）为单位，建立一个默认的 Main Session。
 
 - **飞书 / 微信 / Slack 场景**：如果 Agent 作为一个服务端运行，它可能会同时接收来自“飞书研发群 A”“飞书运维群 B”以及“微信用户 C”的指令。
-
 
 试想一下：群 A 的人在让 Agent 重构 `main.go`，而群 B 的人同时让 Agent 查服务器日志。如果我们只有一个全局的 `contextHistory` 切片，这两个完全不相干的任务指令和文件内容就会混杂在一起发给大模型。大模型瞬间就会精神分裂。
 
@@ -202,7 +202,6 @@ func (sm *SessionManager) GetOrCreate(id string, workDir string) *Session {
 1. `GlobalSessionMgr` 通过一个带有 `sync.RWMutex` 锁的 Map 实现了高并发下的物理隔离。飞书后台无论收到多少人的群聊信息，都可以通过分配不同的 SessionID 各自安好。
 
 2. `GetWorkingMemory` 中的边界处理（丢弃断头的 ToolResult），是你在“调包”开发时绝对接触不到的底层智慧。它从根源上杜绝了因为暴力截断历史而引发的 API 崩溃。
-
 
 ### 第 2 步：重构 AgentEngine 支持 Session 驱动
 
@@ -490,7 +489,6 @@ README.md 中记录了一个密钥：token_12345
 
 2. **Working Memory 截断生效**：在 Session A 的 Turn 2 中，由于我们中间塞入了 6 条闲聊信息，突破了 `Limit=6` 的限制。我们在第一轮读取的 `ToolResult`（包含 `token_12345` 的日志）被完美地丢弃在了 Working Memory 之外。因此大模型如实地告诉你：“我忘了”。
 
-
 这极大程度地保护了 API 的 Token 消耗，确保了长程任务绝不会因为闲聊而引发上下文超限。
 
 ### 架构拾遗：Registry 与工作区绑定的工业级真相
@@ -505,7 +503,6 @@ README.md 中记录了一个密钥：token_12345
 
 2. **OpenClaw**：作为一个可以后台运行的守护进程（Daemon），它的默认工作区通常被死死绑定在 `~/.openclaw/workspace`。无论你是通过飞书、微信还是 API 唤醒它，所有的 Session（多端并发用户） **共享并操作着这同一片物理领地**。
 
-
 因此，引擎全局共享一个 `Registry` 实例，并且绑定一个全局唯一的 `WorkDir`，才是目前工业级 Agent 的主流设计。我们在本讲测试脚本中所做的“强行分配不同工作区”，仅仅是为了极简地向你演示 Session 物理隔离在“内存层”的威力而已。
 
 如果你的业务真的需要让同一个引擎进程服务于多个互不干扰的项目目录，那么你必须在底层的 `BaseTool.Execute(ctx, args)` 接口中，通过 `context.Context` 将当前 Session 的动态 `WorkDir` 透传给工具，而不是像我们现在这样在 `NewReadFileTool` 时就把路径写死。
@@ -519,7 +516,6 @@ README.md 中记录了一个密钥：token_12345
 2. **截断与连续性（Working Memory）**：大模型的内存不仅极其昂贵，而且塞入过多无关的“古老记忆”会导致幻觉。我们通过 `GetWorkingMemory(limit)` 方法，将向 API 发起请求的上下文规模严格限制在了最近 N 个回合。更重要的是，我们巧妙地处理了截断边缘的 `ToolResult` 孤儿问题，规避了底层的 400 报错。
 
 3. **彻底的生命周期解耦**：经过本讲的重构， `engine.Run` 方法彻底沦为了一个纯粹的“打工执行器”。它不在内部维护状态，而是依靠你喂给它的 `Session` 实例进行推理。
-
 
 然而，我们虽然通过 Working Memory 限制了对话轮数（条数），但并没有限制单条消息的体积。在真实的 Coding Agent 场景中，往往只需要一个大动作——比如调用 `read_file` 误读了一个 5MB 的 JSON 数据库文件。这仅仅是一轮（1 条消息）的返回结果，就能瞬间打穿模型的物理极限（比如128K Token），引发灾难性崩溃。
 

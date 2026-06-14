@@ -18,20 +18,20 @@ Docker Desktop 产品线包含两个软件，也就是针对 Windows 系统的 D
 
 对于 Windows 系统来说，安装 Docker for Windows 需要符合以下条件：
 
-*   必须使用 Windows 10 Pro ( 专业版 )
-*   必须使用 64 bit 版本的 Windows
+* 必须使用 Windows 10 Pro ( 专业版 )
+* 必须使用 64 bit 版本的 Windows
 
 对于 macOS 系统来说，安装 Docker for Mac 需要符合以下条件：
 
-*   Mac 硬件必须为 2010 年以后的型号
-*   必须使用 macOS El Capitan 10.11 及以后的版本
+* Mac 硬件必须为 2010 年以后的型号
+* 必须使用 macOS El Capitan 10.11 及以后的版本
 
 另外，虚拟机软件 VirtualBox 与 Docker Desktop 兼容性不佳，建议在安装 Docker for Windows 和 Docker for Mac 之前先卸载 VirtualBox。
 
 在确认系统能够支持 Docker Desktop 之后，我们就从 Docker 官方网站下载这两个软件的安装程序，这里直接附上 Docker Store 的下载链接，供大家直接下载：
 
-*   [Docker for Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows) ( [https://store.docker.com/editions/community/docker-ce-desktop-windows](https://store.docker.com/editions/community/docker-ce-desktop-windows) )
-*   [Docker for Mac](https://store.docker.com/editions/community/docker-ce-desktop-mac) ( [https://store.docker.com/editions/community/docker-ce-desktop-mac](https://store.docker.com/editions/community/docker-ce-desktop-mac) )
+* [Docker for Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows) ( [https://store.docker.com/editions/community/docker-ce-desktop-windows](https://store.docker.com/editions/community/docker-ce-desktop-windows) )
+* [Docker for Mac](https://store.docker.com/editions/community/docker-ce-desktop-mac) ( [https://store.docker.com/editions/community/docker-ce-desktop-mac](https://store.docker.com/editions/community/docker-ce-desktop-mac) )
 
 安装 Docker for Windows 和 Docker for Mac 的方法十分简单，按 Windows 或 macOS 常见的软件安装方式安装即可。
 
@@ -138,8 +138,8 @@ Docker 官方为我们找到了用于搭建虚拟 Linux 系统的软件，即 Or
 
 安装 Docker Toolbox 的过程也十分简单，下载安装包并按常规软件一样安装即可。这里直接我直接提供给大家 Docker Toolbox 安装包的连接，方便大家下载。
 
-*   [Docker Toolbox for Windows](https://download.docker.com/win/stable/DockerToolbox.exe) ( [https://download.docker.com/win/stable/DockerToolbox.exe](https://download.docker.com/win/stable/DockerToolbox.exe) )
-*   [Docker Toolbox for Mac](https://download.docker.com/mac/stable/DockerToolbox.pkg) ( [https://download.docker.com/mac/stable/DockerToolbox.pkg](https://download.docker.com/mac/stable/DockerToolbox.pkg) )
+* [Docker Toolbox for Windows](https://download.docker.com/win/stable/DockerToolbox.exe) ( [https://download.docker.com/win/stable/DockerToolbox.exe](https://download.docker.com/win/stable/DockerToolbox.exe) )
+* [Docker Toolbox for Mac](https://download.docker.com/mac/stable/DockerToolbox.pkg) ( [https://download.docker.com/mac/stable/DockerToolbox.pkg](https://download.docker.com/mac/stable/DockerToolbox.pkg) )
 
 安装完 Docker Toolbox 后，我们有几项与 Docker for Windows 和 Docker for Mac 不同的使用方法需要注意。
 

@@ -35,7 +35,6 @@
 | lowcode-engine（宜搭） | ☑️ |  | ☑️ |
 | amis | ☑️ |  | ☑️ |
 
-
 可以看出上述的 **LowCode** & **D2C** 产品，不管是商业化还是开源项目，可视化搭建类型的低代码产品多数都是使用 **DOM** 方案，而 **D2C** 类型的产品则是使用 **Canvas** 会多一些。
 
 ## Canvas Vs DOM
@@ -79,6 +78,7 @@
   console.log(`DOM render time: ${renderTime} ms`);
 </script>
 ```
+
 ```html
 
 <canvas height="500px" width="500px" id="MyCanvas" ></canvas>
@@ -106,6 +106,7 @@
 浏览器 **DOM** 的优势在于每一个节点都是独立开的，并且具有一套完整易用的浏览器事件系统提供给开发者进行调用，而 **Canvas** 则是在一个画布平面当中，只能通过元素的 **x**，**y** 的距离边界来确定交互的元素，然后通过事件的广播进行操作。
 
 **首先**：看下 **DOM** 的事件绑定：
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -160,6 +161,7 @@
     });
 </script>
 ```
+
 上述示例中，分别用 **DOM** 和 **Canvas** 实现了一个点击元素的事件。可以看到，两者的实现难度还是存在很大差异的，**DOM** 直接使用 **onclick** 来支持相关的事件绑定，而 **Canvas** 则是在事件内部通过 **event** 提供的 **x**，**y** 坐标确定点击的内容归属。
 
 ### 选择
@@ -173,6 +175,7 @@
 最后就是 **Canvas** 通常不利于搜索引擎优化（**SEO**），因为它的内容不易于解析和理解。同时也不支持选择、复制和粘贴等基本的用户界面功能，而 **DOM** 确很好的支持了这些点。
 
 因此在编辑器渲染技术选型中，需要根据具体的应用场景和需求来选择使用哪种技术：
+
 - 需要高性能的图形和动画效果，不需要 **SEO**，可以选择 **Canvas**;
 - 需要更好的可维护性和易用性，可以选择 **DOM**。
 
@@ -185,6 +188,7 @@
 所以最终我们可视化搭建的设计器也将选择 **DOM** 作为搭建技术方案，至于在设计器中存在大量组件渲染卡顿的情况，在本章开头也提到了，除了基础的原生技术方案有区别之外，还可以通过一些额外的研发设计方案来规避，例如**数据组装与视图渲染分离**等来解决性能问题，这些具体的优化措施我们将放在搭建实战篇进行更多的细节讲解。
 
 ## 参考
+
 - [The Future Web: Will Canvas Rendering Replace the DOM?](https://medium.com/young-coder/the-future-web-will-canvas-rendering-replace-the-dom-847be872884c)
 - [https://www.youtube.com/watch?v=SwpS6fP1_hE](https://www.youtube.com/watch?v=SwpS6fP1_hE)
 - [Google Docs is switching to canvas-based rendering. Here's what that means.](https://zapier.com/blog/google-docs-canvas-based-rendering/)

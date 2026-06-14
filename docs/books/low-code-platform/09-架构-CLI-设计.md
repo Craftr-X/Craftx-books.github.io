@@ -4,7 +4,6 @@
 
 所以本次 **CLI** 的设计会更加较为通用，不再与单纯的业务开发耦合过多。
 
-
 ![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/07032c54156346feb621fcb99f024685~tplv-k3u1fbpfcp-watermark.image?)
 
 ## 初始化工程/管理
@@ -14,10 +13,10 @@
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c3e2594940d64c45ba3691b4f0b0796c~tplv-k3u1fbpfcp-watermark.image?)
 
 **nodegit**、**download-git-repo** 和 **git-clone** 都是用于在 **Node.js** 环境中从远程 **Git** 仓库中下载代码的库，它们之间的主要区别如下：
+
 - 功能：**nodegit** 是一个完整的 **Git** 库，提供了一套完整的 **Git API**，可以用于管理 **Git** 仓库、提交代码等操作。**download-git-repo** 和 **git-clone** 则是专门用于下载 **Git** 仓库中的代码的库。
 - 依赖：**nodegit** 和 git-clone 都依赖于 **libgit2** 库，而 **download-git-repo** 则不依赖于任何第三方库。
 - 使用方式：**nodegit** 和 **git-clone** 都是使用 **Git** 命令行工具来下载代码，而 **download-git-repo** 则是直接调用 **Git** 仓库的 **API** 来下载代码。
-
 
 除了拉取模板之外，我们还会借助封装的 **CLI** 来管理工程，所以最终会选择 **nodegit** 进行二次封装，简化使用过程中 **Git** 操作的命令。
 
@@ -26,6 +25,7 @@
 使用 **Open Api** 与用户系统进行交互，通常情况下只有登录与鉴权两个模块。
 
 #### 登录
+
 - 一般都是登录之后将 **token** 缓存在本地，过期之后再重新授权。
 - 如果嫌麻烦，也可以直接加密缓存用户名与密码，再过期之后自动调用登录接口维持登录态，这样可以让用户后期无感知使用。
 
@@ -43,6 +43,7 @@
 由于新的 **CLI** 设计将不再与脚手架耦合，所以构建的具体配置将内置在脚手架中，例如：**Rollup**、**Webpack**、**Vite** 等。
 
 **CLI** 将只接受**构建前、构建、构建后三种构建命令并执行**，通常情况下可以与脚手架约定俗成比如：
+
 - `npm run pre` 构建前执行脚本
 - `npm run build` 构建脚本
 - `npm run did` 构建完成之后执行脚本
@@ -58,7 +59,6 @@
 ```
 
 > 除此之外，构建过程还需要区分各个环境并注入对应的环境变量，让实际工程构建的过程中根据环境变量选择不同的配置。
-
 
 ## 部署
 

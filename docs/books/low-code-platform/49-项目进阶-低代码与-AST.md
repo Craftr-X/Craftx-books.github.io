@@ -50,9 +50,9 @@ babel的操作过程就是将我们编写的代码通过词法、语法的解析
 
 完整的页面构建器将允许最终用户本质上构建 UI 组件，就像开发人员编写 React 组件一样。从本质上讲，这意味着页面构建器将是一个具有 UI 抽象的代码编辑器。最终用户能够创建几乎与开发人员可以用代码编写的组件一样复杂的 UI 组件。
 
--   逆向：基于通用DSL协议生成的前端工程，很难将其逆向成为编辑器的通用协议，大多数情况下只能单向导出，而基于AST可以双向进行管理，极大程度上提高灵活度。
--   语义：每个低代码平台的DSL都不一致，多数情况下很难复用原有的组件资产，多数情况下都是通过中间层添加转换器的方式来渲染React组件，从而达到组件与物料的解耦，而AST协议能直达源码，可以减少很多无意义的开销
--   ProCode：AST协议在转代码的场景下具有天然的优势，本质上是基于JavaScript来抽象的数据结构，那么还原到代码自然水到渠成。
+- 逆向：基于通用DSL协议生成的前端工程，很难将其逆向成为编辑器的通用协议，大多数情况下只能单向导出，而基于AST可以双向进行管理，极大程度上提高灵活度。
+- 语义：每个低代码平台的DSL都不一致，多数情况下很难复用原有的组件资产，多数情况下都是通过中间层添加转换器的方式来渲染React组件，从而达到组件与物料的解耦，而AST协议能直达源码，可以减少很多无意义的开销
+- ProCode：AST协议在转代码的场景下具有天然的优势，本质上是基于JavaScript来抽象的数据结构，那么还原到代码自然水到渠成。
 
 目前而言AST协议有很多优点，但是缺点也同样明显，不可忽视。在这里仅仅举例一些常见的场景，作为未来编辑器的形状，协议驱动的模式肯定会越来越完善。在后面小册工程的更新中，也会慢慢的去进行尝试。
 
@@ -64,7 +64,7 @@ babel的操作过程就是将我们编写的代码通过词法、语法的解析
 
 ## 资源
 
--   [网易云音乐 Tango 低代码引擎正式开源！](https://juejin.cn/post/7273051203562749971?searchId=202402041718469483D25CE0EDCA0DA969#heading-3)
--   [babeljs](https://babeljs.io/docs/usage)
--   [rekajs](https://reka.js.org/docs/introduction)
--   [Future of Craft.js - taking it to the next level! ](https://github.com/prevwong/craft.js/issues/507)
+- [网易云音乐 Tango 低代码引擎正式开源！](https://juejin.cn/post/7273051203562749971?searchId=202402041718469483D25CE0EDCA0DA969#heading-3)
+- [babeljs](https://babeljs.io/docs/usage)
+- [rekajs](https://reka.js.org/docs/introduction)
+- [Future of Craft.js - taking it to the next level!](https://github.com/prevwong/craft.js/issues/507)

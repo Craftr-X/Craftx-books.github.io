@@ -80,9 +80,11 @@ Use this contract for every technical booklet, Markdown folder, or EPUB ebook im
 **Validation checklist**
 
 - Run a residual scan and fix every match:
+
   ```bash
   rg -n "\\[图片：|\\[缺失资源：|缺失资源|图片未找到|text[0-9]+\\.html|filepos" docs/books/<slug>
   ```
+
 - Validate local Markdown links and image references from each imported Markdown file. Build does not catch every bad link because `ignoreDeadLinks: true` is enabled.
 - If `scripts/import-book.mjs` changes, add focused coverage in `scripts/import-book.test.mjs` and run `node --test scripts/import-book.test.mjs`.
 - Always run `npm run build`; existing code-block language warnings are non-blocking only when the build exits successfully.

@@ -518,7 +518,7 @@ await user.save();
 const newUsers = await User.find({ isActive: true });
 ```
 
-TypeORM中，Active Record 模式下需要让实体类继承 `BaseEntity`类，然后实体类上就具有了各种操作方法，如 `save` `remove` `find `方法等。Active Record 模式最早由 Martin Fowle在 ***企业级应用架构模式*** 一书中命名，即直接在对象上支持相关的 CRUD 方法。
+TypeORM中，Active Record 模式下需要让实体类继承 `BaseEntity`类，然后实体类上就具有了各种操作方法，如 `save` `remove` `find`方法等。Active Record 模式最早由 Martin Fowle在 ***企业级应用架构模式*** 一书中命名，即直接在对象上支持相关的 CRUD 方法。
 
 而 Data Mapper 下的代码则是这样的：
 

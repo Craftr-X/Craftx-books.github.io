@@ -1,9 +1,10 @@
 # console篇 - console中骚操作
 
 ## 前言
+
 我最开始接触前端的时候，学会用的就是 `console.log` ，甚至现在，大部分情况也还在用它调试，但是，在不同的场景下，除了 `log` ，其实有更好的选择。
 
-## 1. `console.assert` 
+## 1. `console.assert`
 
 在 [MDN](https://developer.mozilla.org/en-US/docs/Web/API/console/assert)  中是这样定义的
 
@@ -26,17 +27,14 @@ console.assert(assertion, msg [, subst1, ..., substN]); // c-like message format
 
 有时即使你 `console.log` 一个简单的变量，你可能会忘记（或混淆）哪一个是那个。那当你有不同的变量需要打印的时候，阅读起来会更费劲。
 
-
 假如有这么一堆你想要输出但看起来并不易读的数据
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/1/22/16874442f819a4bf~tplv-t2oaga2asx-image.image)
 
-
 > **“哪一个值对应哪一个变量来着？”**
 
-为了让它变得更加易读，你可以打印一个对象 - 只需将所有 `console.log` 的参数包装在大括号中。感谢 `ECMAScript 2015 ` 中引入了 `enhanced object literal(增强对象文字面量)` ，所以加上 `{}` 已经是你需要做的全部事情了：
+为了让它变得更加易读，你可以打印一个对象 - 只需将所有 `console.log` 的参数包装在大括号中。感谢 `ECMAScript 2015` 中引入了 `enhanced object literal(增强对象文字面量)` ，所以加上 `{}` 已经是你需要做的全部事情了：
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/1/22/1687447f46cb18a2~tplv-t2oaga2asx-image.image)
-
 
 ## 3.`console.table`
 
@@ -47,7 +45,6 @@ console.assert(assertion, msg [, subst1, ..., substN]); // c-like message format
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/7/167893640e9ba1d3~tplv-t2oaga2asx-image.image)
 
 > 对于后台而言，只有 `node` 版本大于 `10` 以上， `console.table` 才能起作用
-
 
 ## 4. table 和 `{}` 的配合
 
@@ -117,6 +114,7 @@ function log(message) {
 
     foo();
 ```
+
 运行结果如下：
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/1/14/1684b5b03d4ebb82~tplv-t2oaga2asx-image.image)
@@ -127,7 +125,7 @@ function log(message) {
 
 有两种方式来实现：
 
-- 在回调方法的内部使用 `console.log` 
+- 在回调方法的内部使用 `console.log`
 - **直接使用 `consolelog` 来作为回调方法**。
 
 我推荐使用第二种，因为这不仅减少了输入，还可能在回调中接收多个参数。(这在第一个解决方案中是没有的)

@@ -51,12 +51,6 @@ function App() {
 export default App
 ```
 
-  
-
-
-  
-
-
 然后是 .d.ts 文件，前面我们已经了解过，这就是类型声明文件，我们打开 vite-env.d.ts 文件，看看一个 React 工程需要哪些类型声明才能正常运转？
 
 ```typescript
@@ -112,9 +106,6 @@ const App2: React.FC = () => {
   return <Home owner={599} />;
 };
 ```
-
-  
-
 
 除了这里，再想想还有什么地方我们会迫切地需要类型？前端页面中最重要的一个概念就是状态管理，而在 React 中，我们接触状态管理最常用的方式就是 React Hooks 中的 useState：
 

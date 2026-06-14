@@ -6,6 +6,7 @@ aside: false
 editLink: false
 ---
 # 认知觉醒
+>
 > 开启自我改变的原动力
 
 ## 目录

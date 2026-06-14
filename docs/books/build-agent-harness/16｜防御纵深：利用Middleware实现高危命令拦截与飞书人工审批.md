@@ -1,4 +1,5 @@
 # 16｜防御纵深：利用 Middleware 实现高危命令拦截与飞书人工审批
+
 你好，我是 Tony Bai。欢迎来到《从0开始构建 Agent Harness》专栏的第十六讲。
 
 在前面的讲解中，我们已经为 `go-tiny-claw` 构建了一套极其聪明的自驱体系：它拥有强大的“极简工具集”，遇到错误懂得自我“疗愈”（Error Recovery），陷入死胡同能被系统“当头棒喝”（System Reminders）。
@@ -30,7 +31,6 @@
 3. **Human-in-the-loop**：通过 [第 9 讲](https://time.geekbang.org/column/article/975185) 建立的 `Reporter` 通道，向飞书发送一张包含“同意”和“拒绝”指令的交互信息。
 
 4. **放行或阻断**：人类在飞书上确认回复后，触发 Webhook 回调，通过 Go 的 `channel` 发送信号解除阻塞。同意则继续执行；拒绝则直接向模型返回“人类拒绝执行”的报错。
-
 
 让我们用一张时序图，来看看这个极其精妙的命令拦截、协程挂起与唤醒全景：
 
@@ -532,7 +532,6 @@ $go run cmd/claw/main.go
 2. **Middleware 模式的优雅解耦**：我们没有修改任何一个底层工具（如 `bash.go`），也没有污染核心引擎（Main Loop）。通过在 `Tool Registry` 层注入拦截器数组，我们实现了解耦的安检哨卡。
 
 3. **Human-in-the-loop 的最终闭环**：通过结合飞书 Webhook 与 Go 的 `sync.RWMutex/channel` 阻塞模型，大模型的“破坏力”被关进了笼子里，最终的“执行按钮”永远掌握在人类手中。
-
 
 至此，我们的微型操作系统 `go-tiny-claw` 在 **“单兵作战”** 上的所有基础设施已经全部搭建完毕。
 

@@ -1,4 +1,5 @@
 # 24｜Stable Diffusion：最热门的开源AI画图工具
+
 你好，我是徐文浩。
 
 [上一讲](https://time.geekbang.org/column/article/653489)，我们一起体验了CLIP这个多模态的模型。在这个模型里，我们已经能够把一段文本和对应的图片关联起来了。看到文本和图片的关联，想必你也能联想到过去半年非常火热的“文生图”（Text-To-Image）的应用浪潮了。相比于在大语言模型里OpenAI的一枝独秀。文生图领域就属于百花齐放了，OpenAI陆续发表了DALL-E和 [DALL-E 2](https://labs.openai.com/)，Google也不甘示弱地发表了 [Imagen](https://imagen.research.google/)，而市场上实际被用得最多、反馈最好的用户端产品是 [Midjourney](https://midjourney.com/home/)。

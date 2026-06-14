@@ -1,9 +1,9 @@
 # console篇 - 异步的 console
 
 如今，越来越多与浏览器有关的 API 都是 *基于 `Promise` 的* 。当你使用 `promise` 的时候通常配套用 `.then(处理方法)` 或者 将 `promise` 包裹在 `async` 方法中，再使用 `await` 来接收结果。
- 
+
 我们在 `JavaScript/TypeScript` 中大量使用的东西，但如果在 `Console` 中书写这样的结构很不方便。
- 
+
 像下面这样
 
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/12/1679e0201c187733~tplv-t2oaga2asx-image.image)
@@ -13,7 +13,6 @@
 ![](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2018/12/12/1679e020118e0846~tplv-t2oaga2asx-image.image)
 
 这样太难用了！不是输入之前就被触发了，就是括号漏写了...
-
 
 > **但如果 `console` 默认就被 `async` 包裹呢？**
 

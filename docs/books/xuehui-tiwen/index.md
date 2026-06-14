@@ -6,6 +6,7 @@ aside: false
 editLink: false
 ---
 # 学会提问
+>
 > 批判性思维入门经典，原书第12版
 
 ## 目录

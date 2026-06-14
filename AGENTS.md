@@ -13,6 +13,8 @@ This repository is a VitePress books site. Main site content lives in `docs/`, w
 - `npm run generate:sidebar`: regenerate `sidebar-generated.json` after content structure changes. This file is gitignored (a build-time artifact); `config.mts` regenerates it on demand if missing, and `prebuild` refreshes it before every build.
 - `npm run import:book -- ./path/to/book --slug my-book`: import a Markdown folder or EPUB into `docs/books/`.
 - `npm run check:deadlinks`: scan all internal markdown links and image references under `docs/` for broken targets (external http(s) links are not checked).
+- `npm run lint`: check all Markdown formatting via markdownlint-cli2 (configured in `.markdownlint-cli2.yaml`; runs in CI). Structural rules for the EPUB/juejin book sources are intentionally disabled.
+- `npm run lint:fix`: auto-fix Markdown formatting issues (trailing spaces, blank lines, newlines). Run independently of `prebuild`; do not wire it into the build flow.
 - `node --test scripts/import-book.test.mjs`: run the Node test suite for the import script.
 - `node scripts/verify-import.mjs <slug>`: run post-import verification (pass/fail JSON report).
 
@@ -64,9 +66,11 @@ Use this spec whenever importing a technical booklet, Markdown source, or EPUB e
 **Validation checklist**
 
 - Run a residual scan and fix every match:
+
   ```bash
   rg -n "\\[图片：|\\[缺失资源：|缺失资源|图片未找到|text[0-9]+\\.html|filepos" docs/books/<slug>
   ```
+
 - Validate local Markdown links and image references from each imported Markdown file. Build success alone is not enough because `ignoreDeadLinks: true` is enabled.
 - If importer logic changes, add focused tests in `scripts/import-book.test.mjs` and run `node --test scripts/import-book.test.mjs`.
 - Always run `npm run build`; existing code-block language warnings are non-blocking only when the build exits successfully.

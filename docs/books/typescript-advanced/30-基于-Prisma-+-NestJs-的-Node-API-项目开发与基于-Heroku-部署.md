@@ -66,7 +66,7 @@ heroku git:remote -a <你的应用名>
 
 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/be4728eb4e8d4501aa0d753c675e715d~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp)
 
-数据库的链接会被以环境变量 `process.env.DATABASE_URL `注入进来，来到应用配置页面，点击显示环境变量：
+数据库的链接会被以环境变量 `process.env.DATABASE_URL`注入进来，来到应用配置页面，点击显示环境变量：
 
 ![imagee38ce6a381dc9b3b.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b32f3cf2e9154e68a3aa71a3f16f6e7f~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp)
 
@@ -155,7 +155,7 @@ export class AppModule {}
 
 ```typescript
 async function bootstrap() {
-	// ...
+ // ...
   const PORT = process.env.PORT ?? 3000;
   await app.listen(PORT);
 }

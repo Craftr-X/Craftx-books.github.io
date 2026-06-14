@@ -1,4 +1,5 @@
 # 09｜语义检索，利用Embedding优化你的搜索功能
+
 你好，我是徐文浩。
 
 在过去的8讲里面，相信你已经对Embedding和Completion接口非常熟悉了。Embedding向量适合作为一个中间结果，用于传统的机器学习场景，比如分类、聚类。而Completion接口，一方面可以直接拿来作为一个聊天机器人，另一方面，你只要善用提示词，就能完成合理的文案撰写、文本摘要、机器翻译等一系列的工作。
@@ -47,11 +48,11 @@ df.head()
 
 ```python
     product_name
-0	1. 【限时特惠】Apple/苹果 iPhone 11 Pro Max 手机
-1	2. 【超值折扣】Huawei/华为 P30 Pro 智能手机
-2	3. 【热销爆款】OPPO Reno 10X Zoom 全网通手机
-3	4. 【限量特价】Xiaomi/小米 9 Pro 5G 手机
-4	5. 【限时促销】Apple/苹果 iPad Pro 11寸 平板
+0 1. 【限时特惠】Apple/苹果 iPhone 11 Pro Max 手机
+1 2. 【超值折扣】Huawei/华为 P30 Pro 智能手机
+2 3. 【热销爆款】OPPO Reno 10X Zoom 全网通手机
+3 4. 【限量特价】Xiaomi/小米 9 Pro 5G 手机
+4 5. 【限时促销】Apple/苹果 iPad Pro 11寸 平板
 
 ```
 
@@ -67,11 +68,11 @@ df.head()
 
 ```python
      product_name
-0	【限时特惠】Apple/苹果 iPhone 11 Pro Max 手机
-1	【超值折扣】Huawei/华为 P30 Pro 智能手机
-2	【热销爆款】OPPO Reno 10X Zoom 全网通手机
-3	【限量特价】Xiaomi/小米 9 Pro 5G 手机
-4	【限时促销】Apple/苹果 iPad Pro 11寸 平板
+0 【限时特惠】Apple/苹果 iPhone 11 Pro Max 手机
+1 【超值折扣】Huawei/华为 P30 Pro 智能手机
+2 【热销爆款】OPPO Reno 10X Zoom 全网通手机
+3 【限量特价】Xiaomi/小米 9 Pro 5G 手机
+4 【限时促销】Apple/苹果 iPad Pro 11寸 平板
 
 ```
 
@@ -91,11 +92,11 @@ clothes_df.head()
 
 ```python
     product_name
-0	【新款】时尚百搭羊绒毛衣，暖洋洋温暖你的冬天
-1	【热卖】复古气质翻领毛衣，穿出时尚感
-2	【特价】轻薄百搭棉衣，舒适温暖，冬季必备
-3	【限时】经典百搭牛仔外套，轻松搭配，时尚范
-4	【全新】简约大气羊绒连衣裙，温柔优雅
+0 【新款】时尚百搭羊绒毛衣，暖洋洋温暖你的冬天
+1 【热卖】复古气质翻领毛衣，穿出时尚感
+2 【特价】轻薄百搭棉衣，舒适温暖，冬季必备
+3 【限时】经典百搭牛仔外套，轻松搭配，时尚范
+4 【全新】简约大气羊绒连衣裙，温柔优雅
 
 ```
 
@@ -111,18 +112,18 @@ display(df)
 输出结果：
 
 ```python
-	product_name
-0	【新款】Apple/苹果 iPhone 11 Pro Max 智能手机
-1	【特惠】华为P30 Pro 8GB+256GB 全网通版
-2	【限量】OnePlus 7T Pro 8GB+256GB 全网通
-3	【新品】小米CC9 Pro 8GB+256GB 全网通版
-4	【热销】三星Galaxy Note10+ 8GB+256GB 全网通
-...	...
-92	【优惠】气质小清新拼接百搭双肩斜挎包
-93	【热卖】活力色彩精致小巧百搭女士单肩斜挎包
-94	【特价】简约可爱原宿风时尚双肩斜挎包
-95	【折扣】潮流小清新拼接百搭女士单肩斜挎包
-96	【特惠】百搭潮流活力色彩拼色双肩斜挎
+ product_name
+0 【新款】Apple/苹果 iPhone 11 Pro Max 智能手机
+1 【特惠】华为P30 Pro 8GB+256GB 全网通版
+2 【限量】OnePlus 7T Pro 8GB+256GB 全网通
+3 【新品】小米CC9 Pro 8GB+256GB 全网通版
+4 【热销】三星Galaxy Note10+ 8GB+256GB 全网通
+... ...
+92 【优惠】气质小清新拼接百搭双肩斜挎包
+93 【热卖】活力色彩精致小巧百搭女士单肩斜挎包
+94 【特价】简约可爱原宿风时尚双肩斜挎包
+95 【折扣】潮流小清新拼接百搭女士单肩斜挎包
+96 【特惠】百搭潮流活力色彩拼色双肩斜挎
 
 ```
 
