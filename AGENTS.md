@@ -10,8 +10,9 @@ This repository is a VitePress books site. Main site content lives in `docs/`, w
 - `npm run dev`: start the VitePress dev server for `docs/`.
 - `npm run build`: run prebuild content fixes and build the static site to `dist/`.
 - `npm run preview`: preview the built site locally.
-- `npm run generate:sidebar`: regenerate `sidebar-generated.json` after content structure changes.
+- `npm run generate:sidebar`: regenerate `sidebar-generated.json` after content structure changes. This file is gitignored (a build-time artifact); `config.mts` regenerates it on demand if missing, and `prebuild` refreshes it before every build.
 - `npm run import:book -- ./path/to/book --slug my-book`: import a Markdown folder or EPUB into `docs/books/`.
+- `npm run check:deadlinks`: scan all internal markdown links and image references under `docs/` for broken targets (external http(s) links are not checked).
 - `node --test scripts/import-book.test.mjs`: run the Node test suite for the import script.
 - `node scripts/verify-import.mjs <slug>`: run post-import verification (pass/fail JSON report).
 
@@ -35,7 +36,7 @@ Use this spec whenever importing a technical booklet, Markdown source, or EPUB e
 
 **Scope and boundaries**
 
-- Keep the scope to one book slug unless explicitly asked otherwise. Normal imports should only change `docs/books/<slug>/`, `books.json`, `sidebar-generated.json`, `README.md`, and narrowly scoped importer/test files when needed.
+- Keep the scope to one book slug unless explicitly asked otherwise. Normal imports should only change `docs/books/<slug>/`, `books.json`, `README.md`, and narrowly scoped importer/test files when needed. (`sidebar-generated.json` is a gitignored build artifact; do not commit it.)
 - Do not edit existing book content, site theme, VitePress config, deploy settings, comments, search, or `dist/` unless the user explicitly asks or the import cannot work without a narrowly scoped fix.
 - Do not overwrite an existing `docs/books/<slug>/` unless the user explicitly requests replacement and `--force` is appropriate.
 - Use `npm run import:book -- <source> --slug <slug> --title "<title>" --desc "<desc>"` for Markdown folders and EPUB files. Use `--force` only for an intentional replacement.
@@ -44,7 +45,8 @@ Use this spec whenever importing a technical booklet, Markdown source, or EPUB e
 
 - `docs/books/<slug>/` must contain an `index.md` and numbered chapter Markdown files. Chapter filenames should be readable and ordered, for example `01-开篇.md`.
 - `books.json` is the source registry. Use `category: "booklet"` for Markdown folders and `category: "ebook"` for EPUBs unless the user says otherwise. Use stable lowercase kebab-case slugs.
-- `sidebar-generated.json` must contain `/books/<slug>/` so the left chapter sidebar shows all chapters in reading order.
+- `sidebar-generated.json` (gitignored, regenerated on build) must resolve `/books/<slug>/` so the left chapter sidebar shows all chapters in reading order. The import flow updates it in place via `updateSidebarForBook`; `prebuild` and `config.mts` keep it fresh.
+- Each book's `index.md` should keep a `## 目录` block linking to its chapters. `npm run generate:sidebar` (run by `prebuild`) refreshes this block idempotently alongside the sidebar, preserving any hand-written display text and chapter order; do not hand-edit chapter links inside it.
 - Chapter Markdown should render as normal VitePress Markdown, not raw EPUB HTML fragments. Preserve meaningful headings so the right page outline can work. Do not disable `aside` on chapter pages; a book `index.md` may use `aside: false`.
 - All local images referenced by Markdown must exist beside the book, usually in `_assets/` or `images/`, and render in VitePress.
 - EPUB internal links rewritten from source paths like `text00000.html#filepos...` to generated Markdown links like `./05-章节.md`, or removed if they cannot be resolved safely.
@@ -68,16 +70,18 @@ Use this spec whenever importing a technical booklet, Markdown source, or EPUB e
 - Validate local Markdown links and image references from each imported Markdown file. Build success alone is not enough because `ignoreDeadLinks: true` is enabled.
 - If importer logic changes, add focused tests in `scripts/import-book.test.mjs` and run `node --test scripts/import-book.test.mjs`.
 - Always run `npm run build`; existing code-block language warnings are non-blocking only when the build exits successfully.
+- Run `npm run check:deadlinks` to confirm no internal links or image references are broken across the site.
 
 **Completion criteria**
 
 The import is complete only when all are true:
 
 - `docs/books/<slug>/index.md` exists and links to all chapters.
-- `books.json`, `sidebar-generated.json`, and `README.md` include the new book.
+- `books.json` and `README.md` include the new book, and `sidebar-generated.json` resolves `/books/<slug>/` (regenerated automatically; no commit needed).
 - No missing-resource placeholders, unresolved local images, source EPUB HTML links, or broken local Markdown links remain in the imported book.
 - `node scripts/verify-import.mjs <slug>` reports all checks passed.
 - `node --test scripts/import-book.test.mjs` passes if import code changed.
+- `npm run check:deadlinks` reports no dead links across the site.
 - `npm run build` passes.
 - Existing books and shared site behavior were not changed outside the documented scope.
 
@@ -96,7 +100,7 @@ This project follows a **branch-based workflow**. Never commit directly to `main
 
 ## Commit & Pull Request Guidelines
 
-Recent commits follow Conventional Commit-style prefixes such as `docs:`, `fix:`, and `feat:`. Use concise subject lines, for example `fix: normalize missing image assets`. Pull requests should describe the change, list validation commands run, link related issues when available, and include screenshots for visible site or theme changes. For new books, mention the slug and confirm `books.json`, `sidebar-generated.json`, and the README book list were updated when applicable.
+Recent commits follow Conventional Commit-style prefixes such as `docs:`, `fix:`, and `feat:`. Use concise subject lines, for example `fix: normalize missing image assets`. Pull requests should describe the change, list validation commands run, link related issues when available, and include screenshots for visible site or theme changes. For new books, mention the slug and confirm `books.json` and the README book list were updated when applicable.
 
 ## Security & Configuration Tips
 
