@@ -1,14 +1,20 @@
 import { defineConfig } from 'vitepress'
-import { readFileSync } from 'fs'
+import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
+import { generateSidebar } from '../../scripts/generate-sidebar.mjs'
 
-// 读取生成的侧边栏配置
+// 读取生成的侧边栏配置；若文件缺失（如 fresh clone 后未跑 prebuild），构建期兜底生成。
 const sidebarPath = join(__dirname, '../../sidebar-generated.json')
 let sidebarConfig = {}
-try {
-  sidebarConfig = JSON.parse(readFileSync(sidebarPath, 'utf-8'))
-} catch {
-  sidebarConfig = {}
+if (existsSync(sidebarPath)) {
+  try {
+    sidebarConfig = JSON.parse(readFileSync(sidebarPath, 'utf-8'))
+  } catch {
+    sidebarConfig = {}
+  }
+}
+if (Object.keys(sidebarConfig).length === 0) {
+  sidebarConfig = generateSidebar()
 }
 
 const booksPath = join(__dirname, '../../books.json')

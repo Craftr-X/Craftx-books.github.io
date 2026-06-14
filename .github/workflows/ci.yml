@@ -26,5 +26,8 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Check dead links
+        run: npm run check:deadlinks
+
       - name: Run tests
         run: npm test

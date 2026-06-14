@@ -10,7 +10,7 @@ editLink: false
 
 > 一个人用 Claude Code 造一个简版 Dify
 
-## 📖 目录
+## 目录
 
 - [你是架构师Claude-Code-是你的工程团队](./01-你是架构师Claude-Code-是你的工程团队.md)
 - [规范驱动开发SDD-让-AI-永远在轨道上](./02-规范驱动开发SDD-让-AI-永远在轨道上.md)
@@ -48,4 +48,3 @@ editLink: false
 - [结束语-一个人的工程团队静待花开](./34-结束语-一个人的工程团队静待花开.md)
 - [开篇词-一个人用-Claude-Code-造一个简版-Dify需要多久](./35-开篇词-一个人用-Claude-Code-造一个简版-Dify需要多久.md)
 - [热点速递-Claude-Code-源码泄漏-热闹看完我们聊点真问题](./36-热点速递-Claude-Code-源码泄漏-热闹看完我们聊点真问题.md)
-- [summary](./37-summary.md)

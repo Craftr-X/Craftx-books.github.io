@@ -10,7 +10,7 @@ editLink: false
 
 > Jenkins + Kubernetes 持续集成部署
 
-## 📖 目录
+## 目录
 
 - [前言-什么是-CICD-&-为什么要学-CICD](./01-前言-什么是-CICD-&-为什么要学-CICD.md)
 - [安装-Docker-和-Jenkins-持续构建环境起步](./02-安装-Docker-和-Jenkins-持续构建环境起步.md)

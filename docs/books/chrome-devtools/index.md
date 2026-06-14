@@ -10,7 +10,7 @@ editLink: false
 
 > 提升前端调试效率的实用技巧
 
-## 📖 目录
+## 目录
 
 - [写在前面](./01-写在前面.md)
 - [通用篇-copying-&-saving](./02-通用篇-copying-&-saving.md)

@@ -10,6 +10,7 @@
     "prebuild": "node scripts/generate-sidebar.mjs && node scripts/generate-content-stats.mjs && node scripts/escape-vitepress-braces.mjs && node scripts/normalize-missing-assets.mjs",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
+    "check:deadlinks": "node scripts/check-deadlinks.mjs",
     "test": "node --test scripts/*.test.mjs"
   },
   "devDependencies": {

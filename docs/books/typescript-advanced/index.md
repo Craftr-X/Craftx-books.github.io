@@ -10,7 +10,7 @@ editLink: false
 
 > 深入理解 TypeScript 类型系统
 
-## 📖 目录
+## 目录
 
 - [开篇-用正确的方式学习-TypeScript](./01-开篇-用正确的方式学习-TypeScript.md)
 - [工欲善其事-打造最舒适的-TypeScript-开发环境](./02-工欲善其事-打造最舒适的-TypeScript-开发环境.md)

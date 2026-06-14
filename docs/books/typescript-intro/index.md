@@ -10,7 +10,7 @@ editLink: false
 
 > 从 JavaScript 到 TypeScript 的第一步
 
-## 📖 目录
+## 目录
 
 - [为什么你需要-TypeScript-类型之于-JavaScript](./01-为什么你需要-TypeScript-类型之于-JavaScript.md)
 - [又一次-Hello-World-TypeScript-开发环境搭建](./02-又一次-Hello-World-TypeScript-开发环境搭建.md)

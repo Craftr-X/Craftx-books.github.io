@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { generateSidebar } from './generate-sidebar.mjs'
+import { generateSidebar, regenerateBookIndex } from './generate-sidebar.mjs'
 import { generateContentStats } from './generate-content-stats.mjs'
 import { verify } from './verify-import.mjs'
 
@@ -202,6 +202,176 @@ test('verifyImport rejects broken local assets, links, and EPUB leftovers', () =
     assert.match(failures, /no residual placeholders/)
     assert.match(failures, /sidebar contains slug/)
     assert.match(failures, /README\.md contains slug/)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('regenerateBookIndex preserves existing chapter order and custom display text', () => {
+  const root = makeProject()
+  try {
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'), [
+      '---',
+      'layout: doc',
+      'title: Alpha',
+      'aside: false',
+      '---',
+      '# Alpha',
+      '',
+      '## 📖 目录',
+      '',
+      '- [开篇](./00-开篇.md)',
+      '- [第一章](./01-第一章.md)',
+      '- [尾声](./99-尾声.md)',
+      '',
+    ].join('\n'))
+    writeFileSync(join(bookDir, '00-开篇.md'), '# 开篇\n')
+    writeFileSync(join(bookDir, '01-第一章.md'), '# 第一章\n')
+    writeFileSync(join(bookDir, '99-尾声.md'), '# 尾声\n')
+
+    const items = [
+      { text: '开篇', link: '/books/alpha/00-开篇' },
+      { text: '第一章', link: '/books/alpha/01-第一章' },
+      { text: '尾声', link: '/books/alpha/99-尾声' },
+    ]
+    const changed = regenerateBookIndex(root, 'alpha', items)
+
+    assert.equal(changed, true)
+    const content = readFileSync(join(bookDir, 'index.md'), 'utf8')
+    // 标题样式统一为 ## 目录
+    assert.match(content, /## 目录\n/)
+    assert.doesNotMatch(content, /📖/)
+    // 自定义显示文本和顺序都保留
+    const lines = content.split('\n')
+    const itemLines = lines.filter(l => l.startsWith('- ['))
+    assert.deepEqual(itemLines, [
+      '- [开篇](./00-开篇.md)',
+      '- [第一章](./01-第一章.md)',
+      '- [尾声](./99-尾声.md)',
+    ])
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('regenerateBookIndex is idempotent', () => {
+  const root = makeProject()
+  try {
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'), [
+      '# Alpha',
+      '',
+      '## 目录',
+      '',
+      '- [first](./01-first.md)',
+      '',
+    ].join('\n'))
+    writeFileSync(join(bookDir, '01-first.md'), '# First\n')
+
+    const items = [{ text: 'first', link: '/books/alpha/01-first' }]
+    regenerateBookIndex(root, 'alpha', items)
+    const changed = regenerateBookIndex(root, 'alpha', items)
+
+    assert.equal(changed, false)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('regenerateBookIndex keeps chapters absent from index appended, in sidebar order', () => {
+  const root = makeProject()
+  try {
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'), [
+      '# Alpha',
+      '',
+      '## 目录',
+      '',
+      '- [intro](./01-intro.md)',
+      '',
+    ].join('\n'))
+    writeFileSync(join(bookDir, '01-intro.md'), '# Intro\n')
+    writeFileSync(join(bookDir, '02-new.md'), '# New\n')
+
+    // sidebar 包含一个 index.md 没有的新章节
+    const items = [
+      { text: 'intro', link: '/books/alpha/01-intro' },
+      { text: 'new', link: '/books/alpha/02-new' },
+    ]
+    regenerateBookIndex(root, 'alpha', items)
+
+    const content = readFileSync(join(bookDir, 'index.md'), 'utf8')
+    const itemLines = content.split('\n').filter(l => l.startsWith('- ['))
+    assert.deepEqual(itemLines, [
+      '- [intro](./01-intro.md)', // 已有顺序保留
+      '- [new](./02-new.md)',     // 新章节追加
+    ])
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('regenerateBookIndex skips index.md without a TOC block', () => {
+  const root = makeProject()
+  try {
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    const original = [
+      '---',
+      'title: Alpha',
+      '---',
+      '# Alpha',
+      '',
+      'No TOC here, just prose.',
+      '',
+    ].join('\n')
+    writeFileSync(join(bookDir, 'index.md'), original)
+
+    const changed = regenerateBookIndex(root, 'alpha', [
+      { text: 'first', link: '/books/alpha/01-first' },
+    ])
+
+    assert.equal(changed, false)
+    assert.equal(readFileSync(join(bookDir, 'index.md'), 'utf8'), original)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test('regenerateBookIndex preserves content after the TOC block', () => {
+  const root = makeProject()
+  try {
+    const bookDir = join(root, 'docs', 'books', 'alpha')
+    mkdirSync(bookDir, { recursive: true })
+    writeFileSync(join(bookDir, 'index.md'), [
+      '# Alpha',
+      '',
+      '## 目录',
+      '',
+      '- [first](./01-first.md)',
+      '',
+      '## 后记',
+      '',
+      '这是一段后记内容。',
+      '',
+    ].join('\n'))
+    writeFileSync(join(bookDir, '01-first.md'), '# First\n')
+
+    regenerateBookIndex(root, 'alpha', [
+      { text: 'first', link: '/books/alpha/01-first' },
+    ])
+
+    const content = readFileSync(join(bookDir, 'index.md'), 'utf8')
+    // 后记区块完整保留（标题和正文）
+    assert.match(content, /## 后记[\s\S]*这是一段后记内容。/)
+    // 目录项在两个区块之间
+    const firstIdx = content.indexOf('- [first](./01-first.md)')
+    const afterIdx = content.indexOf('## 后记')
+    assert.ok(firstIdx > 0 && afterIdx > firstIdx)
   } finally {
     rmSync(root, { recursive: true, force: true })
   }

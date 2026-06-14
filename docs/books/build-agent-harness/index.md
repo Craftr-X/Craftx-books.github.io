@@ -10,7 +10,7 @@ editLink: false
 
 > 从零开始构建 Agent Harness 的完整指南
 
-## 📖 目录
+## 目录
 
 - [开篇词｜框架正在坍塌：像写操作系统一样，复刻OpenClaw的底层Harness](./开篇词｜框架正在坍塌：像写操作系统一样，复刻OpenClaw的底层Harness.md)
 - [01｜架构演进：从Framework到Harness，Agent到底需要怎样的底层支撑？](./01｜架构演进：从Framework到Harness，Agent到底需要怎样的底层支撑？.md)
