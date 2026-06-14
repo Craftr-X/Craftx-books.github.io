@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from 'vue'
-import { useRoute } from 'vitepress'
 import { getProgress, statusOf, type ChapterStatus } from '../readingProgress'
+import { useNormalizedPath } from '../routePath'
 // @ts-expect-error content-stats.json 是构建时生成的 JSON，无类型声明
 import contentStats from '../../../../content-stats.json'
 
-const route = useRoute()
+const path = useNormalizedPath()
 const mounted = ref(false)
 const totalChapters = ref(0)
 const readCount = ref(0)
 const readingCount = ref(0)
 
-const isBookIndex = computed(() => /^\/books\/[^/]+\/?$/.test(route.path))
+const isBookIndex = computed(() => /^\/books\/[^/]+\/?$/.test(path.value))
 
 // 本书总阅读时长（分钟），从 content-stats 查表
 const bookReadingMinutes = computed<number | null>(() => {
-  const match = route.path.match(/^\/books\/([^/]+)/)
+  const match = path.value.match(/^\/books\/([^/]+)/)
   if (!match) return null
   return contentStats.books?.[match[1]]?.readingMinutes ?? null
 })
@@ -59,7 +59,7 @@ function refresh() {
     const anchors = Array.from(
       docContent.querySelectorAll('ul a[href]'),
     ) as HTMLAnchorElement[]
-    const basePath = route.path.endsWith('/') ? route.path : route.path + '/'
+    const basePath = path.value.endsWith('/') ? path.value : path.value + '/'
 
     let read = 0
     let reading = 0
@@ -119,7 +119,7 @@ onMounted(() => {
   refresh()
 })
 
-watch(() => route.path, () => {
+watch(path, () => {
   if (mounted.value && isBookIndex.value) refresh()
 })
 

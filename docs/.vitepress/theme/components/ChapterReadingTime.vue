@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useData, useRoute } from 'vitepress'
+import { useData } from 'vitepress'
+import { useNormalizedPath } from '../routePath'
 // @ts-expect-error content-stats.json 是构建时生成的 JSON，无类型声明
 import contentStats from '../../../../content-stats.json'
 
 const { frontmatter } = useData()
-const route = useRoute()
+const path = useNormalizedPath()
 
 // 仅在「章节页」渲染：与 ReadingProgressBar.vue 的 shouldRender 判断保持一致
-const isBookIndex = computed(() => /^\/books\/[^/]+\/?$/.test(route.path))
-const isHomePage = computed(() => route.path === '/' || route.path === '/index.html')
+const isBookIndex = computed(() => /^\/books\/[^/]+\/?$/.test(path.value))
+const isHomePage = computed(() => path.value === '/' || path.value === '/index.html')
 const shouldRender = computed(() => {
   const layout = frontmatter.value.layout
   return (
@@ -18,21 +19,21 @@ const shouldRender = computed(() => {
     layout !== 'page' &&
     !isBookIndex.value &&
     !isHomePage.value &&
-    /^\/books\/[^/]+\//.test(route.path)
+    /^\/books\/[^/]+\//.test(path.value)
   )
 })
 
 /**
- * 从路由解析 slug 与章节 basename，在 content-stats 中查表得阅读分钟。
- * 路由形如 /books/<slug>/<basename>
+ * 从归一化路径解析 slug 与章节 basename，在 content-stats 中查表得阅读分钟。
+ * 路径形如 /books/<slug>/<basename>
  * stats.chapters 的 key 是 basename（无 .md）
  */
 const minutes = computed<number | null>(() => {
   if (!shouldRender.value) return null
-  const match = route.path.match(/^\/books\/([^/]+)\/([^/]+)/)
+  const match = path.value.match(/^\/books\/([^/]+)\/([^/]+)/)
   if (!match) return null
   const slug = match[1]
-  const chapterKey = match[2].replace(/\.html$/, '')
+  const chapterKey = match[2]
   const book = contentStats.books?.[slug]
   if (!book?.chapters) return null
   return book.chapters[chapterKey] ?? null
