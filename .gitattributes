@@ -1,0 +1,6 @@
+# 统一文本文件行尾为 LF。
+# 根因：core.autocrlf=true 会让 Windows 工作区变成 CRLF，
+# 导致 generate-sidebar.mjs 的 frontmatter 正则失配、
+# 以及 Node 脚本重写文件后产生大量行尾噪音。
+# 统一 LF 后，跨平台行为一致，prebuild 输出幂等。
+* text=auto eol=lf
