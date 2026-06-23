@@ -50,11 +50,14 @@ function titleFromMarkdown(file) {
   return basename(file, '.md').replace(/^\d+-/, '')
 }
 
+function hasSidebarFalseFrontmatter(content) {
+  const frontmatter = content.match(/^---\r?\n([\s\S]*?)\r?\n---/)
+  if (!frontmatter) return false
+  return /^sidebar:\s*false\s*$/m.test(frontmatter[1])
+}
+
 function sidebarVisible(file) {
-  const content = readFileSync(file, 'utf8')
-  const frontmatter = content.match(/^---\n([\s\S]*?)\n---/)
-  if (!frontmatter) return true
-  return !/^sidebar:\s*false\s*$/m.test(frontmatter[1])
+  return !hasSidebarFalseFrontmatter(readFileSync(file, 'utf8'))
 }
 
 function toLink(docsBooksDir, slug, file) {
@@ -352,4 +355,4 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   generateSidebar()
 }
 
-export { generateSidebar, regenerateBookIndex, collectLeafItems }
+export { generateSidebar, regenerateBookIndex, collectLeafItems, hasSidebarFalseFrontmatter }
