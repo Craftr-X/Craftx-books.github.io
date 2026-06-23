@@ -2,8 +2,8 @@
   "bookletCount": 15,
   "ebookCount": 7,
   "bookCount": 22,
-  "chapterCount": 725,
-  "totalReadingMinutes": 5807,
+  "chapterCount": 722,
+  "totalReadingMinutes": 5804,
   "books": {
     "claude-code-dev": {
       "chapterCount": 36,
@@ -605,14 +605,12 @@
       }
     },
     "renzhi-qudong": {
-      "chapterCount": 39,
-      "readingMinutes": 228,
+      "chapterCount": 37,
+      "readingMinutes": 226,
       "chapters": {
-        "01-Cover": 1,
         "02-扉页": 1,
         "03-版权信息": 1,
-        "04-目录": 1,
-        "05-未知": 1,
+        "05-献词": 1,
         "06-前言-为什么我们很努力却总是看不到希望": 6,
         "07-上篇-做成一件事的心法": 1,
         "08-第一章-价值——改变自己的关键是创造价值": 1,
@@ -657,10 +655,9 @@
       }
     },
     "xuehui-tiwen": {
-      "chapterCount": 114,
-      "readingMinutes": 281,
+      "chapterCount": 113,
+      "readingMinutes": 280,
       "chapters": {
-        "01-Cover": 1,
         "02-版权信息": 1,
         "03-目录": 2,
         "04-赞誉": 3,
@@ -863,5 +860,5 @@
       }
     }
   },
-  "generatedAt": "2026-06-14T06:26:29.760Z"
+  "generatedAt": "2026-06-23T08:48:47.491Z"
 }
