@@ -1,9 +1,9 @@
 {
-  "bookletCount": 15,
+  "bookletCount": 16,
   "ebookCount": 7,
-  "bookCount": 22,
-  "chapterCount": 722,
-  "totalReadingMinutes": 5804,
+  "bookCount": 23,
+  "chapterCount": 734,
+  "totalReadingMinutes": 6106,
   "books": {
     "claude-code-dev": {
       "chapterCount": 36,
@@ -858,7 +858,25 @@
         "书名页": 0,
         "文前页": 1
       }
+    },
+    "jibing-yuanli": {
+      "chapterCount": 12,
+      "readingMinutes": 302,
+      "chapters": {
+        "01-前言": 14,
+        "02-人体之阴阳": 14,
+        "03-人体之五行": 34,
+        "04-什么是经络": 32,
+        "05-中医的大门：子午流注": 29,
+        "06-人体与宇宙的关联": 24,
+        "07-奇经八脉易致病": 16,
+        "08-五脏六腑概述": 48,
+        "09-神魂魄是什么": 23,
+        "10-营卫系统决定着我们是否健康": 17,
+        "11-人生病的原因解析": 27,
+        "63-人体的时空线": 24
+      }
     }
   },
-  "generatedAt": "2026-06-23T08:48:47.491Z"
+  "generatedAt": "2026-06-25T09:03:21.936Z"
 }
