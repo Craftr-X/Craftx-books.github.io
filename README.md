@@ -41,6 +41,7 @@ CraftX Books 是一个基于 VitePress 构建的在线阅读站点，发布到 G
 | 微信小程序开发入门 | 从 0 到 1 实现天气小程序 | [开始阅读](./docs/books/wechat-miniprogram/) |
 | 从0开始构建AgentHarness | 从零开始构建 Agent Harness 的完整指南 | [开始阅读](./docs/books/build-agent-harness/) |
 | AI 大模型之美 | 大语言模型与生成式 AI 应用实战 | [开始阅读](./docs/books/ai-model-beauty/) |
+| 技术人求职指南 | 技术人求职全流程指南，从市场认知到入职抉择 | [开始阅读](./docs/books/technology-career-guide/) |
 
 ### 电子书
 

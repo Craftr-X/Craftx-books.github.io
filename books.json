@@ -136,5 +136,11 @@
     "title": "疾病原理",
     "desc": "中医基础理论与疾病成因解析",
     "category": "ebook"
+  },
+  {
+    "slug": "technology-career-guide",
+    "title": "技术人求职指南",
+    "desc": "技术人求职全流程指南，从市场认知到入职抉择，助你优雅从容地杀出重围",
+    "category": "booklet"
   }
 ]
