@@ -130,5 +130,11 @@
     "title": "乡土中国（修订本）",
     "desc": "作者：费孝通",
     "category": "ebook"
+  },
+  {
+    "slug": "jibing-yuanli",
+    "title": "疾病原理",
+    "desc": "中医基础理论与疾病成因解析",
+    "category": "booklet"
   }
 ]
