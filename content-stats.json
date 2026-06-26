@@ -1,6 +1,6 @@
 {
-  "bookletCount": 16,
-  "ebookCount": 7,
+  "bookletCount": 15,
+  "ebookCount": 8,
   "bookCount": 23,
   "chapterCount": 734,
   "totalReadingMinutes": 6106,
@@ -878,5 +878,5 @@
       }
     }
   },
-  "generatedAt": "2026-06-25T09:03:21.936Z"
+  "generatedAt": "2026-06-26T01:43:08.421Z"
 }
