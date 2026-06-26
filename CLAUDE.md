@@ -22,17 +22,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Three files drive the site configuration:
 
 1. **`books.json`** — master book registry. Each entry has `slug`, `title`, `desc`, `category` (`booklet` or `ebook`). The `config.mts` reads this at build time to generate the top nav items.
-2. **`sidebar-generated.json`** — auto-generated sidebar config keyed by `/books/<slug>/`. Read by `config.mts` at build time.
+2. **`sidebar-generated.json`** — auto-generated sidebar config keyed by `/books/<slug>/`. **Gitignored (never committed)**; regenerated from `docs/books/` on every build via `prebuild`. Read by `config.mts` at build time.
 3. **`docs/books/<slug>/`** — each book's Markdown files + auto-generated `index.md`.
 
 The import script (`scripts/import-book.mjs`) writes all three: book content to `docs/books/`, updates `books.json`, and calls `updateSidebarForBook()` from `generate-sidebar.mjs` to update the sidebar JSON.
 
 ### Prebuild Pipeline
 
-`npm run build` runs `prebuild` first, which executes two content-fixing scripts in order:
+`npm run build` runs `prebuild` first, which executes four scripts in order:
 
-1. `scripts/escape-vitepress-braces.mjs` — replaces `{{` / `}}` in Markdown with zero-width-space-escaped versions to prevent VitePress/Vue template interpolation errors.
-2. `scripts/normalize-missing-assets.mjs` — converts image/audio references pointing to nonexistent `_assets/` or `images/` files into placeholder text like `[缺失资源：path]`.
+1. `scripts/generate-sidebar.mjs` — regenerates the gitignored `sidebar-generated.json` from the `docs/books/` directory structure.
+2. `scripts/generate-content-stats.mjs` — recomputes chapter counts and reading minutes into `content-stats.json` (this one IS committed, so the import writes it and the build refreshes it).
+3. `scripts/escape-vitepress-braces.mjs` — replaces `{{` / `}}` in Markdown with zero-width-space-escaped versions to prevent VitePress/Vue template interpolation errors.
+4. `scripts/normalize-missing-assets.mjs` — converts image/audio references pointing to nonexistent `_assets/` or `images/` files into placeholder text like `[缺失资源：path]`.
 
 The VitePress config (`docs/.vitepress/config.mts`) has a custom Markdown-it rule `renderMissingAssetPlaceholders` that renders those placeholders as styled cards in the browser.
 
@@ -63,7 +65,7 @@ Use this contract for every technical booklet, Markdown folder, or EPUB ebook im
 **Scope and boundaries**
 
 - Import one book slug at a time unless the user explicitly asks for more.
-- A normal import should only change `docs/books/<slug>/`, `books.json`, `sidebar-generated.json`, `README.md`, and narrowly scoped importer/test files when importer behavior needs a fix.
+- A normal import should only change `docs/books/<slug>/`, `books.json`, `content-stats.json`, `README.md`, and narrowly scoped importer/test files when importer behavior needs a fix. The import script also rewrites the local (gitignored) `sidebar-generated.json` via `updateSidebarForBook()`, but since `prebuild` rebuilds it on every build that change never surfaces in version control.
 - Do not edit existing books, theme files, VitePress config, comments, search, deployment, or `dist/` unless the user explicitly asks or the import cannot work without a narrowly scoped fix.
 - Never overwrite `docs/books/<slug>/` without an explicit replacement request and `--force`.
 
@@ -71,7 +73,8 @@ Use this contract for every technical booklet, Markdown folder, or EPUB ebook im
 
 - `docs/books/<slug>/index.md` plus numbered chapter Markdown files.
 - `books.json` entry with stable lowercase kebab-case `slug`, clear `title`, concise `desc`, and correct `category` (`booklet` for Markdown folders, `ebook` for EPUBs unless the user says otherwise).
-- `sidebar-generated.json` entry under `/books/<slug>/` so the left chapter sidebar lists all chapters in reading order.
+- `sidebar-generated.json` entry under `/books/<slug>/` so the left chapter sidebar lists all chapters in reading order. The file is gitignored and rebuilt on every build; the import writes it locally only so `npm run dev` works right away.
+- `content-stats.json` updated with the book's chapter count and reading minutes (committed; the build refreshes it via `generate-content-stats.mjs`).
 - Chapter pages with readable Markdown content in the center area and meaningful headings for the right page outline. Do not set `aside: false` on chapter pages. A book `index.md` may use `aside: false`.
 - Images copied into `_assets/`, `images/`, or another local book asset folder, with all Markdown image links resolving.
 - EPUB internal links rewritten from source paths like `text00000.html#filepos...` to generated Markdown links like `./05-章节.md`, or removed if they cannot be resolved safely.
@@ -103,7 +106,7 @@ Use this contract for every technical booklet, Markdown folder, or EPUB ebook im
 The import is complete only when all are true:
 
 - `docs/books/<slug>/index.md` exists and links to all chapters.
-- `books.json`, `sidebar-generated.json`, and `README.md` include the new book.
+- `books.json`, `content-stats.json`, and `README.md` include the new book. The local `sidebar-generated.json` also has the new entry — but it is gitignored, so confirm via `npm run dev` (or `node scripts/verify-import.mjs <slug>` which checks "sidebar contains slug"), not via `git diff`.
 - No missing-resource placeholders, unresolved local images, source EPUB HTML links, or broken local Markdown links remain in the imported book.
 - `node scripts/verify-import.mjs <slug>` reports all checks passed.
 - `node --test scripts/import-book.test.mjs` passes if import code changed.
@@ -119,12 +122,12 @@ All scripts in `scripts/` are ES modules (`.mjs`). Key exports from `import-book
 - Conventional Commits prefixes: `docs:`, `fix:`, `feat:`, `chore:`, `update:`
 - Create a feature branch from `main`, never commit directly to `main`
 - Branch naming: `feat/xxx`, `fix/xxx`, `docs/xxx`, `chore/xxx`
-- Open a PR to `main`; CI validates with `npm run build` + tests before merge
+- Open a PR to `main`; CI (`.github/workflows/ci.yml`) validates with `npm run lint` → `npm run build` → `npm run check:deadlinks` → `npm test` before merge. **`npm run lint` runs first and is strict on trailing whitespace (MD009) — run `npm run lint:fix` before pushing any imported book.**
 - After merge to `main`, GitHub Actions auto-deploys to GitHub Pages
 
 ## Important Notes
 
 - `ignoreDeadLinks: true` is set in config — broken internal links won't fail the build but should still be fixed.
 - The site base path is `/Craftx-books.github.io/` — all internal links must account for this.
-- `sidebar-generated.json` (~86KB) is committed to the repo and regenerated by the import script or `npm run generate:sidebar`.
+- `sidebar-generated.json` (~86KB) is **gitignored and never committed**; it is regenerated on every `npm run build` (via `prebuild` → `generate-sidebar.mjs`), or on demand by `npm run generate:sidebar` / the import script's `updateSidebarForBook()`. CI rebuilds it fresh, so it never appears in PR diffs.
 - Build may emit code-block language name downgrade warnings; these are non-blocking.
