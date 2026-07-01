@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process'
 import { copyFileSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, statSync, writeFileSync } from 'fs'
 import { basename, dirname, extname, join, relative, resolve, sep } from 'path'
 import { inflateRawSync } from 'zlib'
@@ -623,6 +624,30 @@ function commitTarget(tempDir, targetDir, force) {
   }
 }
 
+// 对刚导入的 book 目录自动运行 markdownlint --fix，根治 EPUB/掘金源常见的
+// 连续空行(MD012)、标题缺空行(MD022)、尾随空格(MD009)等纯格式违规，
+// 避免导入后忘跑 lint 导致 CI 红灯。不阻断导入：失败仅 warn。
+function lintFixBook(bookDir) {
+  const cliPath = join(root, 'node_modules', 'markdownlint-cli2', 'markdownlint-cli2-bin.mjs')
+  if (!existsSync(cliPath)) {
+    console.warn('未找到 markdownlint-cli2，跳过自动格式修复。请手动运行 npm run lint:fix。')
+    return
+  }
+  const rel = relative(root, bookDir).split(sep).join('/')
+  const result = spawnSync(process.execPath, [cliPath, '--fix', `${rel}/**/*.md`], {
+    cwd: root,
+    encoding: 'utf8',
+  })
+  // markdownlint-cli2 退出码：0 无违规；1 有违规（可自动修的已修，仍剩不可修）；2 致命错误
+  if (result.status === 0) {
+    console.log(`已对 ${rel} 自动运行 markdownlint --fix。`)
+  } else if (result.status === 1) {
+    console.warn(`⚠ ${rel} 经 --fix 后仍有无法自动修复的违规，请手动运行 npm run lint 检查。`)
+  } else {
+    console.warn(`⚠ markdownlint --fix 异常（退出码 ${result.status}）：\n${result.stderr || result.stdout || ''}`)
+  }
+}
+
 function main() {
   const args = parseArgs(process.argv.slice(2))
   if (args.help || !args.input) {
@@ -663,6 +688,7 @@ function main() {
     rmSync(tempParent, { recursive: true, force: true })
     updateBooks(info)
     updateSidebarForBook(info)
+    lintFixBook(targetDir)
     console.log('导入完成。')
   } catch (error) {
     rmSync(tempParent, { recursive: true, force: true })
@@ -671,6 +697,7 @@ function main() {
 }
 
 export {
+  lintFixBook,
   cleanTitle,
   normalizeHref,
   parseNavDocToc,
