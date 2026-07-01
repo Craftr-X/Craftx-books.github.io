@@ -55,6 +55,7 @@ CraftX Books 是一个基于 VitePress 构建的在线阅读站点，发布到 G
 | 学会提问 | 批判性思维入门经典，原书第12版 | [开始阅读](./docs/books/xuehui-tiwen/) |
 | 乡土中国（修订本） | 费孝通社会学经典，中国乡土社会结构与文化深层解读 | [开始阅读](./docs/books/xiangtu-zhongguo/) |
 | 疾病原理 | 中医基础理论与疾病成因解析 | [开始阅读](./docs/books/jibing-yuanli/) |
+| 无悔追踪 | 作者：张策 | [开始阅读](./docs/books/wuhui-zhuizong/) |
 
 ## 🚀 快速开始
 

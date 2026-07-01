@@ -1,9 +1,9 @@
 {
   "bookletCount": 16,
-  "ebookCount": 8,
-  "bookCount": 24,
-  "chapterCount": 760,
-  "totalReadingMinutes": 6500,
+  "ebookCount": 9,
+  "bookCount": 25,
+  "chapterCount": 769,
+  "totalReadingMinutes": 6868,
   "books": {
     "claude-code-dev": {
       "chapterCount": 36,
@@ -908,7 +908,22 @@
         "26-防骗指南篇：细说那些令人心动但充满陷阱的副业大坑": 17,
         "27-分手邂逅篇：一些关于自己的人生感悟及“分手”告别语": 6
       }
+    },
+    "wuhui-zhuizong": {
+      "chapterCount": 9,
+      "readingMinutes": 368,
+      "chapters": {
+        "01-自序": 5,
+        "02-无愧英雄": 43,
+        "03-无悔追踪": 36,
+        "04-无梦生涯": 64,
+        "05-无言寻找": 41,
+        "06-无花季节": 48,
+        "07-无歌之夜": 32,
+        "08-无奈生活": 43,
+        "09-无际的路": 56
+      }
     }
   },
-  "generatedAt": "2026-06-26T05:26:18.037Z"
+  "generatedAt": "2026-07-01T03:46:39.708Z"
 }
