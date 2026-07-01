@@ -1,11 +1,13 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import {
   cleanTitle,
   importEpub,
+  lintFixBook,
   normalizeHref,
   parseNavDocToc,
   parseNcxToc,
@@ -191,4 +193,21 @@ test('parseOpf falls back to spine when no toc exists', () => {
   const opf = parseOpf(entries)
   assert.deepEqual(opf.spine.map(item => item.href), ['c1.xhtml'])
   assert.equal(opf.tocTitleMap.size, 0)
+})
+
+test('lintFixBook folds consecutive blank lines and surrounds headings with blanks', () => {
+  const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+  const testDir = join(repoRoot, `.import-lint-test-${process.pid}-${Date.now()}`)
+  mkdirSync(join(testDir, 'sub'), { recursive: true })
+  const md = join(testDir, 'sub', '01-测试.md')
+  // 连续空行(MD012) + 标题下方缺空行(MD022) —— EPUB/掘金源最常漏的两类
+  writeFileSync(md, '# 标题\n段落一\n\n\n\n段落二\n')
+  try {
+    lintFixBook(testDir)
+    const fixed = readFileSync(md, 'utf8')
+    assert.ok(!/\n{3,}/.test(fixed), '连续空行应被折叠为最多 1 个空行（MD012）')
+    assert.match(fixed, /# 标题\n\n/, '标题下方应补空行（MD022）')
+  } finally {
+    rmSync(testDir, { recursive: true, force: true })
+  }
 })
