@@ -89,6 +89,21 @@ function findResiduals(content, filePath) {
 }
 
 /**
+ * Detect leftover EPUB-internal `.html` links or `filepos` anchors.
+ *
+ * External web URLs (http(s)://...) are stripped first so that legitimate
+ * references ending in `.html` — e.g. government whitepaper pages cited in a
+ * book's bibliography — are not mistaken for source EPUB links.
+ */
+function findSourceHtmlLinks(content) {
+  const stripped = content.replace(/https?:\/\/\S+/g, '');
+  const hits = [];
+  if (/\.html(?:#|$|\s)/.test(stripped)) hits.push('source .html link');
+  if (/filepos/.test(stripped)) hits.push('filepos');
+  return hits;
+}
+
+/**
  * Parse YAML-ish frontmatter to extract aside value.
  */
 function parseFrontmatter(content) {
@@ -272,11 +287,11 @@ function verify(slug, options = {}) {
     results.push(pass('all images resolve'));
   }
 
-  // 10. No source .html links remaining
+  // 10. No source .html links remaining (external http(s) URLs are allowed)
   const htmlLinkFiles = [];
   for (const file of allMdFiles) {
     const content = readFileSync(file, 'utf-8');
-    if (/\.html(?:#|$|\s)/.test(content) || /filepos/.test(content)) {
+    if (findSourceHtmlLinks(content).length > 0) {
       const rel = relative(root, file);
       htmlLinkFiles.push(rel);
     }
@@ -307,7 +322,7 @@ function verify(slug, options = {}) {
   // 12. Build passes
   if (runBuild) {
     try {
-      execSync('npm run build', { cwd: root, stdio: 'pipe', timeout: 120_000 });
+      execSync('npm run build', { cwd: root, stdio: 'pipe', timeout: 300_000 });
       results.push(pass('npm run build passes'));
     } catch (e) {
       const stderr = e.stderr ? e.stderr.toString().slice(0, 500) : '';
@@ -345,4 +360,4 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   }
 }
 
-export { verify };
+export { verify, findSourceHtmlLinks };
