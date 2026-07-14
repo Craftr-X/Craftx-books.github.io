@@ -2,7 +2,7 @@
   "bookletCount": 16,
   "ebookCount": 10,
   "bookCount": 26,
-  "chapterCount": 797,
+  "chapterCount": 796,
   "totalReadingMinutes": 7130,
   "books": {
     "claude-code-dev": {
@@ -925,11 +925,10 @@
       }
     },
     "yi-ri-wei-jian": {
-      "chapterCount": 28,
+      "chapterCount": 27,
       "readingMinutes": 262,
       "chapters": {
-        "01-Cover": 1,
-        "02-155139_以日为鉴：衰退时代生存指南_分析师Boden": 0,
+        "01-封面": 1,
         "03-版权信息": 1,
         "04-前言-关于《以日为鉴》": 4,
         "05-第一篇-失业潮下的决策": 1,
@@ -959,5 +958,5 @@
       }
     }
   },
-  "generatedAt": "2026-07-14T03:11:05.005Z"
+  "generatedAt": "2026-07-14T05:54:45.444Z"
 }
