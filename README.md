@@ -56,6 +56,7 @@ CraftX Books 是一个基于 VitePress 构建的在线阅读站点，发布到 G
 | 乡土中国（修订本） | 费孝通社会学经典，中国乡土社会结构与文化深层解读 | [开始阅读](./docs/books/xiangtu-zhongguo/) |
 | 疾病原理 | 中医基础理论与疾病成因解析 | [开始阅读](./docs/books/jibing-yuanli/) |
 | 无悔追踪 | 作者：张策 | [开始阅读](./docs/books/wuhui-zhuizong/) |
+| 以日为鉴：衰退时代生存指南 | 借鉴日本“失去的三十年”在就业、学历、医疗、出海等领域的经验教训，写给普通人的经济衰退期生存与抉择指南 | [开始阅读](./docs/books/yi-ri-wei-jian/) |
 
 ## 🚀 快速开始
 
