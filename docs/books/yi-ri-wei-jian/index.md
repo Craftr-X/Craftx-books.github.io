@@ -1,11 +1,11 @@
 ---
 layout: doc
-title: 以日为鉴：衰退时代生存指南
+title: 以日为鉴
 description: 作者：分析师Boden
 aside: false
 editLink: false
 ---
-# 以日为鉴：衰退时代生存指南
+# 以日为鉴
 >
 > 作者：分析师Boden
 
