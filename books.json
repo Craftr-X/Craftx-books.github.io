@@ -154,5 +154,11 @@
     "title": "以日为鉴",
     "desc": "作者：分析师Boden",
     "category": "ebook"
+  },
+  {
+    "slug": "yan-tie-lun",
+    "title": "盐铁论",
+    "desc": "西汉·桓宽撰，记录汉昭帝时期盐铁专卖政策的辩论",
+    "category": "ebook"
   }
 ]
