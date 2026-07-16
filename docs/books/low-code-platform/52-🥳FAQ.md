@@ -46,7 +46,7 @@
 
 #### 客户端上车指南
 
-```
+```text
 # 拉取项目代码
 git clone https://github.com/Ignition-Space/Ignition-web.git
 

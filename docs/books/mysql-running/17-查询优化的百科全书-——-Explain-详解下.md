@@ -16,7 +16,7 @@
 
     当查询语句的没有`FROM`子句时将会提示该额外信息，比如：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT 1;
     +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+----------------+
     | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra          |
@@ -30,7 +30,7 @@
 
     查询语句的`WHERE`子句永远为`FALSE`时将会提示该额外信息，比方说：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 WHERE 1 != 1;
     +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+------------------+
     | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra            |
@@ -44,7 +44,7 @@
 
     当查询列表处有`MIN`或者`MAX`聚集函数，但是并没有符合`WHERE`子句中的搜索条件的记录时，将会提示该额外信息，比方说：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT MIN(key1) FROM s1 WHERE key1 = 'abcdefg';
     +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------------------+
     | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                   |
@@ -58,7 +58,7 @@
 
     当我们的查询列表以及搜索条件中只包含属于某个索引的列，也就是在可以使用索引覆盖的情况下，在`Extra`列将会提示该额外信息。比方说下边这个查询中只需要用到`idx_key1`而不需要回表操作：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT key1 FROM s1 WHERE key1 = 'a';
     +----+-------------+-------+------------+------+---------------+----------+---------+-------+------+----------+-------------+
     | id | select_type | table | partitions | type | possible_keys | key      | key_len | ref   | rows | filtered | Extra       |
@@ -72,7 +72,7 @@
 
     有些搜索条件中虽然出现了索引列，但却不能使用到索引，比如下边这个查询：
 
-    ```
+    ```sql
     SELECT * FROM s1 WHERE key1 > 'z' AND key1 LIKE '%a';
     ```
 
@@ -94,7 +94,7 @@
 
     如果在查询语句的执行过程中将要使用`索引条件下推`这个特性，在`Extra`列中将会显示`Using index condition`，比如这样：
 
-  ```
+  ```sql
   mysql> EXPLAIN SELECT * FROM s1 WHERE key1 > 'z' AND key1 LIKE '%b';
     +----+-------------+-------+------------+-------+---------------+----------+---------+------+------+----------+-----------------------+
     | id | select_type | table | partitions | type  | possible_keys | key      | key_len | ref  | rows | filtered | Extra                 |
@@ -108,7 +108,7 @@
 
     当我们使用全表扫描来执行对某个表的查询，并且该语句的`WHERE`子句中有针对该表的搜索条件时，在`Extra`列中会提示上述额外信息。比如下边这个查询：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 WHERE common_field = 'a';
     +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-------------+
     | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
@@ -120,7 +120,7 @@
 
     当使用索引访问来执行对某个表的查询，并且该语句的`WHERE`子句中有除了该索引包含的列之外的其他搜索条件时，在`Extra`列中也会提示上述额外信息。比如下边这个查询虽然使用`idx_key1`索引执行查询，但是搜索条件中除了包含`key1`的搜索条件`key1 = 'a'`，还有包含`common_field`的搜索条件，所以`Extra`列会显示`Using where`的提示：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 WHERE key1 = 'a' AND common_field = 'a';
     +----+-------------+-------+------------+------+---------------+----------+---------+-------+------+----------+-------------+
     | id | select_type | table | partitions | type | possible_keys | key      | key_len | ref   | rows | filtered | Extra       |
@@ -134,7 +134,7 @@
 
     在连接查询执行过程过，当被驱动表不能有效的利用索引加快访问速度，`MySQL`一般会为其分配一块名叫`join buffer`的内存块来加快查询速度，也就是我们所讲的`基于块的嵌套循环算法`，比如下边这个查询语句：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 INNER JOIN s2 ON s1.common_field = s2.common_field;
     +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+----------------------------------------------------+
     | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                                              |
@@ -155,7 +155,7 @@
 
     当我们使用左（外）连接时，如果`WHERE`子句中包含要求被驱动表的某个列等于`NULL`值的搜索条件，而且那个列又是不允许存储`NULL`值的，那么在该表的执行计划的`Extra`列就会提示`Not exists`额外信息，比如这样：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 LEFT JOIN s2 ON s1.key1 = s2.key1 WHERE s2.id IS NULL;
     +----+-------------+-------+------------+------+---------------+----------+---------+-------------------+------+----------+-------------------------+
     | id | select_type | table | partitions | type | possible_keys | key      | key_len | ref               | rows | filtered | Extra                   |
@@ -178,7 +178,7 @@
 
     如果执行计划的`Extra`列出现了`Using intersect(...)`提示，说明准备使用`Intersect`索引合并的方式执行查询，括号中的`...`表示需要进行索引合并的索引名称；如果出现了`Using union(...)`提示，说明准备使用`Union`索引合并的方式执行查询；出现了`Using sort_union(...)`提示，说明准备使用`Sort-Union`索引合并的方式执行查询。比如这个查询的执行计划：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 WHERE key1 = 'a' AND key3 = 'a';
     +----+-------------+-------+------------+-------------+-------------------+-------------------+---------+------+------+----------+-------------------------------------------------+
     | id | select_type | table | partitions | type        | possible_keys     | key               | key_len | ref  | rows | filtered | Extra                                           |
@@ -200,7 +200,7 @@
 
     当我们的`LIMIT`子句的参数为`0`时，表示压根儿不打算从表中读出任何记录，将会提示该额外信息，比如这样：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 LIMIT 0;
     +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+------------+
     | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra      |
@@ -214,7 +214,7 @@
 
     有一些情况下对结果集中的记录进行排序是可以使用到索引的，比如下边这个查询：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 ORDER BY key1 LIMIT 10;
     +----+-------------+-------+------------+-------+---------------+----------+---------+------+------+----------+-------+
     | id | select_type | table | partitions | type  | possible_keys | key      | key_len | ref  | rows | filtered | Extra |
@@ -226,7 +226,7 @@
 
     这个查询语句可以利用`idx_key1`索引直接取出`key1`列的10条记录，然后再进行回表操作就好了。但是很多情况下排序操作无法使用到索引，只能在内存中（记录较少的时候）或者磁盘中（记录较多的时候）进行排序，设计`MySQL`的大叔把这种在内存中或者磁盘上进行排序的方式统称为文件排序（英文名：`filesort`）。如果某个查询需要使用文件排序的方式执行查询，就会在执行计划的`Extra`列中显示`Using filesort`提示，比如这样：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 ORDER BY common_field LIMIT 10;
     +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+----------------+
     | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra          |
@@ -242,7 +242,7 @@
 
     在许多查询的执行过程中，`MySQL`可能会借助临时表来完成一些功能，比如去重、排序之类的，比如我们在执行许多包含`DISTINCT`、`GROUP BY`、`UNION`等子句的查询过程中，如果不能有效利用索引来完成查询，`MySQL`很有可能寻求通过建立内部的临时表来执行查询。如果查询中使用到了内部的临时表，在执行计划的`Extra`列将会显示`Using temporary`提示，比方说这样：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT DISTINCT common_field FROM s1;
     +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-----------------+
     | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra           |
@@ -254,7 +254,7 @@
 
     再比如：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT common_field, COUNT(*) AS amount FROM s1 GROUP BY common_field;
     +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+---------------------------------+
     | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                           |
@@ -266,13 +266,13 @@
 
     不知道大家注意到没有，上述执行计划的`Extra`列不仅仅包含`Using temporary`提示，还包含`Using filesort`提示，可是我们的查询语句中明明没有写`ORDER BY`子句呀？这是因为`MySQL`会在包含`GROUP BY`子句的查询中默认添加上`ORDER BY`子句，也就是说上述查询其实和下边这个查询等价：
 
-    ```
+    ```sql
     EXPLAIN SELECT common_field, COUNT(*) AS amount FROM s1 GROUP BY common_field ORDER BY common_field;
     ```
 
     如果我们并不想为包含`GROUP BY`子句的查询进行排序，需要我们显式的写上`ORDER BY NULL`，就像这样：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT common_field, COUNT(*) AS amount FROM s1 GROUP BY common_field ORDER BY NULL;
     +----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+-----------------+
     | id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra           |
@@ -286,7 +286,7 @@
 
     另外，执行计划中出现`Using temporary`并不是一个好的征兆，因为建立与维护临时表要付出很大成本的，所以我们最好能使用索引来替代掉使用临时表，比方说下边这个包含`GROUP BY`子句的查询就不需要使用临时表：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT key1, COUNT(*) AS amount FROM s1 GROUP BY key1;
     +----+-------------+-------+------------+-------+---------------+----------+---------+------+------+----------+-------------+
     | id | select_type | table | partitions | type  | possible_keys | key      | key_len | ref  | rows | filtered | Extra       |
@@ -302,7 +302,7 @@
 
     我们前边唠叨子查询的时候说过，查询优化器会优先尝试将`IN`子查询转换成`semi-join`，而`semi-join`又有好多种执行策略，当执行策略为`DuplicateWeedout`时，也就是通过建立临时表来实现为外层查询中的记录进行去重操作时，驱动表查询执行计划的`Extra`列将显示`Start temporary`提示，被驱动表查询执行计划的`Extra`列将显示`End temporary`提示，就是这样：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 WHERE key1 IN (SELECT key3 FROM s2 WHERE common_field = 'a');
     +----+-------------+-------+------------+------+---------------+----------+---------+-------------------+------+----------+------------------------------+
     | id | select_type | table | partitions | type | possible_keys | key      | key_len | ref               | rows | filtered | Extra                        |
@@ -317,7 +317,7 @@
 
     在将`In`子查询转为`semi-join`时，如果采用的是`LooseScan`执行策略，则在驱动表执行计划的`Extra`列就是显示`LooseScan`提示，比如这样：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 WHERE key3 IN (SELECT key1 FROM s2 WHERE key1 > 'z');
     +----+-------------+-------+------------+-------+---------------+----------+---------+-------------------+------+----------+-------------------------------------+
     | id | select_type | table | partitions | type  | possible_keys | key      | key_len | ref               | rows | filtered | Extra                               |
@@ -332,7 +332,7 @@
 
     在将`In`子查询转为`semi-join`时，如果采用的是`FirstMatch`执行策略，则在被驱动表执行计划的`Extra`列就是显示`FirstMatch(tbl_name)`提示，比如这样：
 
-    ```
+    ```sql
     mysql> EXPLAIN SELECT * FROM s1 WHERE common_field IN (SELECT key1 FROM s2 where s1.key3 = s2.key3);
     +----+-------------+-------+------------+------+-------------------+----------+---------+-------------------+------+----------+-----------------------------+
     | id | select_type | table | partitions | type | possible_keys     | key      | key_len | ref               | rows | filtered | Extra                       |
@@ -351,7 +351,7 @@
 
 这样我们就可以得到一个`json`格式的执行计划，里边儿包含该计划花费的成本，比如这样：
 
-```
+```sql
 mysql> EXPLAIN FORMAT=JSON SELECT * FROM s1 INNER JOIN s2 ON s1.key1 = s2.key2 WHERE s1.common_field = 'a'\G
 *************************** 1. row ***************************
 
@@ -442,7 +442,7 @@ EXPLAIN: {
 
 我们使用`#`后边跟随注释的形式为大家解释了`EXPLAIN FORMAT=JSON`语句的输出内容，但是大家可能有疑问`"cost_info"`里边的成本看着怪怪的，它们是怎么计算出来的？先看`s1`表的`"cost_info"`部分：
 
-```
+```text
 "cost_info": {
     "read_cost": "1840.84",
     "eval_cost": "193.76",
@@ -480,7 +480,7 @@ EXPLAIN: {
 
 对于`s2`表的`"cost_info"`部分是这样的：
 
-```
+```text
 "cost_info": {
     "read_cost": "968.80",
     "eval_cost": "193.76",
@@ -491,7 +491,7 @@ EXPLAIN: {
 
 由于`s2`表是被驱动表，所以可能被读取多次，这里的`read_cost`和`eval_cost`是访问多次`s2`表后累加起来的值，大家主要关注里边儿的`prefix_cost`的值代表的是整个连接查询预计的成本，也就是单次查询`s1`表和多次查询`s2`表后的成本的和，也就是：
 
-```
+```text
 968.80 + 193.76 + 2034.60 = 3197.16
 ```
 
@@ -499,7 +499,7 @@ EXPLAIN: {
 
 最后，设计`MySQL`的大叔还为我们留了个彩蛋，在我们使用`EXPLAIN`语句查看了某个查询的执行计划后，紧接着还可以使用`SHOW WARNINGS`语句查看与这个查询的执行计划有关的一些扩展信息，比如这样：
 
-```
+```sql
 mysql> EXPLAIN SELECT s1.key1, s2.key1 FROM s1 LEFT JOIN s2 ON s1.key1 = s2.key1 WHERE s2.common_field IS NOT NULL;
 +----+-------------+-------+------------+------+---------------+----------+---------+-------------------+------+----------+-------------+
 | id | select_type | table | partitions | type | possible_keys | key      | key_len | ref               | rows | filtered | Extra       |

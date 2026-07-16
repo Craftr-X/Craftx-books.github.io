@@ -74,7 +74,7 @@ nest g resource user --project user
 
 首先需要先创建实体类，在我们之前创建的 **CURD** 中有一个 `user/entities/user.entity.ts` 文件，也就是之前我们介绍过的与数据库关联的实体类，现在我们来用户实体类型添加一些属性，此外之前我们约定了 `Mysql` 的实体文件命名规则，所以需要将文件名改为 `user.mysql.entity.ts`。
 
-```
+```typescript
 import { Entity, Column, UpdateDateColumn, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
 export enum UserStatus {
@@ -140,7 +140,7 @@ export const UserProviders = [
 
 完毕之后在 `user/user.module.ts` 导入 `UserProviders` 以及 `DatabaseModule`：
 
-```
+```typescript
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@app/comm/database/database.module';
 import { UserService } from './user.service';
@@ -168,7 +168,7 @@ export class UserModule { }
 
 **文件**：`.config/.dev.yaml`
 
-```
+```text
 MYSQL_CONFIG:
     synchronize: true
 ```
@@ -277,7 +277,7 @@ export class UserService {
 
 1. 修改 `user.service.ts`，新增查询方法:
 
-```
+```typescript
   findAll() {
     return this.userRepository.find()
   }
@@ -299,7 +299,7 @@ export class UserService {
 
 1. 修改 `user.service.ts`，新增删除方法:
 
-```
+```typescript
   remove(id: number) {
     return this.userRepository.delete(id)
   }
@@ -319,7 +319,7 @@ export class UserService {
 
 如果你不想使用 **patch** 方法的话，改成 **post** 需要新增 **id** 字段，否则不需要加
 
-```
+```typescript
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
 import { IsNotEmpty } from 'class-validator';
@@ -334,7 +334,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
 1. 修改 `user.service.ts`，新增更新方法:
 
-```
+```typescript
 update(id: number, updateUserDto: UpdateUserDto) {
 return this.userRepository.update({ id }, updateUserDto)
 }
@@ -360,7 +360,7 @@ return this.userRepository.update({ id }, updateUserDto)
 
 1. 修改 `department/department.mysql.entity.ts` 文件为：
 
-```
+```typescript
 import { Entity, Column, UpdateDateColumn, PrimaryGeneratedColumn, CreateDateColumn, OneToMany } from 'typeorm';
 import { User } from '../user/user.mysql.entity';
 
@@ -386,7 +386,7 @@ export class Department {
 
 2. 修改 `user/user.mysql.entity.ts` 文件为：
 
-```
+```typescript
 import { Entity, Column, UpdateDateColumn, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, } from 'typeorm';
 import { Department } from '../department/department.mysql.entity';
 
@@ -438,7 +438,7 @@ export class User {
 
 3. 修改 `uer/user.service.ts` 中 `create` 方法，添加查询部门以及添加的关系逻辑：
 
-```
+```javascript
   async create(createUserDto: CreateUserDto) {
     const dep = await this.departmentService.findOne(createUserDto.departmentId)
     return this.userRepository.save({
@@ -456,7 +456,7 @@ export class User {
 
 4. 修改 `department/department.service.ts` 的 `findAll` 方法，添加 `relations` 筛选关联关系：
 
-```
+```text
   findAll() {
     return this.depRepository.find({ relations: ["users"] })
   }

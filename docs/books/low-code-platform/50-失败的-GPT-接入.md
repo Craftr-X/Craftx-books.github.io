@@ -59,7 +59,7 @@ pnpm i openai
 
 > 接下来的内容都将只写 **prompt** 的修改
 
-```
+```text
   messages: [
     {
       role: 'system',
@@ -75,7 +75,7 @@ pnpm i openai
 
 #### 继续调试
 
-```
+```text
 messages: [
     {
       role: 'system',

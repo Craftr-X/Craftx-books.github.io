@@ -58,7 +58,7 @@
 
 这几个字段的值是**React**构成元素方法**createElement**的参数，因此可以将其显示抽象为**React TSX**的内容文本。
 
-```
+```text
 const tpl = `
 <{​{ name }​} 
   {% for key, value in props -%}
@@ -87,7 +87,7 @@ const tpl = `
 - 引用类型需要转换：引用类型需要通过**JSON.stringify**进行转换，将一些复杂的对象和数组进行序列化。
 - 表达式：表达式的内容是通过 **$$jsx**特殊字段判断的，所以将其处理为直接返回。
 
-```
+```typescript
 transformValue: (_: string, v: any) => {
   // 处理表达式
   if (has(v, "$$jsx")) {
@@ -108,7 +108,7 @@ transformValue: (_: string, v: any) => {
 
 首先使用**pnpm**将**nunjucks**进行安装，如下命令所示：
 
-```
+```bash
 # shell
 pnpm add nunjucks
 
@@ -222,7 +222,7 @@ console.log(str, '当前组件的代码')
 
 首先，执行如下命令先**安装prettier**依赖包：
 
-```
+```bash
 # install prettier
 pnpm add prettier
 ```
@@ -234,7 +234,7 @@ pnpm add prettier
 1. 接下来就使用**prettier.format**方法，传递模板字符串和对应的配置，在这里是将之前引入的babel和estree插件进行注册，同时指定对饮的**parse**解析器为**babel**。
 1. 执行完成后就得到了**format**后的代码内容，接下来就是将其展现到页面上即可。
 
-```
+```typescript
 import prettier from "prettier/standalone";
 import babel from "prettier/plugins/babel";
 import estree from "prettier/plugins/estree";

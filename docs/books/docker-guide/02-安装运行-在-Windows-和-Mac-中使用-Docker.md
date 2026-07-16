@@ -51,7 +51,7 @@ Docker Desktop 为我们在 Windows 和 macOS 中使用 Docker 提供了与 Linu
 
 使用 `docker version` 能够看到 Docker 客户端的信息，我们可以在这里发现程序运行的平台：
 
-```
+```text
 λ docker version
 Client:
 ## ......

@@ -28,7 +28,7 @@
 
 接下来我们就要编写 docker-compose.yml 文件来定义组成这个环境的所有 Docker 容器以及与它们相关的内容了。docker-compose.yml 规则和编写的方法在前两小节中已经谈到，这里我们就不再展开，直接来看看编写好的 docker-compose.yml 配置文件。
 
-```
+```text
 version: "3"
 
 networks:
@@ -110,7 +110,7 @@ services:
 
 在准备好这些使用方法之后，我们就可以开始编写构建 PHP 镜像的 Dockerfile 文件了。这里我已经编写好了一份，供大家参考。
 
-```
+```dockerfile
 FROM php:7.2-fpm
 
 MAINTAINER You Ming <youming@funcuter.org>
@@ -134,7 +134,7 @@ CMD ["php-fpm"]
 
 大家注意到，这里除了我们进行功能安装外，还将一个脚本拷入了镜像中，并将其作为 ENTRYPOINT 启动入口。这个文件的作用主要是为了启动 cron 服务，以便我们在容器中可以正常使用它。
 
-```
+```bash
 #!/bin/bash
 
 service cron start
@@ -165,7 +165,7 @@ exec "$@"
 
 我们知道，虽然 Docker Compose 简化了许多操作流程，但我们还是需要使用 docker-compose 命令来管理项目。对于这个例子来说，我们要启动它就必须使用这样的 docker-compose 命令来管理项目。对于这个例子来说，我们要启动它就必须使用这样的：
 
-```
+```bash
 sudo docker-compose -p website up -d
 
 ```
@@ -174,7 +174,7 @@ sudo docker-compose -p website up -d
 
 我编写了一个 compose 脚本，用来简化 docker-compose 的操作命令。
 
-```
+```bash
 #!/bin/bash
 
 root=$(cd `dirname $0`; dirname `pwd`)
@@ -187,7 +187,7 @@ docker-compose -p website -f ${root}/compose/docker-compose.yml "$@"
 
 通过这个脚本来操作项目，我们的命令就可以简化为：
 
-```
+```bash
 sudo ./bin/compose up -d
 
 sudo ./bin/compose logs nginx

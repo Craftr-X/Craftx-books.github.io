@@ -36,13 +36,13 @@
 
 - `macOS`操作系统上的安装目录：
 
-```
+```text
 /usr/local/mysql/
 ```
 
 - `Windows`操作系统上的安装目录：
 
-```
+```text
 C:\Program Files\MySQL\MySQL Server 5.7
 ```
 
@@ -58,13 +58,13 @@ C:\Program Files\MySQL\MySQL Server 5.7
 
 在`MySQL`的安装目录下有一个特别特别重要的`bin`目录，这个目录下存放着许多可执行文件，以`macOS`系统为例，这个`bin`目录的绝对路径就是（在我的机器上）：
 
-```
+```text
 /usr/local/mysql/bin
 ```
 
 我们列出一些在`macOS`中这个`bin`目录下的一部分可执行文件来看一下（文件太多，全列出来会刷屏的）：
 
-```
+```text
 .
 ├── mysql
 ├── mysql.server -> ../support-files/mysql.server
@@ -89,13 +89,13 @@ C:\Program Files\MySQL\MySQL Server 5.7
 
     假设我们现在所处的工作目录是`MySQL`的安装目录，也就是`/usr/local/mysql`，我们想启动`bin`目录下的`mysqld`这个可执行文件，可以使用相对路径来启动：
 
-    ```
+    ```text
     ./bin/mysqld
     ```
 
     或者直接输入`mysqld`的绝对路径也可以：
 
-    ```
+    ```text
     /usr/local/mysql/bin/mysqld
     ```
 
@@ -103,19 +103,19 @@ C:\Program Files\MySQL\MySQL Server 5.7
 
     如果我们觉得每次执行一个文件都要输入一串长长的路径名贼麻烦的话，可以把该`bin`目录所在的路径添加到环境变量`PATH`中。环境变量`PATH`是一系列路径的集合，各个路径之间使用冒号`:`隔离开，比方说我的机器上的环境变量`PATH`的值就是：
 
-    ```
+    ```text
     /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
     ```
 
     我的系统中这个环境变量`PATH`的值表明：当我在输入一个命令时，系统便会在`/usr/local/bin`、`/usr/bin:`、`/bin:`、`/usr/sbin`、`/sbin`这些目录下依次寻找是否存在我们输入的那个命令，如果寻找成功，则执行该目录下对应的可执行文件。所以我们现在可以修改一下这个环境变量`PATH`，把`MySQL`安装目录下的`bin`目录的路径也加入到`PATH`中，在我的机器上修改后的环境变量`PATH`的值为：
 
-    ```
+    ```text
     /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mysql/bin
     ```
 
     这样现在不论我们所处的工作目录是啥，我们都可以直接输入可执行文件的名字就可以启动它，比如这样：
 
-    ```
+    ```text
     mysqld
     ```
 
@@ -145,7 +145,7 @@ C:\Program Files\MySQL\MySQL Server 5.7
 
 `mysql.server`也是一个启动脚本，它会间接的调用`mysqld_safe`，在调用`mysql.server`时在后边指定`start`参数就可以启动服务器程序了，就像这样：
 
-```
+```text
 mysql.server start
 ```
 
@@ -153,7 +153,7 @@ mysql.server start
 
 另外，我们还可以使用`mysql.server`命令来关闭正在运行的服务器程序，只要把`start`参数换成`stop`就好了：
 
-```
+```text
 mysql.server stop
 ```
 
@@ -173,25 +173,25 @@ mysql.server stop
 
 首先看看啥是个`Windows` 服务？如果无论是谁正在使用这台计算机，我们都需要长时间的运行某个程序，而且需要在计算机启动的时候便启动它，一般我们都会把它注册为一个`Windows 服务`，操作系统会帮我们管理它。把某个程序注册为`Windows`服务的方式挺简单，如下：
 
-```
+```text
 "完整的可执行文件路径" --install [-manual] [服务名]
 ```
 
 其中的`-manual`可以省略，加上它的话表示在`Windows`系统启动的时候<span style="color:red">不</span>自动启动该服务，否则会自动启动。`服务名`也可以省略，默认的服务名就是`MySQL`。比如我的`Windows`计算机上`mysqld`的完整路径是：
 
-```
+```text
 C:\Program Files\MySQL\MySQL Server 5.7\bin\mysqld
 ```
 
 所以如果我们想把它注册为服务的话可以在命令行里这么写：
 
-```
+```text
 "C:\Program Files\MySQL\MySQL Server 5.7\bin\mysqld" --install
 ```
 
 在把`mysqld`注册为`Windows`服务之后，我们就可以通过下边这个命令来启动`MySQL`服务器程序了：
 
-```
+```text
 net start MySQL
 ```
 
@@ -199,7 +199,7 @@ net start MySQL
 
 关闭这个服务也非常简单，只要把上边的`start`换成`stop`就行了，就像这样：
 
-```
+```text
 net stop MySQL
 ```
 
@@ -207,7 +207,7 @@ net stop MySQL
 
 在我们成功启动`MySQL`服务器程序后，就可以接着启动客户端程序来连接到这个服务器喽，`bin`目录下有许多客户端程序，比方说`mysqladmin`、`mysqldump`、`mysqlcheck`等等等等（好多呢，就不一一列举了）。这里我们重点要关注的是可执行文件`mysql`，通过这个可执行文件可以让我们和服务器程序进程交互，也就是发送请求，接受服务器的处理结果。启动这个可执行文件时一般需要一些参数，格式如下：
 
-```
+```text
 mysql -h主机名  -u用户名 -p密码
 ```
 
@@ -227,13 +227,13 @@ mysql -h主机名  -u用户名 -p密码
 
 比如我这样执行下边这个可执行文件(用户名密码按你的实际情况填写)，就可以启动`MySQL`客户端，并且连接到服务器了。
 
-```
+```text
 mysql -hlocalhost -uroot -p123456
 ```
 
 我们看一下连接成功后的界面：
 
-```
+```text
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 2
 Server version: 5.7.21 Homebrew
@@ -258,7 +258,7 @@ mysql>
 
 比如我们输入`quit`试试：
 
-```
+```sql
 mysql> quit
 Bye
 ```
@@ -273,13 +273,13 @@ Bye
 
     我们直接在黑框框里输入密码很可能被别人看到，这和你当着别人的面输入银行卡密码没啥区别，所以我们在执行`mysql`连接服务器的时候可以不显式的写出密码，就像这样：
 
-    ```
+    ```text
     mysql -hlocahhost -uroot -p
     ```
 
     点击回车之后才会提示你输入密码：
 
-    ```
+    ```text
     Enter password:
     ```
 
@@ -287,25 +287,25 @@ Bye
 
 - 如果你非要在一行命令中显式的把密码输出来，那`-p`和密码值之间不能有空白字符（其他参数名之间可以有空白字符），就像这样：
 
-    ```
+    ```text
     mysql -h localhost -u root -p123456
     ```
 
     如果加上了空白字符就是错误的，比如这样：
 
-    ```
+    ```text
     mysql -h localhost -u root -p 123456
     ```
 
 - `mysql`的各个参数的摆放顺序没有硬性规定，也就是说你也可以这么写：
 
-    ```
+    ```text
     mysql -p  -u root -h localhost
     ```
 
 - 如果你的服务器和客户端安装在同一台机器上，`-h`参数可以省略，就像这样：
 
-    ```
+    ```text
     mysql -u root -p  
     ```
 
@@ -313,7 +313,7 @@ Bye
 
     比方说我用登录操作系统的用户名是`xiaohaizi`，那么在我的机器上下边这两条命令是等价的：
 
-    ```
+    ```text
     mysql -u xiaohaizi -p
     mysql -p
     ```
@@ -340,7 +340,7 @@ Bye
 
 如果`3306`端口号已经被别的进程占用了或者我们单纯的想自定义该数据库实例监听的端口号，那我们可以在启动服务器程序的命令行里添加`-P`参数来明确指定一下端口号，比如这样：
 
-```
+```text
 mysqld -P3307
 ```
 
@@ -348,7 +348,7 @@ mysqld -P3307
 
 如果客户端进程想要使用`TCP/IP`网络来连接到服务器进程，比如我们在使用`mysql`来启动客户端程序时，在`-h`参数后必须跟随`IP地址`来作为需要连接的服务器进程所在主机的主机名，如果客户端进程和服务器进程在一台计算机中的话，我们可以使用`127.0.0.1`来代表本机的`IP地址`。另外，如果服务器进程监听的端口号不是默认的`3306`，我们也可以在使用`mysql`启动客户端程序时使用`-P`参数（大写的`P`，小写的`p`是用来指定密码的）来指定需要连接到的端口号。比如我们现在已经在本机启动了服务器进程，监听的端口号为`3307`，那我们启动客户端程序时可以这样写：
 
-```
+```text
 mysql -h127.0.0.1 -uroot -P3307 -p
 ```
 
@@ -378,13 +378,13 @@ mysql -h127.0.0.1 -uroot -P3307 -p
 
 如果我们的服务器进程和客户端进程都运行在同一台操作系统为类`Unix`的机器上的话，我们可以使用`Unix域套接字文件`来进行进程间通信。如果我们在启动客户端程序的时候指定的主机名为`localhost`，或者指定了`--protocal=socket`的启动参数，那服务器程序和客户端程序之间就可以通过`Unix`域套接字文件来进行通信了。`MySQL`服务器程序默认监听的`Unix`域套接字文件路径为`/tmp/mysql.sock`，客户端程序也默认连接到这个`Unix`域套接字文件。如果我们想改变这个默认路径，可以在启动服务器程序时指定`socket`参数，就像这样：
 
-```
+```text
 mysqld --socket=/tmp/a.txt
 ```
 
 这样服务器启动后便会监听`/tmp/a.txt`。在服务器改变了默认的`UNIX`域套接字文件后，如果客户端程序想通过`UNIX`域套接字文件进行通信的话，也需要显式的指定连接到的`UNIX`域套接字文件路径，就像这样：
 
-```
+```text
 mysql -hlocalhost -uroot --socket=/tmp/a.txt -p
 ```
 
@@ -503,13 +503,13 @@ mysql -hlocalhost -uroot --socket=/tmp/a.txt -p
 
 我们可以用下边这个命令来查看当前服务器程序支持的存储引擎：
 
-```
+```text
 SHOW ENGINES;
 ```
 
 来看一下调用效果：
 
-```
+```sql
 mysql> SHOW ENGINES;
 +--------------------+---------+----------------------------------------------------------------+--------------+------+------------+
 | Engine             | Support | Comment                                                        | Transactions | XA   | Savepoints |
@@ -545,7 +545,7 @@ mysql>
 
 我们之前创建表的语句都没有指定表的存储引擎，那就会使用默认的存储引擎`InnoDB`（当然这个默认的存储引擎也是可以修改的，我们在后边的章节中再说怎么改）。如果我们想显式的指定一下表的存储引擎，那可以这么写：
 
-```
+```sql
 CREATE TABLE 表名(
     建表语句;
 ) ENGINE = 存储引擎名称;
@@ -553,7 +553,7 @@ CREATE TABLE 表名(
 
 比如我们想创建一个存储引擎为`MyISAM`的表可以这么写：
 
-```
+```sql
 mysql> CREATE TABLE engine_demo_table(
     ->     i int
     -> ) ENGINE = MyISAM;
@@ -566,13 +566,13 @@ mysql>
 
 如果表已经建好了，我们也可以使用下边这个语句来修改表的存储引擎：
 
-```
+```sql
 ALTER TABLE 表名 ENGINE = 存储引擎名称;
 ```
 
 比如我们修改一下`engine_demo_table`表的存储引擎：
 
-```
+```sql
 mysql> ALTER TABLE engine_demo_table ENGINE = InnoDB;
 Query OK, 0 rows affected (0.05 sec)
 Records: 0  Duplicates: 0  Warnings: 0
@@ -582,7 +582,7 @@ mysql>
 
 这时我们再查看一下`engine_demo_table`的表结构：
 
-```
+```sql
 mysql> SHOW CREATE TABLE engine_demo_table\G
 *************************** 1. row ***************************
        Table: engine_demo_table

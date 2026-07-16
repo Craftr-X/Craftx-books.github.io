@@ -13,7 +13,7 @@ Java Web 泛指以 Java 程序为基础向外提供 Web 服务的技术及相关
 
 在这些的基础上，我给出一个建议性的目录结构，供大家参考。
 
-```
+```text
 └─ project
    ├─ app
    ├─ compose
@@ -62,7 +62,7 @@ Java Web 泛指以 Java 程序为基础向外提供 Web 服务的技术及相关
 
 我们根据这些内容，选取跟我们程序运行有影响的几项需要修改的参数，编写成 MySQL 的配置文件。
 
-```
+```text
 # ./mysql/my.cnf
 
 [mysqld_safe]
@@ -107,7 +107,7 @@ symbolic-links = 0
 
 这里我们以修改 Redis 的密码为例。 打开配置文件，找到定义 Redis 授权授权的地方，将密码修改为我们需要的内容。
 
-```
+```text
 # ./redis/redis.conf
 ##...
 ################################## SECURITY ###################################
@@ -138,7 +138,7 @@ requirepass my-secret-pw
 
 要拿到 Tomcat 中的配置文件，我们需要先创建一个临时的 Tomcat 容器。
 
-```
+```ini
 # docker run --rm -d --name temp-tomcat tomcat:8.5 
 
 ```
@@ -149,7 +149,7 @@ requirepass my-secret-pw
 
 这里我们会用到 `docker cp` 这个命令，`docker cp` 能够在容器与宿主机的文件系统间拷贝文件和目录。
 
-```
+```ini
 # docker cp temp-tomcat:/usr/local/tomcat/conf/server.xml ./server.xml
 # docker cp temp-tomcat:/usr/local/tomcat/conf/web.xml ./web.xml
 
@@ -165,7 +165,7 @@ requirepass my-secret-pw
 
 上述的命令是从容器中向宿主机里拷贝文件，我们还可以从宿主机中向容器里拷贝文件，只需要调换一下参数的位置即可。
 
-```
+```ini
 # docker cp ./server.xml temp-tomcat:/usr/local/tomcat/conf/server.xml
 
 ```
@@ -174,7 +174,7 @@ requirepass my-secret-pw
 
 另外，别忘了在完成上面的操作后清理我们创建的临时容器。
 
-```
+```ini
 # docker stop temp-tomcat
 
 ```
@@ -187,7 +187,7 @@ requirepass my-secret-pw
 
 这里是我编写好的一份 Docker Compose 项目定义文件。
 
-```
+```text
 version: "3"
 
 services:
@@ -234,7 +234,7 @@ services:
 
 一切就绪，我们就可以直接通过 Docker Compose 的命令来启动开发环境了。
 
-```
+```ini
 # docker-compose -p javaweb -f ./compose/docker-compose.yml up -d
 
 ```

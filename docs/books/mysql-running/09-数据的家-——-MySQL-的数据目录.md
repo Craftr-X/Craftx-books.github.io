@@ -20,7 +20,7 @@ MySQL服务器程序在启动时会到文件系统的某个目录下加载一些
 
 那说了半天，到底`MySQL`把数据都存到哪个路径下呢？其实`数据目录`对应着一个系统变量`datadir`，我们在使用客户端与服务器建立连接之后查看这个系统变量的值就可以了：
 
-```
+```sql
 mysql> SHOW VARIABLES LIKE 'datadir';
 +---------------+-----------------------+
 | Variable_name | Value                 |
@@ -46,7 +46,7 @@ mysql> SHOW VARIABLES LIKE 'datadir';
 
 比方说我们查看一下<span style="color:red">在我的计算机上</span>当前有哪些数据库：
 
-```
+```sql
 mysql> SHOW DATABASES;
 +--------------------+
 | Database           |
@@ -64,7 +64,7 @@ mysql> SHOW DATABASES;
 
 可以看到在我的计算机上当前有7个数据库，其中`charset_demo_db`、`dahaizi`和`xiaohaizi`数据库是我们自定义的，其余4个数据库是属于MySQL自带的系统数据库。我们再看一下<span style="color:red">我的计算机上</span>的`数据目录`下的内容：
 
-```
+```text
 .
 ├── auto.cnf
 ├── ca-key.pem
@@ -104,13 +104,13 @@ mysql> SHOW DATABASES;
 
 `表结构`就是该表的名称是啥，表里边有多少列，每个列的数据类型是啥，有啥约束条件和索引，用的是啥字符集和比较规则吧啦吧啦的各种信息，这些信息都体现在了我们的建表语句中了。为了保存这些信息，`InnoDB`和`MyISAM`这两种存储引擎都在`数据目录`下对应的数据库子目录下创建了一个专门用于描述表结构的文件，文件名是这样：
 
-```
+```text
 表名.frm
 ```
 
 比方说我们在`dahaizi`数据库下创建一个名为`test`的表：
 
-```
+```sql
 mysql> USE dahaizi;
 Database changed
 
@@ -142,7 +142,7 @@ Query OK, 0 rows affected (0.03 sec)
 
 当然，如果你想让系统表空间对应文件系统上多个实际文件，或者仅仅觉得原来的`ibdata1`这个文件名难听，那可以在`MySQL`启动时配置对应的文件路径以及它们的大小，比如我们这样修改一下配置文件：
 
-```
+```ini
 [server]
 innodb_data_file_path=data1:512M;data2:512M:autoextend
 ```
@@ -157,39 +157,39 @@ innodb_data_file_path=data1:512M;data2:512M:autoextend
 
 在MySQL5.6.6以及之后的版本中，`InnoDB`并不会默认的把各个表的数据存储到系统表空间中，而是为每一个表建立一个独立表空间，也就是说我们创建了多少个表，就有多少个独立表空间。使用`独立表空间`来存储表数据的话，会在该表所属数据库对应的子目录下创建一个表示该`独立表空间`的文件，文件名和表名相同，只不过添加了一个`.ibd`的扩展名而已，所以完整的文件名称长这样：
 
-```
+```text
 表名.ibd
 ```
 
 比方说假如我们使用了`独立表空间`去存储`xiaohaizi`数据库下的`test`表的话，那么在该表所在数据库对应的`xiaohaizi`目录下会为`test`表创建这两个文件：
 
-```
+```text
 test.frm
 test.ibd
 ```
 
 其中`test.ibd`文件就用来存储`test`表中的数据和索引。当然我们也可以自己指定使用`系统表空间`还是`独立表空间`来存储数据，这个功能由启动参数`innodb_file_per_table`控制，比如说我们想刻意将表数据都存储到`系统表空间`时，可以在启动`MySQL`服务器的时候这样配置：
 
-```
+```ini
 [server]
 innodb_file_per_table=0
 ```
 
 当`innodb_file_per_table`的值为`0`时，代表使用系统表空间；当`innodb_file_per_table`的值为`1`时，代表使用独立表空间。不过`innodb_file_per_table`参数只对新建的表起作用，对于已经分配了表空间的表并不起作用。如果我们想把已经存在系统表空间中的表转移到独立表空间，可以使用下边的语法：
 
-```
+```sql
 ALTER TABLE 表名 TABLESPACE [=] innodb_file_per_table;
 ```
 
 或者把已经存在独立表空间的表转移到系统表空间，可以使用下边的语法：
 
-```
+```sql
 ALTER TABLE 表名 TABLESPACE [=] innodb_system;
 ```
 
 其中中括号扩起来的`=`可有可无，比方说我们想把`test`表从独立表空间移动到系统表空间，可以这么写：
 
-```
+```sql
 ALTER TABLE test TABLESPACE innodb_system;
 ```
 
@@ -201,7 +201,7 @@ ALTER TABLE test TABLESPACE innodb_system;
 
 好了，唠叨完了`InnoDB`的系统表空间和独立表空间，现在轮到`MyISAM`了。我们知道不像`InnoDB`的索引和数据是一个东东，在`MyISAM`中的索引全部都是`二级索引`，该存储引擎的数据和索引是分开存放的。所以在文件系统中也是使用不同的文件来存储数据文件和索引文件。而且和`InnoDB`不同的是，`MyISAM`并没有什么所谓的`表空间`一说，<span style="color:red">表数据都存放到对应的数据库子目录下</span>。假如`test`表使用`MyISAM`存储引擎的话，那么在它所在数据库对应的`xiaohaizi`目录下会为`test`表创建这三个文件：
 
-```
+```text
 test.frm
 test.MYD
 test.MYI
@@ -277,13 +277,13 @@ test.MYI
 
     - 服务器未启动时（类Linux操作系统）：
 
-        ```
+        ```bash
         mysqld --verbose --help | grep datadir
         ```
 
     - 服务器启动后：
 
-        ```
+        ```text
         SHOW VARIABLES LIKE 'datadir';
         ```
 

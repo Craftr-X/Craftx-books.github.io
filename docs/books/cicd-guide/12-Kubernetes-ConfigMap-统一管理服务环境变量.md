@@ -85,7 +85,7 @@ kubectl create configmap [configname] --from-file=[key]=[file_path]
 
 我们创建一个文件，然后将文件内容存入 `configmap` 中。创建一个名为 `env.config` 的文件，输入以下内容：
 
-```
+```text
 URL: 172.168.81.111
 PATH: /root/abcd/efg
 ```
