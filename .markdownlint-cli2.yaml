@@ -5,7 +5,7 @@
 # - 结构性规则(MD001/MD025/MD041)关闭:中文小册源(EPUB/掘金)标题结构已定,589 文件无 H1、28 文件多 H1
 # - MD033 行内 HTML 关闭:VitePress 组件 <HomePage/> + 掘金/EPUB 残留的 <p align=center><img> 等大量出现
 # - MD013 行长关闭:中文排版行长无意义
-# - MD040 代码块语言保留开启,作为真实质量信号(若全站修复后仍导致 CI 失败,会单独脚本处理)
+# - MD040 代码块语言:默认关闭(书源无语言块多),已由 scripts/fix-codeblock-lang.mjs 批量补全(813→1)
 
 config:
   default: true
@@ -21,7 +21,7 @@ config:
   # === 关闭:书源风格 / 内容治理类(记入 README TODO)===
   MD029: false   # ol-prefix: 书里有意的章节编号重置(1. 2. 3. 反复),非作者错误
   MD036: false   # no-emphasis-as-heading: 中文书用 **xxx** 作小标题是常见写法
-  MD040: false   # fenced-code-language: 813 处无语言,需按书内容推断补全,记 TODO 单独治理
+  MD040: false   # fenced-code-language: 已由 fix-codeblock-lang.mjs 批量补全(813→1),规则仍关(残留/新导入需重跑脚本)
   MD045: false   # no-alt-text: 1354 处图片空 alt,EPUB/掘金迁移残留,需语义补全,记 TODO
   MD046: false   # code-block-style: 书源用缩进式代码块,统一改 fenced 风险高
   MD055: false   # table-pipe-style: 表格管道风格不一致,可读性无影响
