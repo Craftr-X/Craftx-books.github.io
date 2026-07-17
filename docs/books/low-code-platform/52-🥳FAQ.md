@@ -32,7 +32,7 @@
 
 - **UmiJS**: [https://umijs.org](https://umijs.org/)
 - **Turbo**: <https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks>
-- **Pnpm**: [https://pnpm.js.org/]()
+- **Pnpm**: <https://pnpm.js.org/>
 - **Craftjs**:  <https://craft.js.org/docs/overview>
 
 #### 工程地址
