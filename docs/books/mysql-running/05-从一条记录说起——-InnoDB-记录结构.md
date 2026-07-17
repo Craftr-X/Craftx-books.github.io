@@ -22,7 +22,7 @@
 
 我们可以在创建或修改表的语句中指定`行格式`：
 
-```
+```sql
 CREATE TABLE 表名 (列的信息) ROW_FORMAT=行格式名称
     
 ALTER TABLE 表名 ROW_FORMAT=行格式名称
@@ -30,7 +30,7 @@ ALTER TABLE 表名 ROW_FORMAT=行格式名称
 
 比如我们在`xiaohaizi`数据库里创建一个演示用的表`record_format_demo`，可以这样指定它的`行格式`：
 
-```
+```sql
 mysql> USE xiaohaizi;
 Database changed
 
@@ -45,7 +45,7 @@ Query OK, 0 rows affected (0.03 sec)
 
 可以看到我们刚刚创建的这个表的`行格式`就是`Compact`，另外，我们还显式指定了这个表的字符集为`ascii`，因为`ascii`字符集只包括空格、标点符号、数字、大小写字母和一些不可见字符，所以我们的汉字是不能存到这个表里的。我们现在向这个表中插入两条记录：
 
-```
+```sql
 mysql> INSERT INTO record_format_demo(c1, c2, c3, c4) VALUES('aaaa', 'bbb', 'cc', 'd'), ('eeee', 'fff', NULL, NULL);
 Query OK, 2 rows affected (0.02 sec)
 Records: 2  Duplicates: 0  Warnings: 0
@@ -53,7 +53,7 @@ Records: 2  Duplicates: 0  Warnings: 0
 
 现在表中的记录就是这个样子的：
 
-```
+```sql
 mysql> SELECT * FROM record_format_demo;
 +------+-----+------+------+
 | c1   | c2  | c3   | c4   |
@@ -99,7 +99,7 @@ mysql>
 
 又因为这些长度值需要按照列的<span style="color:red">逆序</span>存放，所以最后`变长字段长度列表`的字节串用十六进制表示的效果就是（各个字节之间实际上没有空格，用空格隔开只是方便理解）：
 
-```
+```text
 01 03 04 
 ```
 
@@ -260,7 +260,7 @@ mysql>
 
 但是这只是因为我们的`record_format_demo`表采用的是`ascii`字符集，这个字符集是一个定长字符集，也就是说表示一个字符采用固定的一个字节，如果采用变长的字符集（也就是表示一个字符需要的字节数不确定，比如`gbk`表示一个字符要1~2个字节、`utf8`表示一个字符要1~3个字节等）的话，`c3`列的长度也会被存储到`变长字段长度列表`中，比如我们修改一下`record_format_demo`表的字符集：
 
-```
+```sql
 mysql> ALTER TABLE record_format_demo MODIFY COLUMN c3 CHAR(10) CHARACTER SET utf8;
 Query OK, 2 rows affected (0.02 sec)
 Records: 2  Duplicates: 0  Warnings: 0
@@ -284,7 +284,7 @@ Records: 2  Duplicates: 0  Warnings: 0
 
 现在我们把表`record_format_demo`的行格式修改为`Redundant`：
 
-```
+```sql
 mysql> ALTER TABLE record_format_demo ROW_FORMAT=Redundant;
 Query OK, 0 rows affected (0.05 sec)
 Records: 0  Duplicates: 0  Warnings: 0
@@ -352,13 +352,13 @@ Records: 0  Duplicates: 0  Warnings: 0
 
     第一条记录中的头信息是：
 
-    ```
+    ```text
     00 00 10 0F 00 BC
     ```
 
     根据这六个字节可以计算出各个属性的值，如下：
 
-    ```
+    ```text
     预留位1：0x00
     预留位2：0x00
     delete_mask: 0x00
@@ -412,7 +412,7 @@ Records: 0  Duplicates: 0  Warnings: 0
 
 我们知道对于`VARCHAR(M)`类型的列最多可以占用`65535`个字节。其中的`M`代表该类型最多存储的字符数量，如果我们使用`ascii`字符集的话，一个字符就代表一个字节，我们看看`VARCHAR(65535)`是否可用：
 
-```
+```sql
 mysql> CREATE TABLE varchar_size_demo(
     ->     c VARCHAR(65535)
     -> ) CHARSET=ascii ROW_FORMAT=Compact;
@@ -428,7 +428,7 @@ mysql>
 
 如果该`VARCHAR`类型的列没有`NOT NULL`属性，那最多只能存储`65532`个字节的数据，因为真实数据的长度可能占用2个字节，`NULL`值标识需要占用1个字节：
 
-```
+```sql
 mysql> CREATE TABLE varchar_size_demo(
     ->      c VARCHAR(65532)
     -> ) CHARSET=ascii ROW_FORMAT=Compact;
@@ -437,7 +437,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 如果`VARCHAR`类型的列有`NOT NULL`属性，那最多只能存储`65533`个字节的数据，因为真实数据的长度可能占用2个字节，不需要`NULL`值标识：
 
-```
+```sql
 mysql> DROP TABLE varchar_size_demo;
 Query OK, 0 rows affected (0.01 sec)
 
@@ -449,7 +449,7 @@ Query OK, 0 rows affected (0.02 sec)
 
 如果`VARCHAR(M)`类型的列使用的不是`ascii`字符集，那会怎么样呢？来看一下：
 
-```
+```sql
 mysql> DROP TABLE varchar_size_demo;
 Query OK, 0 rows affected (0.00 sec)
 
@@ -476,7 +476,7 @@ ERROR 1074 (42000): Column length too big for column 'c' (max = 21845); use BLOB
 
 我们以`ascii`字符集下的`varchar_size_demo`表为例，插入一条记录：
 
-```
+```sql
 mysql> CREATE TABLE varchar_size_demo(
     ->       c VARCHAR(65532)
     -> ) CHARSET=ascii ROW_FORMAT=Compact;
@@ -518,7 +518,7 @@ Query OK, 1 row affected (0.00 sec)
 
 假设一个列中存储的数据字节数为n，那么发生`行溢出`现象时需要满足这个式子：
 
-```
+```text
 136 + 2×(27 + n) > 16384
 ```
 
@@ -542,7 +542,7 @@ Query OK, 1 row affected (0.00 sec)
 
 2. 指定和修改行格式的语法如下：
 
-    ```
+    ```sql
     CREATE TABLE 表名 (列的信息) ROW_FORMAT=行格式名称
     
     ALTER TABLE 表名 ROW_FORMAT=行格式名称

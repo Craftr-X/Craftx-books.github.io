@@ -255,7 +255,7 @@
 
 我们可以使用`SHOW ENGINE INNODB STATUS`命令查看当前`InnoDB`存储引擎中的各种`LSN`值的情况，比如：
 
-```
+```sql
 mysql> SHOW ENGINE INNODB STATUS\G
 
 (...省略前边的许多状态)
@@ -339,7 +339,7 @@ Last checkpoint at  124052494
 
 我们前边说过，对于实际存储`redo`日志的普通的`log block`来说，在`log block header`处有一个称之为`LOG_BLOCK_HDR_NO`的属性（忘记了的话回头再看看哈），我们说这个属性代表一个唯一的标号。这个属性是初次使用该block时分配的，跟当时的系统`lsn`值有关。使用下边的公式计算该block的`LOG_BLOCK_HDR_NO`值：
 
-```
+```text
 ((lsn / 512) & 0x3FFFFFFFUL) + 1
 ```
 

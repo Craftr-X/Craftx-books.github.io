@@ -44,7 +44,7 @@
 
 为了故事的顺利发展，我们先创建一个表：
 
-```
+```sql
 mysql> CREATE TABLE page_demo(
     ->     c1 INT,
     ->     c2 INT,
@@ -77,7 +77,7 @@ Query OK, 0 rows affected (0.03 sec)
 
 下边我们试着向`page_demo`表中插入几条记录：
 
-```
+```sql
 mysql> INSERT INTO page_demo VALUES(1, 100, 'aaaa'), (2, 200, 'bbbb'), (3, 300, 'cccc'), (4, 400, 'dddd');
 Query OK, 4 rows affected (0.00 sec)
 Records: 4  Duplicates: 0  Warnings: 0
@@ -147,7 +147,7 @@ Records: 4  Duplicates: 0  Warnings: 0
 
     从图中可以看出来，<span style="color:red">我们的记录按照主键从小到大的顺序形成了一个单链表</span>。`最大记录`的`next_record`的值为`0`，这也就是说最大记录是没有`下一条记录`了，它是这个单链表中的最后一个节点。如果从中删除掉一条记录，这个链表也是会跟着变化的，比如我们把第2条记录删掉：
 
-    ```
+    ```sql
     mysql> DELETE FROM page_demo WHERE c1 = 2;
     Query OK, 1 row affected (0.02 sec)
     ```
@@ -175,7 +175,7 @@ Records: 4  Duplicates: 0  Warnings: 0
 
 再来看一个有意思的事情，因为主键值为`2`的记录被我们删掉了，但是存储空间却没有回收，如果我们再次把这条记录插入到表中，会发生什么事呢？
 
-```
+```sql
 mysql> INSERT INTO page_demo VALUES(2, 200, 'bbbb');
 Query OK, 1 row affected (0.00 sec)
 ```
@@ -196,7 +196,7 @@ Query OK, 1 row affected (0.00 sec)
 
 现在我们了解了记录在页中按照主键值由小到大顺序串联成一个单链表，那如果我们想根据主键值查找页中的某条记录该咋办呢？比如说这样的查询语句：
 
-```
+```sql
 SELECT * FROM page_demo WHERE c1 = 3;
 ```
 
@@ -245,7 +245,7 @@ SELECT * FROM page_demo WHERE c1 = 3;
 
 由于现在`page_demo`表中的记录太少，无法演示添加了`页目录`之后加快查找速度的过程，所以再往`page_demo`表中添加一些记录：
 
-```
+```sql
 mysql> INSERT INTO page_demo VALUES(5, 500, 'eeee'), (6, 600, 'ffff'), (7, 700, 'gggg'), (8, 800, 'hhhh'), (9, 900, 'iiii'), (10, 1000, 'jjjj'), (11, 1100, 'kkkk'), (12, 1200, 'llll'), (13, 1300, 'mmmm'), (14, 1400, 'nnnn'), (15, 1500, 'oooo'), (16, 1600, 'pppp');
 Query OK, 12 rows affected (0.00 sec)
 Records: 12  Duplicates: 0  Warnings: 0

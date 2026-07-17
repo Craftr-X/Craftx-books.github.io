@@ -89,7 +89,7 @@ curl http://front-service-v1
 
 在 `Kubernetes DNS` 中，跨 `namespace` 的规则略为复杂。格式如下：
 
-```
+```text
 [ServiceName].[NameSpace].svc.cluster.local
 ```
 

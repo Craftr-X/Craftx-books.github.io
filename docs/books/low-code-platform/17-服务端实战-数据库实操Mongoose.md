@@ -149,7 +149,7 @@ export class AppModule { }
 
 `site.mongo.entity.ts`:
 
-```
+```typescript
 import {
   Entity,
   Column,
@@ -322,7 +322,7 @@ export class SiteService {
 
 修改查询 `site.service.ts`，新增查询单个方法：
 
-```
+```text
   findOne(id) {
     return this.siteRepository.findOne(id);
   }
@@ -336,7 +336,7 @@ export class SiteService {
 
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/12131d2e0c9a448991272d9d0737c1e7~tplv-k3u1fbpfcp-watermark.image?)
 
-```
+```typescript
   findOne(id: string) {
     return this.siteRepository.findOne({
       where: {

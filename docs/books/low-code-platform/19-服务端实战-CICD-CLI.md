@@ -8,7 +8,7 @@
 
 新建批量注册命令行的工具类：
 
-```
+```javascript
 #!/usr/bin/env node
 
 import * as path from "path";
@@ -62,7 +62,7 @@ program.parse(process.argv);
 
 `src/bin/register.ts`
 
-```
+```typescript
 import inquirer from '@/inquirer';
 
 const { registerPlugin } = inquirer
@@ -80,7 +80,7 @@ export default [
 
 如何在入口文件：`src/bin/index.ts` 引入即可，其他的命令用法类似：
 
-```
+```typescript
 import build from './build'
 import tpl from './tpl'
 import git from './git'
@@ -118,7 +118,7 @@ export default [
 
 `src/inquirer/registerPlugin.ts`
 
-```
+```typescript
 import inquirer from 'inquirer';
 import { existNpm, npmInstall } from '@/util/npm'
 import { loggerSuccess } from '@/util';
@@ -373,7 +373,7 @@ export default {
 
 `src/util/file.ts`
 
-```
+```typescript
 /**
  * @description: 解析 ts 配置文件
  * @param {string} path
@@ -401,7 +401,7 @@ export const loadTsConfig = (path: string) => {
 
 接下来运行流程编排的命令：
 
-```
+```text
 ig buildFlow
 ```
 

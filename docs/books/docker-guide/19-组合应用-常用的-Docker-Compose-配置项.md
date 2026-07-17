@@ -6,7 +6,7 @@
 
 为了理解在开发中常用的 Docker Compose 配置，我们通过一个在开发中使用的 Docker Compose 文件来进行下面的讲解。
 
-```
+```text
 version: "3"
 
 services:
@@ -83,7 +83,7 @@ volumes:
 
 当然，在 `docker build` 里我们还能通过选项定义许多内容，这些在 Docker Compose 里我们依然可以。
 
-```
+```text
 ## ......
   webapp:
     build:
@@ -135,7 +135,7 @@ volumes:
 
 如果我们想把属于 Docker Compose 项目以外的数据卷引入进来直接使用，我们可以将数据卷定义为外部引入，通过 external 这个配置就能完成这个定义。
 
-```
+```text
 ## ......
 volumes:
   mysql-data:
@@ -154,7 +154,7 @@ volumes:
 
 除了简单的声明网络名称，让 Docker Compose 自动按默认形式完成网络配置外，我们还可以显式的指定网络的参数。
 
-```
+```text
 networks:
   frontend:
     driver: bridge
@@ -174,7 +174,7 @@ networks:
 
 网络别名的定义方式很简单，这里需要将之前简单的网络 List 定义结构修改成 Map 结构，以便在网络中加入更多的定义。
 
-```
+```text
 ## ......
   database:
     networks:

@@ -8,7 +8,7 @@
 
 在 Redis Cluster 节点第一次启动的时候，它只能感知到自身的存在，我们可以手动执行 CLUSTER MEET 命令让当前节点感知到指定目标节点：
 
-```
+```text
  CLUSTER MEET <ip> <port> [<cport>]
 ```
 

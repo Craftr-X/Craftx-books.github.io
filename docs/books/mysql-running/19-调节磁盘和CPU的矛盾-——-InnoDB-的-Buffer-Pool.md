@@ -14,7 +14,7 @@
 
 设计`InnoDB`的大叔为了缓存磁盘中的页，在`MySQL`服务器启动的时候就向操作系统申请了一片连续的内存，他们给这片内存起了个名，叫做`Buffer Pool`（中文名是`缓冲池`）。那它有多大呢？这个其实看我们机器的配置，如果你是土豪，你有`512G`内存，你分配个几百G作为`Buffer Pool`也可以啊，当然你要是没那么有钱，设置小点也行呀～ 默认情况下`Buffer Pool`只有`128M`大小。当然如果你嫌弃这个`128M`太大或者太小，可以在启动服务器的时候配置`innodb_buffer_pool_size`参数的值，它表示`Buffer Pool`的大小，就像这样：
 
-```
+```ini
 [server]
 innodb_buffer_pool_size = 268435456
 ```
@@ -138,7 +138,7 @@ innodb_buffer_pool_size = 268435456
 
 大家要特别注意一个事儿：<span style="color:red">我们是按照某个比例将LRU链表分成两半的，不是某些节点固定是young区域的，某些节点固定是old区域的，随着程序的运行，某个节点所属的区域也可能发生变化</span>。那这个划分成两截的比例怎么确定呢？对于`InnoDB`存储引擎来说，我们可以通过查看系统变量`innodb_old_blocks_pct`的值来确定`old`区域在`LRU链表`中所占的比例，比方说这样：
 
-```
+```sql
 mysql> SHOW VARIABLES LIKE 'innodb_old_blocks_pct';
 +-----------------------+-------+
 | Variable_name         | Value |
@@ -150,14 +150,14 @@ mysql> SHOW VARIABLES LIKE 'innodb_old_blocks_pct';
 
 从结果可以看出来，默认情况下，`old`区域在`LRU链表`中所占的比例是`37%`，也就是说`old`区域大约占`LRU链表`的`3/8`。这个比例我们是可以设置的，我们可以在启动时修改`innodb_old_blocks_pct`参数来控制`old`区域在`LRU链表`中所占的比例，比方说这样修改配置文件：
 
-```
+```ini
 [server]
 innodb_old_blocks_pct = 40
 ```
 
 这样我们在启动服务器后，`old`区域占`LRU链表`的比例就是`40%`。当然，如果在服务器运行期间，我们也可以修改这个系统变量的值，不过需要注意的是，这个系统变量属于`全局变量`，一经修改，会对所有客户端生效，所以我们只能这样修改：
 
-```
+```text
 SET GLOBAL innodb_old_blocks_pct = 40;
 ```
 
@@ -173,7 +173,7 @@ SET GLOBAL innodb_old_blocks_pct = 40;
 
     咋办？全表扫描有一个特点，那就是它的执行频率非常低，谁也不会没事儿老在那写全表扫描的语句玩，而且在执行全表扫描的过程中，即使某个页面中有很多条记录，也就是去多次访问这个页面所花费的时间也是非常少的。所以我们只需要规定，<span style="color:red">在对某个处在`old`区域的缓存页进行第一次访问时就在它对应的控制块中记录下来这个访问时间，如果后续的访问时间与第一次访问的时间在某个时间间隔内，那么该页面就不会被从old区域移动到young区域的头部，否则将它移动到young区域的头部</span>。上述的这个间隔时间是由系统变量`innodb_old_blocks_time`控制的，你看：
 
-```
+```sql
 mysql> SHOW VARIABLES LIKE 'innodb_old_blocks_time';
 +------------------------+-------+
 | Variable_name          | Value |
@@ -204,7 +204,7 @@ mysql> SHOW VARIABLES LIKE 'innodb_old_blocks_time';
 
 为了更好的管理`Buffer Pool`中的缓存页，除了我们上边提到的一些措施，设计`InnoDB`的大叔们还引进了其他的一些`链表`，比如`unzip LRU链表`用于管理解压页，`zip clean链表`用于管理没有被解压的压缩页，`zip free数组`中每一个元素都代表一个链表，它们组成所谓的`伙伴系统`来为压缩页提供内存空间等等，反正是为了更好的管理这个`Buffer Pool`引入了各种链表或其他数据结构，具体的使用方式就不啰嗦了，大家有兴趣深究的再去找些更深的书或者直接看源代码吧，也可以直接来找我哈～
 
-```
+```text
 小贴士：
 
 我们压根儿没有深入唠叨过InnoDB中的压缩页，对上边的这些链表也只是为了完整性顺便提一下，如果你看不懂千万不要抑郁，因为我压根儿就没打算向大家介绍它们。
@@ -230,7 +230,7 @@ mysql> SHOW VARIABLES LIKE 'innodb_old_blocks_time';
 
 我们上边说过，`Buffer Pool`本质是`InnoDB`向操作系统申请的一块连续的内存空间，在多线程环境下，访问`Buffer Pool`中的各种链表都需要加锁处理啥的，在`Buffer Pool`特别大而且多线程并发访问特别高的情况下，单一的`Buffer Pool`可能会影响请求的处理速度。所以在`Buffer Pool`特别大的时候，我们可以把它们拆分成若干个小的`Buffer Pool`，每个`Buffer Pool`都称为一个`实例`，它们都是独立的，独立的去申请内存空间，独立的管理各种链表，独立的吧啦吧啦，所以在多线程并发访问时并不会相互影响，从而提高并发处理能力。我们可以在服务器启动的时候通过设置`innodb_buffer_pool_instances`的值来修改`Buffer Pool`实例的个数，比方说这样：
 
-```
+```ini
 [server]
 innodb_buffer_pool_instances = 2
 ```
@@ -247,7 +247,7 @@ innodb_buffer_pool_instances = 2
 
 那每个`Buffer Pool`实例实际占多少内存空间呢？其实使用这个公式算出来的：
 
-```
+```text
 innodb_buffer_pool_size/innodb_buffer_pool_instances
 ```
 
@@ -279,13 +279,13 @@ innodb_buffer_pool_size/innodb_buffer_pool_instances
 
     假设我们指定的`innodb_buffer_pool_chunk_size`的值是`128M`，`innodb_buffer_pool_instances`的值是`16`，那么这两个值的乘积就是`2G`，也就是说`innodb_buffer_pool_size`的值必须是`2G`或者`2G`的整数倍。比方说我们在启动`MySQL`服务器是这样指定启动参数的：
 
-    ```
+    ```text
     mysqld --innodb-buffer-pool-size=8G --innodb-buffer-pool-instances=16
     ```
 
     默认的`innodb_buffer_pool_chunk_size`值是`128M`，指定的`innodb_buffer_pool_instances`的值是`16`，所以`innodb_buffer_pool_size`的值必须是`2G`或者`2G`的整数倍，上边例子中指定的`innodb_buffer_pool_size`的值是`8G`，符合规定，所以在服务器启动完成之后我们查看一下该变量的值就是我们指定的`8G`（8589934592字节）：
 
-    ```
+    ```sql
     mysql> show variables like 'innodb_buffer_pool_size';
     +-------------------------+------------+
     | Variable_name           | Value      |
@@ -297,13 +297,13 @@ innodb_buffer_pool_size/innodb_buffer_pool_instances
 
     如果我们指定的`innodb_buffer_pool_size`大于`2G`并且不是`2G`的整数倍，那么服务器会自动的把`innodb_buffer_pool_size`的值调整为`2G`的整数倍，比方说我们在启动服务器时指定的`innodb_buffer_pool_size`的值是`9G`：
 
-    ```
+    ```text
     mysqld --innodb-buffer-pool-size=9G --innodb-buffer-pool-instances=16
     ```
 
     那么服务器会自动把`innodb_buffer_pool_size`的值调整为`10G`（10737418240字节），不信你看：
 
-    ```
+    ```sql
     mysql> show variables like 'innodb_buffer_pool_size';
     +-------------------------+-------------+
     | Variable_name           | Value       |
@@ -317,13 +317,13 @@ innodb_buffer_pool_size/innodb_buffer_pool_instances
 
     比方说我们在启动服务器时指定的`innodb_buffer_pool_size`的值为`2G`，`innodb_buffer_pool_instances`的值为16，`innodb_buffer_pool_chunk_size`的值为`256M`：
 
-    ```
+    ```text
     mysqld --innodb-buffer-pool-size=2G --innodb-buffer-pool-instances=16 --innodb-buffer-pool-chunk-size=256M
     ```
 
     由于`256M × 16 = 4G`，而`4G > 2G`，所以`innodb_buffer_pool_chunk_size`值会被服务器改写为`innodb_buffer_pool_size/innodb_buffer_pool_instances`的值，也就是：`2G/16 = 128M`（134217728字节），不信你看：
 
-    ```
+    ```sql
     mysql> show variables like 'innodb_buffer_pool_size';
     +-------------------------+------------+
     | Variable_name           | Value      |
@@ -349,7 +349,7 @@ innodb_buffer_pool_size/innodb_buffer_pool_instances
 
 设计`MySQL`的大叔贴心的给我们提供了`SHOW ENGINE INNODB STATUS`语句来查看关于`InnoDB`存储引擎运行过程中的一些状态信息，其中就包括`Buffer Pool`的一些信息，我们看一下（为了突出重点，我们只把输出中关于`Buffer Pool`的部分提取了出来）：
 
-```
+```sql
 mysql> SHOW ENGINE INNODB STATUS\G
 
 (...省略前边的许多状态)
@@ -465,7 +465,7 @@ mysql>
 
 11. 可以用下边的命令查看`Buffer Pool`的状态信息：
 
-    ```
+    ```text
     SHOW ENGINE INNODB STATUS\G
     ```
 

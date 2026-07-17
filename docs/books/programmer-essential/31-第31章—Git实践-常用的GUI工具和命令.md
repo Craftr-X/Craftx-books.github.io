@@ -169,7 +169,7 @@ GUI 工具中，最好用的应该就是`SourceTree`了，大家可以去[官网
 
 此时，我们就会发现合并冲突，因为我们两个分支都修改了同一个文件，如下：
 
-```
+```text
 Auto-merging hello.java
 CONFLICT (content): Merge conflict in hello.java
 Automatic merge failed; fix conflicts and then commit the result.

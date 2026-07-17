@@ -212,7 +212,7 @@
 
     再次强调一遍，每一个索引都对应两个段，每个段都会维护上述的3个链表，比如下边这个表：
 
-    ```
+    ```sql
     CREATE TABLE t (
         c1 INT NOT NULL AUTO_INCREMENT,
         c2 VARCHAR(100),
@@ -635,7 +635,7 @@
 
 需要注意一点的是，用户是不能直接访问`InnoDB`的这些内部系统表的，除非你直接去解析系统表空间对应文件系统上的文件。不过设计InnoDB的大叔考虑到查看这些表的内容可能有助于大家分析问题，所以在系统数据库`information_schema`中提供了一些以`innodb_sys`开头的表：
 
-```
+```sql
 mysql> USE information_schema;
 Database changed
 
